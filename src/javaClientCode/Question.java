@@ -1,9 +1,12 @@
 package javaClientCode;
 
-public class Question {
+public class Question { // Need to decide question format, WIP
+	String category;
+	String questionText;
+	String correctAnswer;
 	
 	
-	Question questionLoader(){ //Load questions from file, maybe from server, maybe should be in Asker
+	Question loader(){ //Load questions from file, maybe from server, maybe should be in Asker
 		return new Question();
 	}
 	

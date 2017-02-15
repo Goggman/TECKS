@@ -15,6 +15,13 @@ public class Analyzer { //Should process user input, answered questions, general
 		
 	}
 	
+	String findCategory(){  //Maybe some methods to decide what category to ask, or maybe even find wich questions to ask
+		return "programming";
+		
+	}
 	
+	void loadFromServer(){ //method to request files from central server
+		
+	}
 	
 }

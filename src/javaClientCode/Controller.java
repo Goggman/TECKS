@@ -19,5 +19,7 @@ public class Controller { //Connects all different components, lots of control n
 		
 		System.out.println("Asking questions");	
 		
+		Controller controller = new Controller();
+		controller.main_loop();
 	}
 }
