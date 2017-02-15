@@ -16,6 +16,8 @@ public class Controller { //Connects all different components, lots of control n
 	
 	public static void main(String args[]){
 		
+		
 		System.out.println("Asking questions");	
+		
 	}
 }
