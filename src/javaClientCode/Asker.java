@@ -4,34 +4,48 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Iterator;
-public class Asker {
+public class Asker implements Listener {
 	HashMap<String, ArrayList<Question>> questionMap; //A dictionary of questions sorted by category could be nice
 	//ArrayList<Question> sampleQuestions;
 	//HashMap<String, Integer> score;
 	Analyzer analyzer;
+	GUIData data;
+	ArrayList<Object> listener;
+	int change;
 	
-	Asker(HashMap<String, Integer> categoryMap, ArrayList<Question> listQuestions){
+	
+	Asker(HashMap<String, Integer> categoryMap, ArrayList<Question> listQuestions){//Maybe sort lists of questions by category, WIP
 		Set<String> keys= categoryMap.keySet();
 		Iterator<String> keyIterate = keys.iterator();
 		while  ( ! keys.isEmpty()){
 			questionMap.put(keyIterate.next(), null);
 		}
 	}
-	Asker (Analyzer analyzerInput){
-		analyzer = analyzerInput;
+	Asker (GUIData dataInit){
+		analyzer = new Analyzer();
+		data = dataInit;
+		change=0;
+
+	}
+	
+	public	void trigger(){
+		change=1;
 		
-		
+	}
+	void resetTrigger(){
+		change=0;
 	}
 	
 	void ask(Question question){//the main method of this class maybe, should print question text and wait for user input, check against the correct answer, etc
-		Scanner scanner = new Scanner(System.in);
-		System.out.println(question.getQuestionText());
-		System.out.println("Enter Answer: ");
-		String input = scanner.nextLine();
+		resetTrigger();
+		data.setTextLabel( question.getQuestionText());
+		data.setTextLabel("Enter Answer: ");
+		
+		String input = data.getTextField();
 		
 		if (input.equals(question.getCorrectAnswer()))
 		{
-			System.out.println("Correct answer!");
+			data.setTextLabel("Correct answer!");
 			//System.out.println("Category: " + question.getCategory());
 			int value = analyzer.getCategories().get(question.getCategory());
 			analyzer.getCategories().put(question.getCategory(),
@@ -39,9 +53,9 @@ public class Asker {
 			
 		}
 		else{
-			System.out.println("Would you like a hint?");
+			data.setTextLabel("Would you like a hint?");
 		}
-		//scanner.close();
+		resetTrigger();
 		
 	}
 	
@@ -51,9 +65,26 @@ public class Asker {
 			ask(questionIterator.next());
 			
 		}
-		System.out.println("Your results: ");
-		System.out.println(analyzer.getCategories());
+		data.setTextLabel("Your results: ");
+		data.setTextLabel(""+analyzer.getCategories());
 		
+	}
+	
+	ArrayList<Question> makeQuiz(){
+		ArrayList<Question> quiz = new ArrayList<Question>();
+		Question question1 = new Question("String_Formatting", "Wich method do one use when comparing strings in Java 8?","equals");
+		Question question2 = new Question("If_else","If an if condition is not met, which statement does one use after to have something else happen?","else");
+		Question question3 = new Question("Loops","Fill in correct initialization of the loop: for(_ x;x<10;x++)","int");
+		Question question4 = new Question("Scope","If a variable is declared within a method, and nowhere else, is it accessible from outside the method in question?","no");
+		Question question5 = new Question("Conventions","If one wants to keep the fields of an object \'private\', wich keyword is used before the variable?","private");
+		
+		quiz.add(question1);
+		quiz.add(question2);
+		quiz.add(question3);
+		quiz.add(question4);
+		quiz.add(question5);
+		
+		return quiz;
 	}
 	
 
