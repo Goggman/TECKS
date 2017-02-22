@@ -4,71 +4,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Iterator;
-public class Asker implements Listener {
-	HashMap<String, ArrayList<Question>> questionMap; //A dictionary of questions sorted by category could be nice
-	//ArrayList<Question> sampleQuestions;
-	//HashMap<String, Integer> score;
-	Analyzer analyzer;
-	GUIData data;
-	ArrayList<Object> listener;
-	int change;
+public class Asker {
 	
 	
-	Asker(HashMap<String, Integer> categoryMap, ArrayList<Question> listQuestions){//Maybe sort lists of questions by category, WIP
-		Set<String> keys= categoryMap.keySet();
-		Iterator<String> keyIterate = keys.iterator();
-		while  ( ! keys.isEmpty()){
-			questionMap.put(keyIterate.next(), null);
-		}
-	}
-	Asker (GUIData dataInit){
-		analyzer = new Analyzer();
-		data = dataInit;
-		change=0;
-
-	}
 	
-	public	void trigger(){
-		change=1;
-		
-	}
-	void resetTrigger(){
-		change=0;
-	}
-	
-	void ask(Question question){//the main method of this class maybe, should print question text and wait for user input, check against the correct answer, etc
-		resetTrigger();
-		data.setTextLabel( question.getQuestionText());
-		data.setTextLabel("Enter Answer: ");
-		
-		String input = data.getTextField();
-		
-		if (input.equals(question.getCorrectAnswer()))
-		{
-			data.setTextLabel("Correct answer!");
-			//System.out.println("Category: " + question.getCategory());
-			int value = analyzer.getCategories().get(question.getCategory());
-			analyzer.getCategories().put(question.getCategory(),
-										 value + 1);
-			
-		}
-		else{
-			data.setTextLabel("Would you like a hint?");
-		}
-		resetTrigger();
-		
-	}
-	
-	void askMany(ArrayList<Question> listOfQuestions){
-		Iterator<Question> questionIterator = listOfQuestions.iterator();
-		while (questionIterator.hasNext()){
-			ask(questionIterator.next());
-			
-		}
-		data.setTextLabel("Your results: ");
-		data.setTextLabel(""+analyzer.getCategories());
-		
-	}
 	
 	ArrayList<Question> makeQuiz(){
 		ArrayList<Question> quiz = new ArrayList<Question>();
