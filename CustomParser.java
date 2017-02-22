@@ -55,8 +55,8 @@ public class CustomParser {
 				
 				q = fcuk.createQuestion(out.get(i));
 				System.out.println(q.getHeader());
-				System.out.println(q.getQuestion());
-				System.out.println(q.getAnswer());
+				System.out.println(q.getQuestionText());
+				System.out.println(q.getCorrectAnswer());
 				for (int j = 0; j < q.getOptions().size(); j++){
 					System.out.println(q.getOptions().get(j));
 				}
@@ -70,14 +70,14 @@ public class CustomParser {
 				stf.saveFile(fileName, q);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// 
 			e.printStackTrace();
 		}
 		
 	}
 
 	public CustomParser() {
-		// TODO Auto-generated constructor stub
+		// 
 	}
 	
 	public Question createQuestion(ArrayList<String> qe){

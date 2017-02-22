@@ -7,11 +7,11 @@ public class Question {
 	private String questionText, correctAnswer, header;
 	private ArrayList<String> options = new ArrayList<>();
 	
-	public String getQuestion() {
+	public String getQuestionText() {
 		return questionText;
 	}
 
-	public String getAnswer() {
+	public String getCorrectAnswer() {
 		return correctAnswer;
 	}
 
