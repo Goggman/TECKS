@@ -1,6 +1,6 @@
 Header: multiple-choice, difficulty-1, tdt4144
 q: why do niggas eat chicken?
-op: 
+op: cause they black
 a: cause they niggas
 
 Header: fill-in, difficulty-3, fy0001

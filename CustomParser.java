@@ -5,13 +5,15 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CustomParser {
 
-	private String path;
+	private String path = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/";
 	
-	public void ReadFile(){
-		path = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/thing.txt";
+	
+	public void ReadFile(String filename){
+		path += filename;
 		
 	}
 	
@@ -43,17 +45,28 @@ public class CustomParser {
 	
 	public static void main(String[] args) {
 		CustomParser fcuk = new CustomParser();
-		fcuk.ReadFile();
+		fcuk.ReadFile("thing.txt");
+		Question q;
 		try {
 			ArrayList<ArrayList<String>> out = fcuk.OpenFile();
 			for (int i = 0; i < out.size(); i++){
 				
 				//System.out.println(out.get(i));
 				
-				Question q = fcuk.createQuestion(out.get(i));
+				q = fcuk.createQuestion(out.get(i));
 				System.out.println(q.getHeader());
 				System.out.println(q.getQuestion());
 				System.out.println(q.getAnswer());
+				for (int j = 0; j < q.getOptions().size(); j++){
+					System.out.println(q.getOptions().get(j));
+				}
+				
+				System.out.println("save to file: ");
+				Scanner in = new Scanner(System.in);
+				String fileName = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/" + in.next();
+				
+				SaveToFile stf = new SaveToFile();
+				stf.saveFile(fileName, q);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -67,7 +80,6 @@ public class CustomParser {
 	}
 	
 	public Question createQuestion(ArrayList<String> qe){
-		
 		
 		Question q = new Question();
 		
@@ -84,14 +96,14 @@ public class CustomParser {
 			else if (current.contains("a:")){
 				String[] temp = current.split(":");
 				q.setAnswer(temp[1]);
+				q.setOptions(temp[1]);
 			}
-		}
-		
-		
-		
-		
-		
-		
+			else if (current.contains("op:")){
+				String[] temp = current.split(":");
+				q.setOptions(temp[1]);
+				
+			}
+		}	
 		return q;
 	}
 	
