@@ -12,8 +12,8 @@ public class GUI extends Application{
 	
 	
 	public void start(Stage stage) throws Exception{
-		QuestionWindow QB = new QuestionWindow(new QuestionSchema());
-		stage.setScene(QB.createScene());
+		GUIController ctrl = new GUIController(stage);
+		stage.setScene(ctrl.getWindow(0));
 		stage.show();
 	}
 	

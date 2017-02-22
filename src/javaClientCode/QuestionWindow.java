@@ -10,18 +10,22 @@ import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 
-public class QuestionWindow {
+public class QuestionWindow implements Window {
 	QuestionSchema schema;
 	int index;
 	int quizStarted;
-	QuestionWindow(QuestionSchema schema1){
+	Stage stage;
+	GUIController ctrl;
+	QuestionWindow(Stage stageInput, QuestionSchema schema1, GUIController ctrlIn){
 		schema=schema1;
 		index=0;
 		quizStarted = 0;
+		stage=stageInput;
+		ctrl=ctrlIn;
 		
 	}
 
-	Scene createScene(){
+	public Scene createScene(){
 		int xBase=300; int yBase=200;
 		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
@@ -75,10 +79,14 @@ public class QuestionWindow {
 		});
 		MenuButton pickCategory = new MenuButton("Category"); pickCategory.getItems().add(item1); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);
 		
-		
+		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+100);
+		menu.setOnAction(e->{
+			stage.setScene(ctrl.getWindow(0));
+			
+		});
 	
 		
-		root.getChildren().addAll(userInput,feed, questBut, nextQ, prevQ, pickCategory);
+		root.getChildren().addAll(userInput,feed, questBut, nextQ, prevQ, pickCategory, menu);
 		Scene scene1 = new Scene(root, 1300, 700);
 		return scene1;
 	}
