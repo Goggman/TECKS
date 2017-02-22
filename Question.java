@@ -41,5 +41,16 @@ public class Question {
 	public void setOptions(String option) {
 		this.options.add(option);
 	}
+
+	public void setHeader(String string) {
+		this.header = string;
+	}
 	
+	public void setAnswer(String string) {
+		this.correctAnswer = string;
+	}
+	
+	public void setQuestion(String string) {
+		this.questionText = string;
+	}
 }

@@ -65,6 +65,7 @@ public class CustomParser {
 				Scanner in = new Scanner(System.in);
 				String fileName = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/" + in.next();
 				
+				in.close();
 				SaveToFile stf = new SaveToFile();
 				stf.saveFile(fileName, q);
 			}
