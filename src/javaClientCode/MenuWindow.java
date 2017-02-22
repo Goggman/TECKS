@@ -21,18 +21,18 @@ public class MenuWindow implements Window{
 	}
 	
 	public Scene createScene(){
-		VBox root = new VBox();
+		int xBase=100; int yBase = 300;
+		Pane root = new Pane();
 		Label feed = new Label();
-		Button menu1 = new Button("MenuItem1");
+		Button menu1 = new Button("MenuItem1"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+0);
 		menu1.setOnAction(e->{
-			//stage.setScene(questionScene);
 			stage.setScene(ctrl.getWindow(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
-		Button menu2 = new Button("MenuItem2");
-		Button menu3 = new Button("MenuItem3");
+		Button menu2 = new Button("MenuItem2"); menu2.setLayoutX(xBase+0); menu2.setLayoutY(yBase+50);
+		Button menu3 = new Button("MenuItem3"); menu3.setLayoutX(xBase+0); menu3.setLayoutY(yBase+100);
 		
-		root.getChildren().addAll(feed, menu1,menu2,menu3);
+		root.getChildren().addAll(feed, menu1, menu2, menu3);
 		Scene scene = new Scene(root, 1300, 700);
 		return scene;
 		

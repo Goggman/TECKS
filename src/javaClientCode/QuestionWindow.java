@@ -79,7 +79,7 @@ public class QuestionWindow implements Window {
 		});
 		MenuButton pickCategory = new MenuButton("Category"); pickCategory.getItems().add(item1); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);
 		
-		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+100);
+		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+150);
 		menu.setOnAction(e->{
 			stage.setScene(ctrl.getWindow(0));
 			
