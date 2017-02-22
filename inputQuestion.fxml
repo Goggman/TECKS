@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="349.0" prefWidth="474.0" style="-fx-background-color: uh;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+   <children>
+      <MenuButton layoutX="28.0" layoutY="32.0" mnemonicParsing="false" text="MenuButton">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <TextField layoutX="170.0" layoutY="32.0" prefHeight="25.0" prefWidth="67.0" />
+      <TextField layoutX="262.0" layoutY="32.0" />
+      <TextArea layoutX="28.0" layoutY="87.0" prefHeight="44.0" prefWidth="209.0" />
+      <TextArea layoutX="28.0" layoutY="153.0" prefHeight="44.0" prefWidth="209.0" />
+   </children>
+</AnchorPane>
