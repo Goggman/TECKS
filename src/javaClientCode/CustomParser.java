@@ -16,7 +16,7 @@ public class CustomParser {
 		
 	}
 	
-	public ArrayList<ArrayList<String>> OpenFile() throws IOException{
+	public ArrayList<ArrayList<String>> OpenFile(String path) throws IOException{
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);
 		
@@ -42,38 +42,6 @@ public class CustomParser {
 		
 	
 	
-	public static void main(String[] args) {
-		CustomParser fcuk = new CustomParser();
-		fcuk.ReadFile("thing.txt");
-		Question q;
-		try {
-			ArrayList<ArrayList<String>> out = fcuk.OpenFile();
-			for (int i = 0; i < out.size(); i++){
-				
-				//System.out.println(out.get(i));
-				
-				q = fcuk.createQuestion(out.get(i));
-				System.out.println(q.getHeader());
-				System.out.println(q.getQuestionText());
-				System.out.println(q.getCorrectAnswer());
-				for (int j = 0; j < q.getOptions().size(); j++){
-					System.out.println(q.getOptions().get(j));
-				}
-				
-				System.out.println("save to file: ");
-				Scanner in = new Scanner(System.in);
-				String fileName = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/" + in.next();
-				
-				in.close();
-				SaveToFile stf = new SaveToFile();
-				stf.saveFile(fileName, q);
-			}
-		} catch (IOException e) {
-			// 
-			e.printStackTrace();
-		}
-		
-	}
 
 	public CustomParser() {
 		// 

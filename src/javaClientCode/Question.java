@@ -40,6 +40,10 @@ public class Question {
 	public ArrayList<String> getOptions() {
 		return options;
 	}
+	public void setCategory(String text){
+		this.category=text;
+		
+	}
 
 	public void setOptions(String option) {
 		this.options.add(option);
