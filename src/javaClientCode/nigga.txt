@@ -1,5 +1,4 @@
 Header:  multiple-choice, difficulty-1, tdt4144
+c: racism
 q:  why do niggas eat chicken?
- cause they black
- cause they niggas
 a:  cause they niggas

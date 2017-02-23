@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 public class QuestionSchema {
 	ArrayList<String> answers;
-	ArrayList<Question> questions;
+	ArrayList<Question_Alt> questions;
 	
-	QuestionSchema(ArrayList<Question> questionQuiz){
+	QuestionSchema(ArrayList<Question_Alt> questionQuiz){
 		questions=questionQuiz;
 		answers=new ArrayList<String>();
 		for (int x=0;x<questions.size();x++){
@@ -20,20 +20,20 @@ public class QuestionSchema {
 		}
 	}
 	
-	ArrayList<Question> getQuestions(){
+	ArrayList<Question_Alt> getQuestions(){
 		return questions;
 	}
 	ArrayList<String> getAnswers(){
 		return answers;
 	}
 
-	ArrayList<Question> makeQuiz(){
-		ArrayList<Question> quiz = new ArrayList<Question>();
-		Question question1 = new Question("String_Formatting", "Which method do one use when comparing strings in Java 8?","equals");
-		Question question2 = new Question("If_else","If an if condition is not met, which statement\n does one use after to have something else happen?","else");
-		Question question3 = new Question("Loops","Fill in correct initialization of the loop: for(_ x;x<10;x++)","int");
-		Question question4 = new Question("Scope","If a variable is declared within a method, and nowhere else,\n is it accessible from outside the method in question?","no");
-		Question question5 = new Question("Conventions","If one wants to keep the fields of an object \'private\', \n which keyword is used before the variable?","private");
+	ArrayList<Question_Alt> makeQuiz(){
+		ArrayList<Question_Alt> quiz = new ArrayList<Question_Alt>();
+		Question_Alt question1 = new Question_Alt("String_Formatting", "Which method do one use when comparing strings in Java 8?","equals");
+		Question_Alt question2 = new Question_Alt("If_else","If an if condition is not met, which statement\n does one use after to have something else happen?","else");
+		Question_Alt question3 = new Question_Alt("Loops","Fill in correct initialization of the loop: for(_ x;x<10;x++)","int");
+		Question_Alt question4 = new Question_Alt("Scope","If a variable is declared within a method, and nowhere else,\n is it accessible from outside the method in question?","no");
+		Question_Alt question5 = new Question_Alt("Conventions","If one wants to keep the fields of an object \'private\', \n which keyword is used before the variable?","private");
 		
 		quiz.add(question1);
 		quiz.add(question2);

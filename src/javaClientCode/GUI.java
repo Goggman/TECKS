@@ -13,7 +13,7 @@ public class GUI extends Application{
 	
 	public void start(Stage stage) throws Exception{
 		GUIController ctrl = new GUIController(stage);
-		stage.setScene(ctrl.getWindow(0));
+		stage.setScene(ctrl.getScene(0));
 		stage.show();
 	}
 	
