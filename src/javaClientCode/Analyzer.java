@@ -2,14 +2,22 @@ package javaClientCode;
 import java.util.HashMap;
 
 
-
-public class Analyzer { //Should process user input, answered questions, general performance, maybe categorize problems
-	
+/**
+ * 
+ *  //Should process user input, answered questions, general performance, maybe categorize problems
+ * @author Martin
+ *
+ */
+public class Analyzer {
 	HashMap<String, Integer> categories;
 	
 	Analyzer(){
 		init_score();
 	}
+	
+	/**
+	 * initilialize categories
+	 */
 	void init_score(){
 		categories = new HashMap<String, Integer>();
 		categories.put("String_Formatting", 0);
@@ -24,12 +32,18 @@ public class Analyzer { //Should process user input, answered questions, general
 		return categories;
 	}
 	
-	String findCategory(){  //Maybe some methods to decide what category to ask, or maybe even find wich questions to ask
+	/**
+	 * Maybe some methods to decide what category to ask, or maybe even find wich questions to ask
+	 */
+	String findCategory(){  
 		return "programming";
 		
 	}
 	
-	void loadFromServer(){ //method to request files from central server, maybe needed
+	/**
+	 * method to request files from central server, maybe needed 
+	 */
+	void loadFromServer(){ 
 		
 	}
 	

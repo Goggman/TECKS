@@ -5,6 +5,10 @@ public class QuestionSchema {
 	ArrayList<String> answers;
 	ArrayList<Question_Alt> questions;
 	
+	/**
+	 * creates new question; generates empty strings to be filled in
+	 * @param questionQuiz list of Question objects 
+	 */
 	QuestionSchema(ArrayList<Question_Alt> questionQuiz){
 		questions=questionQuiz;
 		answers=new ArrayList<String>();
@@ -12,6 +16,10 @@ public class QuestionSchema {
 			answers.add("");
 		}
 	}
+	
+	/**
+	 * creates new question if no params are specified
+	 */
 	QuestionSchema(){
 		questions=makeQuiz();
 		answers=new ArrayList<String>();
@@ -20,9 +28,18 @@ public class QuestionSchema {
 		}
 	}
 	
+	/**
+	 * getter method for questions
+	 * @return ArrayList of questions
+	 */
 	ArrayList<Question_Alt> getQuestions(){
 		return questions;
 	}
+	
+	/**
+	 * getter method for answers
+	 * @return Strings containing the correct answers
+	 */
 	ArrayList<String> getAnswers(){
 		return answers;
 	}

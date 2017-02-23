@@ -21,6 +21,11 @@ public class CreateQWindow implements Window {
 		ctrl=ctrlIn;
 		
 	}
+	
+	/**
+	 * create a scene with create question forms
+	 * @return Scene
+	 */
 	public Scene createScene(){
 		int xBase=600, yBase=200;
 		Pane root = new Pane();
@@ -57,7 +62,12 @@ public class CreateQWindow implements Window {
 	
 	
 	
-	
+	/**
+	 * Load question object to file
+	 * @param filename 
+	 * @param q Question object to be saved
+	 * @throws IOException
+	 */
 	public void saveFile(String filename, Question q) throws IOException{
 		
 		PrintWriter p = new PrintWriter(filename);
