@@ -1,5 +1,4 @@
-package TECKS;
-
+package javaClientCode;
 
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -89,6 +88,11 @@ public class CustomParser {
 			if (current.contains("Header:")){
 				String[] temp = current.split(":");
 				q.setHeader(temp[1]);
+			}
+			else if (current.contains("c: ")){
+				String[] temp = current.split(":");
+				q.setCategory(temp[1]);
+				
 			}
 			else if (current.contains("q:")){
 				String[] temp = current.split(":");

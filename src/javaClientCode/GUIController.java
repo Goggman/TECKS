@@ -2,7 +2,7 @@ package javaClientCode;
 import java.util.ArrayList;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-public class GUIController { //Connects all different components, lots of control n stuff
+public class GUIController { //Connects all the different scenes in an array, used as and argument with the stage in all sceneCreators
 	
 	ArrayList<Scene> windows;
 	Stage stage;
@@ -10,9 +10,11 @@ public class GUIController { //Connects all different components, lots of contro
 	GUIController(Stage stageInput){
 		stage=stageInput;
 		windows = new ArrayList<>();
-		Window mw = new MenuWindow(stage, this);								//Create the scenes to use, then add them in the list of windows/scenes
-		Window qw = new QuestionWindow(stage, new QuestionSchema(), this);
-		addScene(mw.createScene()); addScene(qw.createScene());
+		Window mw = new MenuWindow(stage, this);//Create the scenes to use, then add them in the list of windows/scenes
+		Window qw = new QuestionWindow(stage, this, new QuestionSchema());
+		Window cqw = new CreateQWindow(stage, this);
+		Window lqw = new LoadQWindow(stage, this);
+		addScene(mw.createScene()); addScene(qw.createScene()); addScene(cqw.createScene()); addScene(lqw.createScene());
 		
 	}
 	
@@ -22,7 +24,7 @@ public class GUIController { //Connects all different components, lots of contro
 		}
 		
 	}
-	Scene getWindow(int index){
+	Scene getScene(int index){
 		return windows.get(index);
 	}
 	

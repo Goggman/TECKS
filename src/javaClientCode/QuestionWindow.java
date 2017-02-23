@@ -16,7 +16,7 @@ public class QuestionWindow implements Window {
 	int quizStarted;
 	Stage stage;
 	GUIController ctrl;
-	QuestionWindow(Stage stageInput, QuestionSchema schema1, GUIController ctrlIn){
+	QuestionWindow(Stage stageInput, GUIController ctrlIn, QuestionSchema schema1){
 		schema=schema1;
 		index=0;
 		quizStarted = 0;
@@ -26,7 +26,7 @@ public class QuestionWindow implements Window {
 	}
 
 	public Scene createScene(){
-		int xBase=300; int yBase=200;
+		int xBase=300, yBase=200;
 		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
@@ -42,7 +42,7 @@ public class QuestionWindow implements Window {
 		questBut.setOnAction(e-> {
 			Analyzer analyzer = new Analyzer();
 			for (int i=0;i<schema.getQuestions().size();i++){
-				Question question=schema.getQuestions().get(i);
+				Question_Alt question=schema.getQuestions().get(i);
 				String correctAnswer = question.getCorrectAnswer();
 				String answer = schema.getAnswers().get(i);
 				String category = question.getCategory();
@@ -81,7 +81,7 @@ public class QuestionWindow implements Window {
 		
 		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+150);
 		menu.setOnAction(e->{
-			stage.setScene(ctrl.getWindow(0));
+			stage.setScene(ctrl.getScene(0));
 			
 		});
 	
@@ -94,5 +94,6 @@ public class QuestionWindow implements Window {
 	QuestionSchema getSchema(){
 		return schema;
 	}
+	
 
 }
