@@ -33,7 +33,7 @@ public class LoadQWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=600, yBase=200;
-		Pane root = new Pane();
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label("QuestionLoader"); feed.setLayoutX(xBase-600); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
 		feed.setPrefSize(600, 300); feed.setText(""+System.getProperty("user.dir"));
 		TextField path = new TextField(); path.setLayoutX(xBase+0); path.setLayoutY(yBase+50); path.setPromptText("Enter path directory");
