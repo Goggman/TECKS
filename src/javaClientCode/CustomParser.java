@@ -16,6 +16,12 @@ public class CustomParser {
 		
 	}
 	
+	/**
+	 * read from file and create a new question object
+	 * @param path
+	 * @return Arraylist matrix with strings
+	 * @throws IOException
+	 */
 	public ArrayList<ArrayList<String>> OpenFile(String path) throws IOException{
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);
@@ -41,12 +47,11 @@ public class CustomParser {
 	}
 		
 	
-	
-
-	public CustomParser() {
-		// 
-	}
-	
+	/**
+	 * creates new question object from ArrayList in the ArrayList matrix	
+	 * @param qe
+	 * @return Question object
+	 */
 	public Question createQuestion(ArrayList<String> qe){
 		
 		Question q = new Question();

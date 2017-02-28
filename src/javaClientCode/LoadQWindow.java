@@ -17,12 +17,20 @@ import javafx.scene.control.MenuItem;
 public class LoadQWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
-	
+	/**
+	 * get stage and controller
+	 * @param stageIn
+	 * @param ctrlIn
+	 */
 	LoadQWindow(Stage stageIn, GUIController ctrlIn){
 		stage=stageIn;
 		ctrl=ctrlIn;
 		
 	}
+	/**
+	 * method for creating Load Question scene
+	 * @return
+	 */
 	public Scene createScene(){
 		int xBase=600, yBase=200;
 		Pane root = new Pane();
@@ -56,7 +64,12 @@ public class LoadQWindow implements Window {
 	}
 	
 	
-	
+	/**
+	 * read from file and create a new question object
+	 * @param path
+	 * @return Arraylist matrix with strings
+	 * @throws IOException
+	 */
 	public ArrayList<ArrayList<String>> OpenFile(String path) throws IOException{ //Returnerer en liste av spørsmål i standard format
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);

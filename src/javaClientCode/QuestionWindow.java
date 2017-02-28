@@ -25,6 +25,10 @@ public class QuestionWindow implements Window {
 		
 	}
 
+	/**
+	 * Method for creating a scene in gui controller
+	 * @return scene1 Scene objekt
+	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
 		Pane root = new Pane(); 
@@ -91,6 +95,10 @@ public class QuestionWindow implements Window {
 		return scene1;
 	}
 	
+	/**
+	 * 
+	 * @return schema returns schema for the quiz window
+	 */
 	QuestionSchema getSchema(){
 		return schema;
 	}

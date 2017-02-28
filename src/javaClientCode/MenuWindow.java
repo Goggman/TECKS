@@ -20,6 +20,10 @@ public class MenuWindow implements Window{
 		
 	}
 	
+	/**
+	 * create scene for the main menu
+	 * @return
+	 */
 	public Scene createScene(){
 		int xBase=600; int yBase = 200;
 		Pane root = new Pane();
