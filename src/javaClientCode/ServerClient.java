@@ -1,16 +1,16 @@
 package javaClientCode;
 import java.net.*;
+import java.util.Scanner;
 import java.io.*;
-public class ServerCom {
-	String localIP="10.22.40.214";
-	
+public class ServerClient {
+	String localIP="10.22.41.239"; //Will change frequently
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
     
-    ServerCom(){
-    	init(new String[]{localIP, "12000"});
-    	
+    ServerClient(){
+    	init(new String[]{"localhost", "12000"});
+    	System.out.println("Reay to send");
     }
 	    void init(String[] args) {
 	        
@@ -39,17 +39,30 @@ public class ServerCom {
 	void send(String message){//Should send user specific data and updates into socket towards server
 		try{
 		out.println(message);
-    	System.out.println("echo: " + in.readLine());
+    	
 		}
-		catch (IOException e) {
-            System.out.println("Couldn't get I/O for the connection <hostname>");
+		catch (Exception e) {
+            System.out.println("Something happened during excecution of send");
         }  
 	}
 	
-	void request(){//Fetch user info and status on login maybe
-		
+	void receive(){//Fetch user info and status on login maybe
+		try{
+			System.out.println("Received message: " + in.readLine());
+			
+		}
+		catch (IOException ae){
+			System.out.println("Couldn't get I/O for the connection to host");
+		}
 	}
 	public static void main(String[] args) {
+		ServerClient sender = new ServerClient();
+		Scanner scanner = new Scanner(System.in);
+		while(true){
+			String input = scanner.nextLine();
+			sender.send(""+input);
+			sender.receive();
+		}
 		
 	}
 }
