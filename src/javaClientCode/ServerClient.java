@@ -1,16 +1,20 @@
 package javaClientCode;
 import java.net.*;
+import java.time.LocalTime;
 import java.util.Scanner;
 import java.io.*;
+
+
 public class ServerClient {
-	String localIP="10.22.41.239"; //Will change frequently
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
+    MessageReceiver receiver;
     
     ServerClient(){
     	init(new String[]{"localhost", "12000"});
-    	System.out.println("Reay to send");
+    	
+    	listen();
     }
 	    void init(String[] args) {
 	        
@@ -33,13 +37,18 @@ public class ServerClient {
 	        } 
 	        catch (IOException e) {
 	            System.out.println("Couldn't get I/O for the connection to " +hostName);
-	        } 
+	        }
+	        receiver = new MessageReceiver(this);
+	        receiver.start();
+	        
+	        System.out.println("Reay to send\n");
 	    }
+
 	
-	void send(String message){//Should send user specific data and updates into socket towards server
-		try{
-		out.println(message);
-    	
+	void parse(String payload){
+		if (get_response(payload).equals("info")){
+			parse_info(payload);
+			
 		}
 		catch (Exception e) {
             System.out.println("Something happened during excecution of send");
@@ -63,6 +72,7 @@ public class ServerClient {
 			sender.send(""+input);
 			sender.receive();
 		}
+		
 		
 	}
 }
