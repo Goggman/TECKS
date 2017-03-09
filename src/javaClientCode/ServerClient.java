@@ -60,6 +60,9 @@ public class ServerClient {
 		else if(get_response(payload).equals("error")){
 			parse_error(payload);
 		}
+		else if(get_response(payload).equals("question")){
+			parse_question(payload);
+		}
 		else{
 			System.out.println("Bad request");
 		}
@@ -74,20 +77,34 @@ public class ServerClient {
 		return payload.split("\t")[1].split(":")[1];
 	}
 	String get_timestamp(String payload){
-		return payload.split("\t")[0].split(":")[1];
+		return payload.split("\t")[0].split("timestamp:")[1];
+		//timestamp:
 		
 	}
 	void parse_error(String payload){
-		System.out.println(payload);
+		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
-		System.out.println(payload);
+		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
-		System.out.println(payload);
+		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
-		System.out.println(payload);
+		printPrettyMessageGeneral(payload);
+	}
+	
+	void parse_question(String payload){
+		printPrettyMessageGeneral(payload);
+	}
+	void printPrettyMessageGeneral(String payload){
+		System.out.println(
+				"time:\t\t"+get_timestamp(payload)+"\n"+
+				"sender:\t\t"+get_sender(payload)+"\n"+
+				"response:\t"+get_response(payload)+"\n"+
+				"content:\t"+get_content(payload)+"\n"
+				
+						);
 	}
 	void listen(){
 		Scanner scanner = new Scanner(System.in); //When scenes are properly set up, all will println to some kind of outputstream
