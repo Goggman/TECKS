@@ -31,7 +31,7 @@ public class QuestionWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
-		Pane root = new Pane(); 
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
 		userInput.setOnAction(e -> {

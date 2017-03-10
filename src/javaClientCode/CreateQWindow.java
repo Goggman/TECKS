@@ -28,7 +28,7 @@ public class CreateQWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=600, yBase=200;
-		Pane root = new Pane();
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		TextField head = new TextField(); head.setLayoutX(xBase+0); head.setLayoutY(yBase+0);
 		TextField qText = new TextField(); qText.setLayoutX(xBase+0); qText.setLayoutY(yBase+50);
 		TextField aText = new TextField(); aText.setLayoutX(xBase+0); aText.setLayoutY(yBase+100);
