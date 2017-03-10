@@ -71,7 +71,12 @@ public class ServerClient {
 		return payload.split("\t")[2].split(":")[1];
 	}
 	String get_content(String payload){
-		return payload.split("\t")[3].split(":")[1];
+		try{
+			return payload.split("\t")[3].split(":")[1];
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			return "";
+		}
 	}
 	String get_sender(String payload){
 		return payload.split("\t")[1].split(":")[1];
