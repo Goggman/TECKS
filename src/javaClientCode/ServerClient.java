@@ -12,6 +12,7 @@ public class ServerClient {
     MessageReceiver receiver;
     
     ServerClient(){
+    	//System.out.println(System.getProperty("user.dir"));
     	init(new String[]{"localhost", "12000"});
     	
     	listen();
@@ -43,7 +44,7 @@ public class ServerClient {
 	        
 	        System.out.println("Reay to send\n");
 	    }
-
+	    
 	
 	void parse(String payload){
 		if (get_response(payload).equals("info")){
@@ -114,7 +115,18 @@ public class ServerClient {
 	void listen(){
 		Scanner scanner = new Scanner(System.in); //When scenes are properly set up, all will println to some kind of outputstream
 		while(true){
-			String[] user_input=scanner.nextLine().split(" ");
+			String line = scanner.nextLine();
+			if (line.equals("exit")){
+				System.out.println("Closing client");
+				scanner.close();
+				break;
+			}
+			else if (line.equals("connect")){
+				
+				init(new String[]{"localhost","12000"});
+				continue;
+			}
+			String[] user_input=line.split(" ");
 			String req=user_input[0];
 			String con = "";
 			for(int x=1;x<user_input.length;x++){
@@ -144,6 +156,8 @@ public class ServerClient {
 				catch(IOException ee){
 					System.out.println("Server disconnected");
 					break;
+					
+					
 				}
 					
 			}
