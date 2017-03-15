@@ -2,37 +2,76 @@ package javaClientCode;
 import java.util.ArrayList;
 import java.util.HashMap;
 public class QuestionSchema {
-	ArrayList<String> answers;
-	ArrayList<Question_Alt> questions;
+	HashMap<Question, String> answers = new HashMap<>();
+	ArrayList<Question> questions = new ArrayList<>();
+	String category;
 	
 	/**
 	 * creates new question; generates empty strings to be filled in
 	 * @param questionQuiz list of Question objects 
 	 */
+	/*
 	QuestionSchema(ArrayList<Question_Alt> questionQuiz){
 		questions=questionQuiz;
 		answers=new ArrayList<String>();
 		for (int x=0;x<questions.size();x++){
 			answers.add("");
 		}
+	}*/
+	
+	QuestionSchema(ArrayList<ArrayList<String>> quizList){
+		
+		for (ArrayList<String> list : quizList){
+			Question q = new Question();
+			for (String s : list){
+				
+				String[] temp = s.split(":");
+				if (temp.length < 1){
+					//do nothing
+				}
+				else if (s.contains("Header: ")){
+					q.setHeader(temp[1].trim());
+				}
+				else if (s.contains("q:")){
+					q.setQuestion(temp[1].trim());
+				}
+				else if (s.contains("a:")){
+					q.setAnswer(temp[1].trim());
+				}
+				else if (s.contains("op:")){
+					q.addOptions(temp[1].trim());
+				}
+				else if (s.contains("c:")){
+					q.setCategory(temp[1].trim());
+				}
+			}
+			questions.add(q);
+			
+			
+		}
+	
+	}
+	
+	QuestionSchema(){
+		
 	}
 	
 	/**
 	 * creates new question if no params are specified
-	 */
+	 *//*
 	QuestionSchema(){
 		questions=makeQuiz();
 		answers=new ArrayList<String>();
 		for (int x=0;x<questions.size();x++){
 			answers.add("");
 		}
-	}
+	}*/
 	
 	/**
 	 * getter method for questions
 	 * @return ArrayList of questions
 	 */
-	ArrayList<Question_Alt> getQuestions(){
+	ArrayList<Question> getQuestions(){
 		return questions;
 	}
 	
@@ -40,10 +79,13 @@ public class QuestionSchema {
 	 * getter method for answers
 	 * @return Strings containing the correct answers
 	 */
-	ArrayList<String> getAnswers(){
+	HashMap<Question, String> getAnswers(){
 		return answers;
 	}
-
+	
+	
+	
+	/*
 	ArrayList<Question_Alt> makeQuiz(){
 		ArrayList<Question_Alt> quiz = new ArrayList<Question_Alt>();
 		Question_Alt question1 = new Question_Alt("String_Formatting", "Which method do one use when comparing strings in Java 8?","equals");
@@ -59,6 +101,6 @@ public class QuestionSchema {
 		quiz.add(question5);
 		
 		return quiz;
-	}
+	}*/
 	
 }

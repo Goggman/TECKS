@@ -6,6 +6,7 @@ public class Question {
 	
 	private String questionText, correctAnswer, header, category; 
 	private ArrayList<String> options = new ArrayList<>();
+	private int difficulty;
 	
 	/**
 	 * getter method for the question text
@@ -15,6 +16,10 @@ public class Question {
 		return questionText;
 	}
 
+	public int getDifficulty(){
+		return difficulty;
+	}
+	
 	/**
 	 * getter method for correct answer
 	 * @return String with correct answer
@@ -56,6 +61,13 @@ public class Question {
 	 */
 	public Question(String categoryInput, String question, String answer, String header, String... options){
 		this.questionText = question;
+		String[] props = header.split(",");
+		for (String words : props){
+			if (words.contains("difficulty")) {
+				this.difficulty = Integer.parseInt(words.split("-")[words.split("-").length-1]);
+				
+			}
+		}
 		this.correctAnswer  = answer;
 		this.category=categoryInput;
 		this.header = header;
@@ -86,7 +98,7 @@ public class Question {
 	 * add method for options
 	 * @param option
 	 */
-	public void setOptions(String option) {
+	public void addOptions(String option) {
 		this.options.add(option);
 	}
 
@@ -112,5 +124,9 @@ public class Question {
 	 */
 	public void setQuestion(String string) {
 		this.questionText = string;
+	}
+	
+	public String toString(){
+		return "" + difficulty + questionText + correctAnswer;
 	}
 }

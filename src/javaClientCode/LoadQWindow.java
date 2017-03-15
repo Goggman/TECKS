@@ -17,12 +17,21 @@ import javafx.scene.control.MenuItem;
 public class LoadQWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
+	ArrayList<ArrayList<String>> quizHolder = new ArrayList<>();
+	private QuestionWindow qw;
+	
+	
+	public ArrayList<ArrayList<String>> getQuizHolder(){
+		System.out.println(quizHolder.toString());
+		return quizHolder;
+	}
 	/**
 	 * get stage and controller
 	 * @param stageIn
 	 * @param ctrlIn
 	 */
-	LoadQWindow(Stage stageIn, GUIController ctrlIn){
+	LoadQWindow(Stage stageIn, GUIController ctrlIn, QuestionWindow qw){
+		this.qw = qw;
 		stage=stageIn;
 		ctrl=ctrlIn;
 		
@@ -40,6 +49,9 @@ public class LoadQWindow implements Window {
 		path.setPrefWidth(600);
 		path.setOnAction(e->{
 			try{
+				
+				quizHolder = OpenFile(path.getText());
+				qw.addSchema(new QuestionSchema(quizHolder));
 				feed.setText(OpenFile(path.getText()).toString());
 				
 			}
@@ -51,6 +63,7 @@ public class LoadQWindow implements Window {
 			}
 			
 		});
+		
 		//TextField aText = new TextField(); aText.setLayoutX(xBase+0); aText.setLayoutY(yBase+100);
 		
 		Button back = new Button("Back"); back.setLayoutX(xBase+0); back.setLayoutY(yBase+200);
@@ -84,10 +97,10 @@ public class LoadQWindow implements Window {
 				textData.add(new ArrayList<String>());
 				i++;
 			}
-			//System.out.println(next);
 			textData.get(i).add(next);
 			
 		}
+	
 		
 		textReader.close();
 		return textData;
