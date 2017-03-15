@@ -16,8 +16,8 @@ public class ClientHandler implements Runnable{
 	private Socket clientSocket;
 	private PrintWriter out;
     private BufferedReader in;
-    private String username=null;
-    private String chatroom=null;
+    private String username;
+    private String chatroom;
     private String current_subject;
     
 	ClientHandler(ServerHost server, Socket clientSocket)  {
@@ -175,7 +175,7 @@ public class ClientHandler implements Runnable{
 		}
 		
 	}
-
+	
 	
 	
 	
@@ -225,7 +225,7 @@ public class ClientHandler implements Runnable{
 		prop.put(username,new HashMap());
 		HashMap userdata = (HashMap)server.getProperties().get("users").get(username);
 		userdata.put("subjects", new HashMap<String,HashMap>());
-		userdata.put("overall_score",0);
+		//userdata.put("overall_score",0);
 		setUsername(username);
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
@@ -402,12 +402,19 @@ public class ClientHandler implements Runnable{
 		}
 		else{
 			
+			
+			((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).put(getContent(payload), new HashMap());   //casing out of control, setup the standard keys for a user-subject
+			((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getContent(payload))).put("score",null);
+			((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getContent(payload))).put("categories",new HashMap());  
+			((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getContent(payload))).get("categories")).put("score",null);
+			
+			((ArrayList)((HashMap)server.getProperties().get("subjects").get(getContent(payload))).get("members")).add(getUsername());
+			
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:Current subject set successfully";
+					+ "content:Subject added successfully";
 			out.println(returnToClient);
-			this.current_subject=getContent(payload);
 		}
 	}
 	void parse_add_question(String payload){
@@ -460,7 +467,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:"+subjects;
+					+ "content:Subjects registered - "+subjects;
 			out.println(returnToClient);
 		}
 			
@@ -476,7 +483,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:"+subjects;
+					+ "content:Your subjects - "+subjects;
 			out.println(returnToClient);
 		}
 		else{
@@ -502,6 +509,8 @@ public class ClientHandler implements Runnable{
 			
 			
 			((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).remove(getContent(payload));
+			((ArrayList)((HashMap)server.getProperties().get("subjects").get(getContent(payload))).get("members")).remove(getUsername());
+			
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
@@ -635,8 +644,17 @@ public class ClientHandler implements Runnable{
 			
 		}
 	}
+	//add methods to save status on score and grade for each user in each subject
+	void get_stats(String payload){ //get overall score for each subject, and score for each category
+		//get subject - <overall score> category - score - category - score
+		// do this for every subject registered for the user
+	}
+	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
+		//need to define subprotocol, maybe content: <category> <points added>
 		
-	
+		//first regular error checking, user needs to be logged in, current subject not null etc
+		//them spimply update the relevevant properties, checking if null, and adding to a counter which keeps track of the number of questions asked
+	}
 	
 	
 	

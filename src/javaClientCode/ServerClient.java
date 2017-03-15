@@ -3,19 +3,21 @@ import java.net.*;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.io.*;
-
-
+import java.util.LinkedList;
+import java.util.Queue;
 public class ServerClient {
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
     MessageReceiver receiver;
+    Queue<String> serverIn;
+    Queue<String> messageIn;
     
     ServerClient(){
     	//System.out.println(System.getProperty("user.dir"));
     	init(new String[]{"localhost", "12000"});
     	
-    	listen();
+    	//listen();
     }
 	    void init(String[] args) {
 	        
@@ -39,6 +41,8 @@ public class ServerClient {
 	        catch (IOException e) {
 	            System.out.println("Couldn't get I/O for the connection to " +hostName);
 	        }
+	        serverIn = new LinkedList<String>();
+	        messageIn = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -88,19 +92,25 @@ public class ServerClient {
 		
 	}
 	void parse_error(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
+		messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
+		serverIn.add(payload);
+		messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	
 	void parse_question(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){
@@ -112,6 +122,11 @@ public class ServerClient {
 				
 						);
 	}
+	void sendMessage(String payload){
+		out.println(payload);
+	}
+	
+	
 	void listen(){
 		Scanner scanner = new Scanner(System.in); //When scenes are properly set up, all will println to some kind of outputstream
 		while(true){
@@ -171,10 +186,11 @@ public class ServerClient {
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		ServerClient sender = new ServerClient();
+	//**
+	//public static void main(String[] args) {
+	//	ServerClient sender = new ServerClient();
 		
 		
-	}
+	//}
+	//**
 }
