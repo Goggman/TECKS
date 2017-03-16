@@ -46,6 +46,16 @@ public class QuestionWindow implements Window {
 		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
+		root.getChildren().add(userInput);
+		userInput.setOnAction(ev -> {
+			if (quizStarted == 1){
+				
+				schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
+				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+userInput.getText());
+				userInput.clear();
+			}
+			
+		});
 		//TODO: different question types
 		
 		
@@ -131,18 +141,8 @@ public class QuestionWindow implements Window {
 				
 				int xRadio = xBase + 50, yRadio = 400;
 				if (qType.substring(0, qType.indexOf(",")).equals("fill-in")){
-					root.getChildren().add(userInput);
-					userInput.setOnAction(ev -> {
-						if (quizStarted == 1){
-							
-							schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
-							feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+userInput.getText());
-							userInput.clear();
-						}
-						
-					});
 				}
-				else if (qType.substring(0, qType.indexOf(",")).equals("multiple-choice")){
+				/*else if (qType.substring(0, qType.indexOf(",")).equals("multiple-choice")){
 					if (quizStarted == 1){
 						for (String op : schema.getQuestions().get(index).getOptions()){
 							RadioButton temp = new RadioButton(op);temp.setLayoutX(xRadio);temp.setLayoutY(yRadio);
@@ -157,7 +157,7 @@ public class QuestionWindow implements Window {
 							root.getChildren().add(temp);
 						}
 					}
-				}
+				}*/
 				}
 			else if (schemas.size() < 1){
 				feed.setText("No schema found \n try loading one from file");
