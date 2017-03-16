@@ -34,12 +34,17 @@ public class CreateQWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=600, yBase=200;
+
 		ArrayList<Question> quiz = new ArrayList<>();
 		
 		Pane root = new Pane();
 		TextField head = new TextField(); head.setLayoutX(xBase+0); head.setLayoutY(yBase+0); head.setPromptText("Set header");
 		TextField qText = new TextField(); qText.setLayoutX(xBase+0); qText.setLayoutY(yBase+50);qText.setPromptText("Question");
 		TextField aText = new TextField(); aText.setLayoutX(xBase+0); aText.setLayoutY(yBase+100);aText.setPromptText("Answer");
+
+		root.setStyle("-fx-background-color: white");
+		
+
 		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
 		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("filename");
 		

@@ -26,7 +26,7 @@ public class MenuWindow implements Window{
 	 */
 	public Scene createScene(){
 		int xBase=600; int yBase = 200;
-		Pane root = new Pane();
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label();
 		Button menu1 = new Button("Goto quiz"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+0);
 		menu1.setOnAction(e->{
