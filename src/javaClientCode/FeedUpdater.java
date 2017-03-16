@@ -1,25 +1,34 @@
 package javaClientCode;
 import javafx.scene.control.Label;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.Queue;
 public class FeedUpdater implements Runnable{
 		Thread t;
 		ServerClient client;
 		Label feed;
-		FeedUpdater(ServerClient client, Label feed){
+		Queue<String> queue;
+		FeedUpdater(ServerClient client, Label feed, Queue<String> queue){
 			this.client=client;
 			this.feed=feed;
+			this.queue=queue;
 		}
+
+
 		public void run(){
-			System.out.println("feedupdater started");
 			while (true){
-				for(int x=0;x<1000000000;x++){
-					//Wait for message
+				for(long x=0;x<10000000;x++){
+					//Wait
 				}
-				String newMessage = client.serverIn.poll();
-				if (newMessage!=null){
-					//System.out.println("feedupdater got this message: "+newMessage);
-					feed.setText(newMessage);
-					break;
+				String payload = queue.poll();
+				if (payload!=null){
+					Platform.runLater(()->{
+						feed.setText(feed.getText()+"\n\n"+client.get_sender(payload)+"\n"+client.get_content(payload));
+					});
+					
 				}
 					
 			}

@@ -96,17 +96,18 @@ public class ClientHandler implements Runnable{
 						+"\tsender:server\t"
 						+ "response:info\t"
 						+ "content:"+this.username+" logged out";
-				
+				((HashMap)server.getProperties().get("connected_clients")).remove(this); //remove oneself from connected clients 
+				if (getChat()!=null){
 				ArrayList chat= (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log");  //add message to chat
 				chat.add(returnToClients);
 				HashMap users= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users"); //remove oneself from chatroom
-				users.remove(this);
-				((HashMap)server.getProperties().get("connected_clients")).remove(this); 								 //remove oneself from connected clients 
+				users.remove(this);	 								
 				Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();
 				while(clients.hasNext()){
 					((ClientHandler)clients.next()).getOut().println(returnToClients);
 				}
 				setUsername(null);
+				}
 				break;
 			}
 				

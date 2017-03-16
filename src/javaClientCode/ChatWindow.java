@@ -1,6 +1,7 @@
 package javaClientCode;
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -39,8 +40,8 @@ public class ChatWindow implements Window{
 		});
 		root.getChildren().addAll(feed, menu1,menu2, text);
 		Scene scene = new Scene(root, 300, 300);
-		//FeedUpdater updater = new FeedUpdater(client, feed);
-		//updater.start();
+		FeedUpdater updater = new FeedUpdater(client, feed, client.messageIn);
+		updater.start();
 		return scene;
 	}
 	

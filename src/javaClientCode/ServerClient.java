@@ -14,10 +14,9 @@ public class ServerClient {
     Queue<String> messageIn;
     
     ServerClient(){
-    	//System.out.println(System.getProperty("user.dir"));
     	init(new String[]{"localhost", "12000"}); //
     	
-    	listen();
+    	//listen();
     }
 	    void init(String[] args) {
 	        
@@ -187,10 +186,10 @@ public class ServerClient {
 	}
 	
 	
-	public static void main(String[] args) {
-		ServerClient sender = new ServerClient();
+	//public static void main(String[] args) {
+	//	ServerClient sender = new ServerClient();
 		
 		
-	}
+	//}
 
 }
