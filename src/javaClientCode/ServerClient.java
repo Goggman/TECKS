@@ -3,18 +3,21 @@ import java.net.*;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.io.*;
-
-
+import java.util.LinkedList;
+import java.util.Queue;
 public class ServerClient {
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
     MessageReceiver receiver;
+    Queue<String> serverIn;
+    Queue<String> messageIn;
     
     ServerClient(){
+    	//System.out.println(System.getProperty("user.dir"));
     	init(new String[]{"localhost", "12000"});
     	
-    	listen();
+    	//listen();
     }
 	    void init(String[] args) {
 	        
@@ -38,12 +41,14 @@ public class ServerClient {
 	        catch (IOException e) {
 	            System.out.println("Couldn't get I/O for the connection to " +hostName);
 	        }
+	        serverIn = new LinkedList<String>();
+	        messageIn = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
 	        System.out.println("Reay to send\n");
 	    }
-
+	    
 	
 	void parse(String payload){
 		if (get_response(payload).equals("info")){
@@ -87,19 +92,25 @@ public class ServerClient {
 		
 	}
 	void parse_error(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
+		messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
+		serverIn.add(payload);
+		messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	
 	void parse_question(String payload){
+		serverIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){
@@ -111,10 +122,26 @@ public class ServerClient {
 				
 						);
 	}
+	void sendMessage(String payload){
+		out.println(payload);
+	}
+	
+	
 	void listen(){
 		Scanner scanner = new Scanner(System.in); //When scenes are properly set up, all will println to some kind of outputstream
 		while(true){
-			String[] user_input=scanner.nextLine().split(" ");
+			String line = scanner.nextLine();
+			if (line.equals("exit")){
+				System.out.println("Closing client");
+				scanner.close();
+				break;
+			}
+			else if (line.equals("connect")){
+				
+				init(new String[]{"localhost","12000"});
+				continue;
+			}
+			String[] user_input=line.split(" ");
 			String req=user_input[0];
 			String con = "";
 			for(int x=1;x<user_input.length;x++){
@@ -144,6 +171,8 @@ public class ServerClient {
 				catch(IOException ee){
 					System.out.println("Server disconnected");
 					break;
+					
+					
 				}
 					
 			}
@@ -157,10 +186,11 @@ public class ServerClient {
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		ServerClient sender = new ServerClient();
+	//**
+	//public static void main(String[] args) {
+	//	ServerClient sender = new ServerClient();
 		
 		
-	}
+	//}
+	//**
 }
