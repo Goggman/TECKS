@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 
 public class QuestionWindow implements Window {
 	QuestionSchema schema;
@@ -28,9 +29,7 @@ public class QuestionWindow implements Window {
 	}
 	
 	QuestionWindow(Stage stageInput, GUIController ctrlIn){
-		//System.out.println(lqw.getQuizHolder().toString());
 		
-		//schema=new QuestionSchema(lqw.getQuizHolder());
 		index=0;
 		quizStarted = 0;
 		stage=stageInput;
@@ -47,14 +46,8 @@ public class QuestionWindow implements Window {
 		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
-		userInput.setOnAction(e -> {
-			if (quizStarted == 1){
-				
-				schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
-				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+userInput.getText());
-				userInput.clear();
-			}
-		});
+		//TODO: different question types
+		
 		
 		//
 		Button questBut = new Button("Confirm Answer"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
@@ -67,7 +60,7 @@ public class QuestionWindow implements Window {
 					String correctAnswer = question.getCorrectAnswer();//
 					String answer = schema.getAnswers().get(question); //user input
 					String category = question.getCategory();
-					System.out.println(answer + " | " + correctAnswer);
+					
 					analyzer.getCategories().putIfAbsent(category, 0);
 					if (correctAnswer.equals(answer)){
 						try {
@@ -76,7 +69,7 @@ public class QuestionWindow implements Window {
 							analyzer.getCategories().put(category, 1);
 						}
 					}
-					else {System.out.println("not correct");}
+					
 					
 				}
 				feed.setText("Your results: \n"+analyzer.getCategories().toString());
@@ -106,41 +99,15 @@ public class QuestionWindow implements Window {
 			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
 			}
 		});
-		//TODO: fix triple click
+		//
 		
 		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);pickCategory.setText("Pick category");
-		/*pickCategory.setOnMouseClicked(e -> {
-			System.out.println("size: " + schemas.size());
-			System.out.println("categories: " + pickCategory.getItems().size());
-			if (pickCategory.getItems().size() < schemas.size()){
-				for (int i = 0; i < schemas.size(); i++){
-					System.out.println("i: " + i);
-					MenuItem temp = new MenuItem("quiz" + (i + 1));
-					pickCategory.getItems().add(temp); 
-					temp.setOnAction(ev -> {
-						index = 0;
-						
-						try {
-							schema = schemas.get(0);
-							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
-							quizStarted=1;
-							System.out.println("item successfully added");
-						}
-						catch (IndexOutOfBoundsException ex){
-							feed.setText("no quiz selected");
-						}
-						catch (NullPointerException eex){
-							feed.setText("no schema found");
-						}
-					});
-				}
-			}
-		});*/
+		
 		Button load = new Button("Load"); load.setLayoutX(xBase+300);load.setLayoutY(yBase);
 		load.setOnAction(e -> {
 			if (pickCategory.getItems().size() < schemas.size()){
 				for (int i = 0; i < schemas.size(); i++){
-					System.out.println("i: " + i);
+					
 					MenuItem temp = new MenuItem("quiz" + (i + 1));
 					pickCategory.getItems().add(temp); 
 					temp.setOnAction(ev -> {
@@ -150,7 +117,7 @@ public class QuestionWindow implements Window {
 							schema = schemas.get(0);
 							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
 							quizStarted=1;
-							System.out.println("item successfully added");
+							
 						}
 						catch (IndexOutOfBoundsException ex){
 							feed.setText("no quiz selected");
@@ -160,19 +127,43 @@ public class QuestionWindow implements Window {
 						}
 					});
 				}
+				String qType = schema.getQuestions().get(index).getHeader();
+				
+				int xRadio = xBase + 50, yRadio = 400;
+				if (qType.substring(0, qType.indexOf(",")).equals("fill-in")){
+					root.getChildren().add(userInput);
+					userInput.setOnAction(ev -> {
+						if (quizStarted == 1){
+							
+							schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
+							feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+userInput.getText());
+							userInput.clear();
+						}
+						
+					});
+				}
+				else if (qType.substring(0, qType.indexOf(",")).equals("multiple-choice")){
+					if (quizStarted == 1){
+						for (String op : schema.getQuestions().get(index).getOptions()){
+							RadioButton temp = new RadioButton(op);temp.setLayoutX(xRadio);temp.setLayoutY(yRadio);
+							temp.setOnAction(ev -> {
+								if (temp.isSelected()){
+									schema.getAnswers().put(schema.getQuestions().get(index), temp.getText());
+								}
+							});
+							
+							
+							
+							root.getChildren().add(temp);
+						}
+					}
+				}
+				}
+			else if (schemas.size() < 1){
+				feed.setText("No schema found \n try loading one from file");
 			}
 		});
-//		MenuItem item1 = new MenuItem("quiz1"); item1.setOnAction(e->{
-//			index=0;
-//			try {
-//				feed.setText(""+schema.getQuestions().get(index).getQuestionText());
-//				quizStarted=1;
-//			}
-//			catch (IndexOutOfBoundsException ex){
-//				feed.setText("no quiz selected");
-//			}
-//			
-//		});
+
 		
 		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+150);
 		menu.setOnAction(e->{
@@ -181,7 +172,7 @@ public class QuestionWindow implements Window {
 		});
 	
 		
-		root.getChildren().addAll(userInput,feed, questBut, nextQ, prevQ, pickCategory, menu, load);
+		root.getChildren().addAll(feed, questBut, nextQ, prevQ, pickCategory, menu, load);
 		Scene scene1 = new Scene(root, 1300, 700);
 		return scene1;
 	}
