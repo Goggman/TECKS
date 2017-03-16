@@ -17,7 +17,7 @@ public class SaveToFile {
 		p.println("c: "+q.getCategory());
 		p.println("q: " + q.getQuestionText());
 		for (int i = 0; i < q.getOptions().size(); i++){
-			p.println(q.getOptions().get(i));
+			p.println("op: " + q.getOptions().get(i));
 		}
 		p.println("a: " + q.getCorrectAnswer());
 		p.close();
