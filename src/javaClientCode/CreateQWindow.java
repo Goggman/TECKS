@@ -45,6 +45,7 @@ public class CreateQWindow implements Window {
 			Question newQuestion = new Question("categoryInput", questionText, answerText, headerText);
 		});
 		Button back = new Button("Back"); back.setLayoutX(xBase+0); back.setLayoutY(yBase+250);
+		back.setStyle("-fx-text-fill: #ff003a");
 		back.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 		});

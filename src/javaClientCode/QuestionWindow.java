@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
@@ -16,6 +17,7 @@ public class QuestionWindow implements Window {
 	int quizStarted;
 	Stage stage;
 	GUIController ctrl;
+	//scene.getStylesheets().add(GUICSS.css)
 	QuestionWindow(Stage stageInput, GUIController ctrlIn, QuestionSchema schema1){
 		schema=schema1;
 		index=0;
@@ -26,23 +28,22 @@ public class QuestionWindow implements Window {
 	}
 
 	/**
-	 * Method for creating a scene in gui controller
-	 * @return scene1 Scene objekt
+	 * Method for creating a scene in controller
+	 * @return scene1 Scene 
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
 		Pane root = new Pane(); 
-		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
-		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
+		Label feed = new Label(); feed.setLayoutX(xBase-250); feed.setLayoutY(yBase-100); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(300, 400); feed.setAlignment(Pos.TOP_LEFT);
+		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+150); userInput.setLayoutY(yBase-100); userInput.setPrefSize(300, 400);
 		userInput.setOnAction(e -> {
 			if (quizStarted == 1){
-				
 				schema.getAnswers().set(index, userInput.getText());
 				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+userInput.getText());
 				userInput.clear();
 			}
 		});
-		Button questBut = new Button("Confirm Answer"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
+		Button questBut = new Button("Confirm Answer"); questBut.setLayoutX(xBase+350); questBut.setLayoutY(yBase+330);
 		questBut.setOnAction(e-> {
 			Analyzer analyzer = new Analyzer();
 			for (int i=0;i<schema.getQuestions().size();i++){
@@ -56,7 +57,7 @@ public class QuestionWindow implements Window {
 			}
 			feed.setText("Your results: \n"+analyzer.getCategories().toString());
 		});
-		Button nextQ = new Button("Next Question"); nextQ.setLayoutX(xBase+0); nextQ.setLayoutY(yBase+100);
+		Button nextQ = new Button("Next Question"); nextQ.setLayoutX(xBase+250); nextQ.setLayoutY(yBase+330);
 		nextQ.setOnAction(e->{
 			if (quizStarted==1){
 			if (index < schema.getQuestions().size()-1){
@@ -66,7 +67,7 @@ public class QuestionWindow implements Window {
 			feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(index));
 			}
 		});
-		Button prevQ = new Button("Prev Question"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+50);
+		Button prevQ = new Button("Prev Question"); prevQ.setLayoutX(xBase+150); prevQ.setLayoutY(yBase+330);
 		prevQ.setOnAction(e->{
 			if (quizStarted==1){
 			if (index!=0){
@@ -75,15 +76,16 @@ public class QuestionWindow implements Window {
 			feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(index));
 			}
 		});
-		MenuItem item1 = new MenuItem("quiz1"); item1.setOnAction(e->{
+		MenuItem item1 = new MenuItem("quiz1");
+		item1.setOnAction(e->{
 			index=0;
 			quizStarted=1;
 			feed.setText(""+schema.getQuestions().get(index).getQuestionText());
 			
 		});
-		MenuButton pickCategory = new MenuButton("Category"); pickCategory.getItems().add(item1); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);
+		MenuButton pickCategory = new MenuButton("Category"); pickCategory.getItems().add(item1); pickCategory.setLayoutX(xBase-300); pickCategory.setLayoutY(yBase-200);
 		
-		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+150);
+		Button menu = new Button("Menu"); menu.setLayoutX(xBase+250); menu.setLayoutY(yBase-200);
 		menu.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 			
