@@ -25,16 +25,16 @@ import java.util.HashMap;
 public class TestingClient extends Application {
 	public void start(Stage stage) throws Exception{
 		Stage chat = new Stage();
-		
 		ServerClient client = new ServerClient();
+		ChatWindow chatScene = new ChatWindow(chat, client);
+		chat.setScene(chatScene.createScene());
 		LoginWindow login = new LoginWindow(stage, null, client, chat);
 		
 		stage.setScene(login.createScene());
 		stage.setTitle("TECKS");
 		stage.show();
 		
-		ChatWindow chatScene = new ChatWindow(chat, client);
-		chat.setScene(chatScene.createScene());
+		
 		
 	}
 	

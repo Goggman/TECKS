@@ -22,9 +22,9 @@ public class ChatWindow implements Window{
 		client=clientIn;
 	}
 	public Scene createScene(){
-		int xBase=100; int yBase = 100;
+		int xBase=200; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		feed = new Label("Welcome to Chat"); feed.setLayoutX(xBase-50); feed.setLayoutY(yBase-50);
+		feed = new Label("Welcome to Chat"); feed.setLayoutX(xBase-200); feed.setLayoutY(yBase-200);
 		feed.setPrefSize(100, 100);
 		TextField text = new TextField("Type here"); text.setLayoutX(xBase+0); text.setLayoutY(yBase+20);
 		//TextField password = new TextField();
@@ -33,14 +33,14 @@ public class ChatWindow implements Window{
 			client.sendMessage("request:msg\tcontent:"+text.getText());
 		});
 		
-		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase+20); menu2.setLayoutY(yBase+40);
+		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase+40); menu2.setLayoutY(yBase+40);
 		menu2.setOnAction(e->{
 			feed.setText("Window cleared");
 		});
 		root.getChildren().addAll(feed, menu1,menu2, text);
 		Scene scene = new Scene(root, 300, 300);
-		FeedUpdater updater = new FeedUpdater(client, feed);
-		updater.start();
+		//FeedUpdater updater = new FeedUpdater(client, feed);
+		//updater.start();
 		return scene;
 	}
 	

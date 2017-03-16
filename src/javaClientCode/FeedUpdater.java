@@ -10,11 +10,16 @@ public class FeedUpdater implements Runnable{
 			this.feed=feed;
 		}
 		public void run(){
+			System.out.println("feedupdater started");
 			while (true){
-				String newMessage = client.messageIn.poll();
+				for(int x=0;x<1000000000;x++){
+					//Wait for message
+				}
+				String newMessage = client.serverIn.poll();
 				if (newMessage!=null){
-					feed.setText(feed.getText()+"\n"+newMessage);
-					
+					//System.out.println("feedupdater got this message: "+newMessage);
+					feed.setText(newMessage);
+					break;
 				}
 					
 			}

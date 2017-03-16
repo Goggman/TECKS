@@ -16,6 +16,7 @@ public class ClientHandler implements Runnable{
 	private Socket clientSocket;
 	private PrintWriter out;
     private BufferedReader in;
+    
     private String username;
     private String chatroom;
     private String current_subject;
@@ -91,6 +92,21 @@ public class ClientHandler implements Runnable{
 			}
 			catch(IOException ee){
 				System.out.println("Client disconnected");
+				String returnToClients = "timestamp:"+LocalTime.now().toString()
+						+"\tsender:server\t"
+						+ "response:info\t"
+						+ "content:"+this.username+" logged out";
+				
+				ArrayList chat= (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log");  //add message to chat
+				chat.add(returnToClients);
+				HashMap users= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users"); //remove oneself from chatroom
+				users.remove(this);
+				((HashMap)server.getProperties().get("connected_clients")).remove(this); 								 //remove oneself from connected clients 
+				Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();
+				while(clients.hasNext()){
+					((ClientHandler)clients.next()).getOut().println(returnToClients);
+				}
+				setUsername(null);
 				break;
 			}
 				
@@ -250,10 +266,10 @@ public class ClientHandler implements Runnable{
 		ArrayList chat= (ArrayList) ((HashMap) server.getProperties().get("chatrooms").get(getChat())).get("log");			//add login notification to chat
 		chat.add(returnToClients);
 		out.println(returnToClient);																//send receipt
-		ArrayList chatlog = (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log"); // print every message received so far
-		for(int x=0;x<chatlog.size();x++){
-			out.println(chatlog.get(x));
-		}
+		//ArrayList chatlog = (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log"); // print every message received so far
+		//for(int x=chatlog.size()-1;x>chatlog.size()-4;x--){ // 4 last messages from chat
+		//	out.println(chatlog.get(x));
+		//}
 		
 		server.getProperties().get("connected_clients").put(this, new HashMap());
 		
@@ -645,7 +661,7 @@ public class ClientHandler implements Runnable{
 		}
 	}
 	//add methods to save status on score and grade for each user in each subject
-	void get_stats(String payload){ //get overall score for each subject, and score for each category
+	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category
 		//get subject - <overall score> category - score - category - score
 		// do this for every subject registered for the user
 	}
