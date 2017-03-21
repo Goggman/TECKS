@@ -15,7 +15,9 @@ public class ServerClient {
     
     ServerClient(){
     	//System.out.println(System.getProperty("user.dir"));
-    	init(new String[]{"10.22.41.102", "12000"});
+
+    	init(new String[]{"localhost", "12000"});
+
     	
     	listen();
     }
@@ -186,11 +188,14 @@ public class ServerClient {
 		}
 	}
 	
-	//**
+
+	
 	public static void main(String[] args) {
 		ServerClient sender = new ServerClient();
-		
-		
+
+	
+
 	}
-	//**
+
+
 }

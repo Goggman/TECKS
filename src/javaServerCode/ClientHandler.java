@@ -258,10 +258,10 @@ public class ClientHandler implements Runnable{
 		Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();  				//send message to every client in chat
 		while(clients.hasNext()){
 			ClientHandler next = (ClientHandler)clients.next();
-			if (next == this){
-				continue;
+			if (!next.equals(this)){
+				next.getOut().println(returnToClients);
 			}
-			((ClientHandler)clients.next()).getOut().println(returnToClients);
+			
 		}
 		ArrayList chat= (ArrayList) ((HashMap) server.getProperties().get("chatrooms").get(getChat())).get("log");			//add login notification to chat
 		chat.add(returnToClients);
@@ -322,8 +322,8 @@ public class ClientHandler implements Runnable{
 		Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();
 		while(clients.hasNext()){
 			ClientHandler next = (ClientHandler)clients.next();
-			if (next != this){
-				((ClientHandler)clients.next()).getOut().println(returnToClients);
+			if (!next.equals(this)){
+				next.getOut().println(returnToClients);
 			}
 			
 		}
