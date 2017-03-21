@@ -174,6 +174,7 @@ public class QuestionWindow implements Window {
 		
 		root.getChildren().addAll(feed, questBut, nextQ, prevQ, pickCategory, menu, load);
 		Scene scene1 = new Scene(root, 1300, 700);
+		scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		return scene1;
 	}
 	
