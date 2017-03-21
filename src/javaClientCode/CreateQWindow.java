@@ -54,6 +54,7 @@ public class CreateQWindow implements Window {
 		
 		root.getChildren().addAll(qText, aText, feed, back, head, createQ);
 		Scene scene = new Scene(root, 1300, 700);
+		scene.getStylesheets().add(getClass().getResource("GUICSS.css").toExternalForm());
 		return scene;
 	}
 	

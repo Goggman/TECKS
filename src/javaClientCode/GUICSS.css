@@ -1,5 +1,3 @@
-.root{
-	-fx-
-	
-
+Button{
+	-fx-pref-width: 100px;
 }

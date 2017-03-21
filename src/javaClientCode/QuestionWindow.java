@@ -94,6 +94,8 @@ public class QuestionWindow implements Window {
 		
 		root.getChildren().addAll(userInput,feed, questBut, nextQ, prevQ, pickCategory, menu);
 		Scene scene1 = new Scene(root, 1300, 700);
+		scene1.getStylesheets().add(getClass().getResource("GUICSS.css").toExternalForm());
+
 		return scene1;
 	}
 	

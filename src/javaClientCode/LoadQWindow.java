@@ -60,6 +60,7 @@ public class LoadQWindow implements Window {
 		
 		root.getChildren().addAll(path, feed, back);
 		Scene scene = new Scene(root, 1300, 700);
+		scene.getStylesheets().add(getClass().getResource("GUICSS.css").toExternalForm());
 		return scene;
 	}
 	
