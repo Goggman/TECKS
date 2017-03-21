@@ -7,11 +7,12 @@ import java.time.LocalTime;
 import java.util.Iterator;
 public class ServerHost {
 	
-	//Message format from client/server
+	//Message format from client
 	//request:
 	//content:
 	//request:<>\tcontent:<>
 	//
+	//from server
 	//timestamp:
 	//sender:
 	//response:
@@ -20,11 +21,7 @@ public class ServerHost {
 	
 	
 	
-	//userdata
-	//-> fag -> delemner i fag, -> total score for faget
-	//U> delemner i fag -> score for hvert delemne
-	//-> type bruker->student/lærer/admin
-	//->
+	
 	HashMap<String,HashMap> properties;
 	int portNumber;
 	ServerSocket serverSocket;
@@ -57,7 +54,6 @@ public class ServerHost {
 			start.put("users", new HashMap<ClientHandler,HashMap>());
 		
 			properties.put("subjects", new HashMap<String, HashMap<String, ArrayList<String>>>());
-			properties.get("subjects").put("tdt4100",new HashMap<String, ArrayList<String>>());
 		
 		
 		

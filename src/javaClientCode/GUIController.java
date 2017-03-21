@@ -10,20 +10,30 @@ import javafx.scene.Scene;
 public class GUIController { 
 	
 	ArrayList<Scene> windows;
+	
 	Stage stage;
+	ServerClient client;
 	
 	/**
 	 * contains all the scenes that are accessable in the GUI
 	 * @param stageInput
 	 */
 	GUIController(Stage stageInput){
+		client=new ServerClient();
 		stage=stageInput;
-		windows = new ArrayList<>();
+		windows = new ArrayList<Scene>();
+		Stage chatStage = new Stage();
+		chatStage.hide();
 		Window mw = new MenuWindow(stage, this);//Create the scenes to use, then add them in the list of windows/scenes
 		Window qw = new QuestionWindow(stage, this, new QuestionSchema());
 		Window cqw = new CreateQWindow(stage, this);
 		Window lqw = new LoadQWindow(stage, this);
+		
+		Window chat = new ChatWindow(chatStage, client);
+		chatStage.setScene(chat.createScene());
+		Window linw = new LoginWindow(stage, this, client, chatStage);
 		addScene(mw.createScene()); addScene(qw.createScene()); addScene(cqw.createScene()); addScene(lqw.createScene());
+		addScene(linw.createScene());
 		
 	}
 	

@@ -40,7 +40,8 @@ public class TestingClient extends Application {
 	
 	
 public static void main(String[] args){
-	launch();
-	
+	//launch();
+	ServerClient client = new ServerClient();
+	client.listen();
 }
 }

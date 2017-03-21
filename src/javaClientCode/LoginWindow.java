@@ -16,7 +16,7 @@ public class LoginWindow implements Window{
 	GUIController ctrl;
 	ServerClient client;
 	Stage chat;
-	LoginWindow(Stage stageInput, GUIController CtrlIn, ServerClient clientIn, Stage chatIn){
+	LoginWindow(Stage stageInput, GUIController CtrlIn, ServerClient clientIn, Stage chatIn ){
 		ctrl=CtrlIn;
 		stage=stageInput;
 		client=clientIn;
@@ -25,7 +25,7 @@ public class LoginWindow implements Window{
 	public Scene createScene(){
 		int xBase=600; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150);
+		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150); feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(400, 400);
 		TextField username = new TextField("Enter username"); username.setLayoutX(xBase+0); username.setLayoutY(yBase-50);
 		//TextField password = new TextField();
@@ -41,7 +41,15 @@ public class LoginWindow implements Window{
 		menu3.setOnAction(e->{
 			chat.hide();
 		});
-		root.getChildren().addAll(feed, menu1, menu2, menu3, username);
+		Button menu4 = new Button("To Menu"); menu4.setLayoutX(xBase+0);menu4.setLayoutY(yBase+150);
+		menu4.setOnAction(e->{
+			stage.setScene(ctrl.getScene(0));
+		});
+		Button menu5 = new Button("Clear window"); menu5.setLayoutX(xBase+0);menu5.setLayoutY(yBase+200);
+		menu5.setOnAction(e->{
+			feed.setText("Window cleared");
+		});
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, username);
 		Scene scene = new Scene(root, 1300, 700);
 		FeedUpdater updater = new FeedUpdater(client, feed, client.serverIn);
 		//FeedUpdater updater = new FeedUpdater(client, feed);

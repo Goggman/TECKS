@@ -41,8 +41,11 @@ public class MenuWindow implements Window{
 		menu3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(3));
 		});
-		
-		root.getChildren().addAll(feed, menu1, menu2, menu3);
+		Button menu4 = new Button("Goto login"); menu4.setLayoutX(xBase+0); menu4.setLayoutY(yBase+150);
+		menu4.setOnAction(e->{
+			stage.setScene(ctrl.getScene(4));
+		});
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4);
 		Scene scene = new Scene(root, 1300, 700);
 		return scene;
 		

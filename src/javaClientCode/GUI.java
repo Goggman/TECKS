@@ -16,7 +16,7 @@ public class GUI extends Application{
 		chat chat = new chat();
 		
 		GUIController ctrl = new GUIController(stage);
-		stage.setScene(ctrl.getScene(0));
+		stage.setScene(ctrl.getScene(4));
 		stage.setTitle("TECKS");
 		stage.show();
 		chat.start(stage1);

@@ -121,10 +121,23 @@ public class ClientHandler implements Runnable{
 		}
 	}
 	
+	String get_sender(String payload){
+		return payload.split("\t")[1].split(":")[1];
+	}
 	
-	
-	
-
+	String get_content(String payload){
+		try{
+			return payload.split("\t")[3].split(":")[1];
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			return "";
+		}
+	}
+	String get_timestamp(String payload){
+		return payload.split("\t")[0].split("timestamp:")[1];
+		//timestamp:
+		
+	}
 	///////////////////////////////////////////////////////////////////////////////////////////// PARSE METHODS BELOW
 	
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +196,15 @@ public class ClientHandler implements Runnable{
 		}
 		else if(getRequest(payload).equals("save_server")){
 			parse_save_server(payload);
+		}
+		else if(getRequest(payload).equals("get_username")){
+			parse_get_username(payload);
+		}
+		else if(getRequest(payload).equals("get_chatroom")){
+			parse_get_chatroom(payload);
+		}
+		else if(getRequest(payload).equals("get_subject")){
+			parse_get_subject(payload);
 		}
 		//else if(get_request().equals("set<property>")){ // setters for all different types of things one want to change with a user, type, subjects,
 			//create all parse_set<> to
@@ -247,7 +269,7 @@ public class ClientHandler implements Runnable{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
-				+ "content:Login successful as "+this.username+" into chatroom - "+getChat();
+				+ "content:OK - Login successful as "+this.username+" into chatroom - "+getChat();
 		String returnToClients = "timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
@@ -315,7 +337,7 @@ public class ClientHandler implements Runnable{
 								
 		String returnToClients = "timestamp:"+LocalTime.now().toString()
 								+"\tsender:"+getUsername()+"\t"
-								+ "response:info\t"
+								+ "response:message\t"
 								+ "content:"+getContent(payload);
 		
 		ArrayList chat= (ArrayList) ((HashMap)server.properties.get("chatrooms").get(getChat())).get("log");  //Holy shit casting is annoying
@@ -341,7 +363,11 @@ public class ClientHandler implements Runnable{
 		}
 		ArrayList chatlog = (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(this.chatroom)).get("log"); // print every message received so far
 		for(int x=0;x<chatlog.size();x++){
-			out.println(chatlog.get(x));
+			String returnToClient= 	"timestamp:"+get_timestamp((String)chatlog.get(x))+"\t"
+					+"sender:"+get_sender((String)chatlog.get(x))+"\t"
+					+ "response:history\t"
+					+ "content:"+get_content((String)chatlog.get(x));
+			out.println(returnToClient);
 		}
 		
 	}
@@ -354,7 +380,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		if (server.getProperties().get("sujects").containsKey(getContent(payload))){
+		if (server.getProperties().get("subjects").containsKey(getContent(payload))){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -362,7 +388,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 		else{
-			server.getProperties().get("sujects").put(getContent(payload), new HashMap());
+			server.getProperties().get("subjects").put(getContent(payload), new HashMap());
 			((HashMap)server.getProperties().get("subjects").get(getContent(payload))).put("members", new ArrayList<String>());
 			((HashMap)server.getProperties().get("subjects").get(getContent(payload))).put("questions", new ArrayList<String>());
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -382,7 +408,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		if (! server.getProperties().get("sujects").containsKey(getContent(payload))){
+		if (! server.getProperties().get("subjects").containsKey(getContent(payload))){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -643,7 +669,54 @@ public class ClientHandler implements Runnable{
 		}
 		
 	}
-	
+	void parse_get_chatroom(String payload){
+		try{
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:info\t"
+				+ "content:"+getChat().toString();
+		out.println(returnToClient);
+		}
+		catch(NullPointerException e){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:Null";
+			out.println(returnToClient);
+		}
+	}
+	void parse_get_subject(String payload){
+		try{
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:info\t"
+				+ "content:"+getCurrentSubject().toString();
+		out.println(returnToClient);
+		}
+		catch(NullPointerException e){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:Null";
+			out.println(returnToClient);
+		}
+	}
+	void parse_get_username(String payload){
+		try{
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:info\t"
+				+ "content:"+getUsername().toString();
+		out.println(returnToClient);
+		}
+		catch(NullPointerException e){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:Null";
+			out.println(returnToClient);
+		}
+	}
 	void parse_save_server(String payload){
 		if (saveProperties()){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
