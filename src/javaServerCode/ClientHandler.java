@@ -206,9 +206,9 @@ public class ClientHandler implements Runnable{
 		else if(getRequest(payload).equals("get_subject")){
 			parse_get_subject(payload);
 		}
-		//else if(get_request().equals("set<property>")){ // setters for all different types of things one want to change with a user, type, subjects,
-			//create all parse_set<> to
-		//}
+		else if (getRequest(payload).equals("get_questions")){
+			parse_get_questions(payload);
+		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
 		}
@@ -487,7 +487,7 @@ public class ClientHandler implements Runnable{
 				+ "content:Question added successfully in "+getCurrentSubject();
 		out.println(returnToClient);
 	}
-	void parse_get_subjects(String payload){//didnt return properly, need to fix
+	void parse_get_subjects(String payload){
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -748,6 +748,46 @@ public class ClientHandler implements Runnable{
 	}
 	
 	
+	void parse_get_questions(){
+		if (getCurrentSubject()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:you need to set the current subject";
+			out.println(returnToClient);
+			return;
+		}
+		if (getUsername()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:you need to log in to use this function";
+			out.println(returnToClient);
+			return;
+		}
+		try{
+		ArrayList<String> questionList = (ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions");
+		String content="";
+		for(String question : questionList){
+			content+=question+"@";
+			
+		}
+		content=content.substring(0, content.length()-2);
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:question\t"
+				+ "content:"+content;
+		out.println(returnToClient);
+		}
+		catch(NullPointerException e){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:No questions to send";
+			out.println(returnToClient);
+			return;
+		}
+	}
 	
 	
 	
