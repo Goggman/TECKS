@@ -176,7 +176,7 @@ public class ClientHandler implements Runnable{
 		else if(getRequest(payload).equals("get_questions")){//getquestions <subject>
 			parse_get_questions(payload);
 		}
-		else if(getRequest(payload).equals("set_current_subject")){ //set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
+		else if(getRequest(payload).equals("set_subject")){ //TODO: possible to set subject without having it added, fix this---set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
 			parse_set_subject(payload);
 		}
 		else if(getRequest(payload).equals("create_subject")){ //getsubjects <None>, creates a new subject
@@ -421,7 +421,7 @@ public class ClientHandler implements Runnable{
 					+ "response:info\t"
 					+ "content:Current subject set successfully";
 			out.println(returnToClient);
-			this.current_subject=getContent(payload);
+			setCurrentSubject(getContent(payload));
 		}
 	}
 	void parse_add_subject(String payload){
@@ -440,7 +440,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:Subject does not exist";
+					+ "content:Subject does not exist, or you already have registered in the subject";
 			out.println(returnToClient);
 		}
 		else{

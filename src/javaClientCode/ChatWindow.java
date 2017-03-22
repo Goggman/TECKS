@@ -65,7 +65,7 @@ public class ChatWindow implements Window{
 		
 		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, text);
 		Scene scene = new Scene(root, 400, 400);
-		FeedUpdater updater = new FeedUpdater(client, feed, client.messageIn);
+		FeedUpdater updater = new FeedUpdater(client, feed, client.ChatWindow);
 		updater.start();
 		return scene;
 	}

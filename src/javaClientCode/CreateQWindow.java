@@ -21,11 +21,12 @@ import javafx.scene.control.MenuItem;
 public class CreateQWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
+	ServerClient client;
 	
-	CreateQWindow(Stage stageIn, GUIController ctrlIn){
+	CreateQWindow(Stage stageIn, GUIController ctrlIn, ServerClient clientIn){
 		stage=stageIn;
 		ctrl=ctrlIn;
-		
+		client=clientIn;
 	}
 	
 	/**
@@ -44,8 +45,15 @@ public class CreateQWindow implements Window {
 
 		root.setStyle("-fx-background-color: white");
 		
-
-		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
+		Label serverFeed = new Label("Info from server"); serverFeed.setLayoutX(xBase-600); serverFeed.setLayoutY(yBase+0); serverFeed.setStyle("-fx-border-color: black");
+		serverFeed.setPrefSize(300, 500); serverFeed.setAlignment(Pos.TOP_LEFT);
+		TextField setSubject = new TextField(); setSubject.setPromptText("enter subject name, enter to set"); setSubject.setLayoutX(xBase);setSubject.setLayoutY(yBase-200);
+		setSubject.setPrefSize(100, 30);
+		setSubject.setOnAction(e->{
+			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
+		});
+		
+		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-300); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
 		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("filename");
 		
 		TextField op1 = new TextField(); op1.setLayoutX(xBase);op1.setLayoutY(yBase+130);op1.setPromptText("Option 1");op1.setVisible(false);
@@ -54,7 +62,7 @@ public class CreateQWindow implements Window {
 		
 		Label error = new Label("Needs filename");error.setVisible(false);
 		Button save = new Button("Save quiz");save.setLayoutX(xBase+200);save.setLayoutY(yBase+150);
-		save.setDisable(true);
+		//save.setDisable(true);
 		
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
@@ -83,11 +91,11 @@ public class CreateQWindow implements Window {
 			String answerText = aText.getText();
 			String headerText = head.getText();
 			String categoryText = category.getText();
-			if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
+			/*if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
 				feed.setText("Need values for Header, Question and answer");
 			}else {
 				save.setDisable(false);
-			}
+			}*/
 			qText.setText(""); aText.setText("");head.setText("");
 			
 			
@@ -108,24 +116,33 @@ public class CreateQWindow implements Window {
 		
 		//save to file
 		save.setOnAction(e -> {
+			/*
 			if (fileName.getText().equals("")){
 				error.setLayoutX(fileName.getLayoutX()+5);error.setLayoutY(fileName.getLayoutY()+30);
 				error.setTextFill(Paint.valueOf("red"));error.setVisible(true);
 				
 			}
-			else{
+			else{ */
 				error.setVisible(false);
+				createQuestionToServer(quiz);
+				/*
 				try {
 					saveFile(fileName.getText(), quiz);
+					
 				}
 				catch (IOException ex){
 					ex.printStackTrace();
-			}}
+			}
+				
+				}
+				*/
 		});
 		
 		
-		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category);
+		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category, serverFeed, setSubject);
 		Scene scene = new Scene(root, 1300, 700);
+		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
+		updater.start();
 		return scene;
 	}
 	
@@ -157,5 +174,20 @@ public class CreateQWindow implements Window {
 		}
 		p.close();
 	}
+	public void createQuestionToServer(ArrayList<Question> q){
+		for (Question question : q){
+			String questionToServer ="request:add_question\tcontent:"+"Header;"+question.getHeader()+"|"
+																	+"c; "+question.getCategory()+"|"
+																	+"q; "+question.getQuestionText()+"|";
+			
+			for (String option : question.getOptions()){
+				questionToServer+="op; "+option+"|";
+			}
+			questionToServer+="a; "+question.getCorrectAnswer();
+			client.sendMessage(questionToServer);
+			
+		
+	}
 
+}
 }
