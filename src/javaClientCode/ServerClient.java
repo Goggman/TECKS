@@ -14,7 +14,9 @@ public class ServerClient {
     Queue<String> messageIn;
     
     ServerClient(){
+
     	init(new String[]{"localhost", "12000"}); //
+
     	
     	//listen();
     }
@@ -186,11 +188,15 @@ public class ServerClient {
 		}
 	}
 	
+
 	
+
 	//public static void main(String[] args) {
 	//	ServerClient sender = new ServerClient();
 		
 		
 	//}
+
+
 
 }
