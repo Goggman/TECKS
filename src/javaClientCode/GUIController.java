@@ -21,6 +21,7 @@ public class GUIController {
 	GUIController(Stage stageInput){
 		client=new ServerClient();
 		stage=stageInput;
+
 		windows = new ArrayList<Scene>();
 		Stage chatStage = new Stage();
 		chatStage.hide();
@@ -34,6 +35,7 @@ public class GUIController {
 		Window linw = new LoginWindow(stage, this, client, chatStage);
 		addScene(mw.createScene()); addScene(qw.createScene()); addScene(cqw.createScene());addScene(lqw.createScene());
 		addScene(linw.createScene());
+
 		
 	}
 	

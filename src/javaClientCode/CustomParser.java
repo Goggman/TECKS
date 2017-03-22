@@ -74,11 +74,11 @@ public class CustomParser {
 			else if (current.contains("a:")){
 				String[] temp = current.split(":");
 				q.setAnswer(temp[1]);
-				q.setOptions(temp[1]);
+				q.addOptions(temp[1]);
 			}
 			else if (current.contains("op:")){
 				String[] temp = current.split(":");
-				q.setOptions(temp[1]);
+				q.addOptions(temp[1]);
 				
 			}
 		}	

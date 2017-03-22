@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.time.LocalTime;
 import java.util.Iterator;
 public class PropertiesHandler {
-	String path="C:/Users/Fritz Olav/Desktop/PU_GROUP88/workspace_TECHS_88/TECKS/src/javaServerCode/serverSave.ser";
+	String path= System.getProperties().getProperty("user.dir") +"/TECKS/src/javaServerCode/serverSave.ser";
 	HashMap purgeMap(HashMap map){								//helper function, clears the map from non .ser -able objects (objects that cannot be written to file easily), particularly clienthandler objects, which are to be found in the properties map
 		HashMap newmap = new HashMap<String, HashMap>();
 		newmap.put("users", map.get("users"));

@@ -738,6 +738,7 @@ public class ClientHandler implements Runnable{
 	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category
 		//get subject - <overall score> category - score - category - score
 		// do this for every subject registered for the user
+		
 	}
 	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
 		//need to define subprotocol, maybe content: <category> <points added>
