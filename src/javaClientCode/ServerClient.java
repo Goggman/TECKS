@@ -14,12 +14,11 @@ public class ServerClient {
     Queue<String> messageIn;
     
     ServerClient(){
-    	//System.out.println(System.getProperty("user.dir"));
 
-    	init(new String[]{"localhost", "12000"});
+    	init(new String[]{"localhost", "12000"}); //
 
     	
-    	listen();
+    	//listen();
     }
 	    void init(String[] args) {
 	        
@@ -103,11 +102,11 @@ public class ServerClient {
 	}
 	void parse_info(String payload){
 		serverIn.add(payload);
-		messageIn.add(payload);
+		//messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
-		serverIn.add(payload);
+		messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	
@@ -136,7 +135,8 @@ public class ServerClient {
 			if (line.equals("exit")){
 				System.out.println("Closing client");
 				scanner.close();
-				break;
+				System.exit(1);
+				
 			}
 			else if (line.equals("connect")){
 				
@@ -190,12 +190,13 @@ public class ServerClient {
 	
 
 	
-	public static void main(String[] args) {
-		ServerClient sender = new ServerClient();
 
-	
+	//public static void main(String[] args) {
+	//	ServerClient sender = new ServerClient();
+		
+		
+	//}
 
-	}
 
 
 }
