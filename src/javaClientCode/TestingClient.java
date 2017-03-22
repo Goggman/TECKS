@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import java.util.Scanner;
 
 import javaClientCode.GUIController;
-import javaClientCode.GUI.chat;
 import javafx.stage.Stage;
 
 import java.io.FileOutputStream;

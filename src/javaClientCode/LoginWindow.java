@@ -51,7 +51,7 @@ public class LoginWindow implements Window{
 		});
 		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, username);
 		Scene scene = new Scene(root, 1300, 700);
-		FeedUpdater updater = new FeedUpdater(client, feed, client.serverIn);
+		FeedUpdater updater = new FeedUpdater(client, feed, client.LoginWindow);
 		//FeedUpdater updater = new FeedUpdater(client, feed);
 		updater.start();
 		return scene;

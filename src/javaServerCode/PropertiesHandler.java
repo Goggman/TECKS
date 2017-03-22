@@ -62,7 +62,7 @@ public class PropertiesHandler {
 		    HashMap readCase = (HashMap) objectinputstream.readObject();
 		    return readCase;
 		} catch (Exception e) {
-		    e.printStackTrace();
+		    //e.printStackTrace();
 			System.out.println("Properties not loaded");
 		} finally {
 		    if(objectinputstream != null){
