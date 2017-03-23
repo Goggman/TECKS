@@ -26,7 +26,7 @@ public class GUIController {
 		Stage chatStage = new Stage();
 		chatStage.hide();
 		Window mw = new MenuWindow(stage, this);//Create the scenes to use, then add them in the list of windows/scenes
-		Window qw = new QuestionWindow(stage, this);
+		Window qw = new QuestionWindow(stage, this, client);
 		Window cqw = new CreateQWindow(stage, this, client);
 		Window lqw = new LoadQWindow(stage, this, (QuestionWindow)qw);
 		

@@ -175,6 +175,7 @@ public class CreateQWindow implements Window {
 		p.close();
 	}
 	public void createQuestionToServer(ArrayList<Question> q){
+		//String quiz = "";
 		for (Question question : q){
 			String questionToServer ="request:add_question\tcontent:"+"Header;"+question.getHeader()+"|"
 																	+"c; "+question.getCategory()+"|"
@@ -184,10 +185,11 @@ public class CreateQWindow implements Window {
 				questionToServer+="op; "+option+"|";
 			}
 			questionToServer+="a; "+question.getCorrectAnswer();
-			client.sendMessage(questionToServer);
 			
+			client.sendMessage(questionToServer);
 		
 	}
+		
 
 }
 }

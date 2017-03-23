@@ -13,7 +13,8 @@ public class ServerClient {
     Queue<String> LoginWindow;
     Queue<String> ChatWindow;
     Queue<String> CreateQWindow;
-    
+    Queue<String> QuestionWindowQuestions;
+    Queue<String> QuestionWindowInfo;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -46,6 +47,8 @@ public class ServerClient {
 	        LoginWindow = new LinkedList<String>();
 	        ChatWindow = new LinkedList<String>();
 	        CreateQWindow = new LinkedList<String>();
+	        QuestionWindowQuestions = new LinkedList<String>();
+	        QuestionWindowInfo = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -97,6 +100,7 @@ public class ServerClient {
 	void parse_error(String payload){
 		LoginWindow.add(payload);
 		CreateQWindow.add(payload);
+		QuestionWindowInfo.add(payload);
 		
 		printPrettyMessageGeneral(payload);
 	}
@@ -105,6 +109,7 @@ public class ServerClient {
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
+		QuestionWindowInfo.add(payload);
 		LoginWindow.add(payload);
 		CreateQWindow.add(payload);
 		//messageIn.add(payload);
@@ -116,7 +121,7 @@ public class ServerClient {
 	}
 	
 	void parse_question(String payload){
-		//QuestionWindow.add(payload);
+		QuestionWindowQuestions.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){
