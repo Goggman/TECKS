@@ -17,7 +17,7 @@ public class ChatWindow implements Window{
 	Stage stage;
 	GUIController ctrl;
 	ServerClient client;
-	Label feed;
+	
 	ChatWindow(Stage stageInput, ServerClient clientIn){
 		stage=stageInput;
 		client=clientIn;
@@ -25,27 +25,39 @@ public class ChatWindow implements Window{
 	public Scene createScene(){
 		int xBase=200; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		feed = new Label("Welcome to Chat"); feed.setLayoutX(xBase-195); feed.setLayoutY(yBase-200); feed.setAlignment(Pos.TOP_LEFT);
-		feed.setPrefSize(200, 400);
-		TextField text = new TextField("Type here"); text.setLayoutX(xBase+0); text.setLayoutY(yBase+20);
-		//TextField password = new TextField();
-		
-		Button menu1 = new Button("Send"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+40);
-		menu1.setOnAction(e->{
+		Label feed = new Label("Welcome to Chat"); feed.setLayoutX(xBase-195); feed.setLayoutY(yBase-200); feed.setAlignment(Pos.TOP_LEFT);
+		feed.setPrefSize(200, 350); feed.setStyle("-fx-border-color:black");
+		TextField text = new TextField(); text.setLayoutX(xBase+20); text.setLayoutY(yBase+150);
+		text.setPromptText("TypeHere");
+		text.setOnAction(e->{
 			feed.setText(feed.getText()+"\n"+text.getText());
 			client.sendMessage("request:msg\tcontent:"+text.getText());
 		});
+		//TextField password = new TextField();
 		
-		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase+40); menu2.setLayoutY(yBase+40);
-		menu2.setOnAction(e->{
-			feed.setText("Window cleared");
+		Button menu1 = new Button("CreateChat"); menu1.setLayoutX(xBase-170); menu1.setLayoutY(yBase+150);
+		menu1.setOnAction(e->{
+			//feed.setText(feed.getText()+"\n"+text.getText());
+			client.sendMessage("request:add_chatroom\tcontent:"+text.getText());
 		});
+		Button menu6 = new Button("Login"); menu6.setLayoutX(xBase-100); menu6.setLayoutY(yBase+150);
+		menu6.setOnAction(e->{
+			//feed.setText(feed.getText()+"\n"+text.getText());
+			client.sendMessage("request:login\tcontent:"+text.getText());
+		});
+		Button menu7 = new Button("SetChat"); menu7.setLayoutX(xBase-50); menu7.setLayoutY(yBase+150);
+		menu7.setOnAction(e->{
+			//feed.setText(feed.getText()+"\n"+text.getText());
+			client.sendMessage("request:set_chatroom\tcontent:"+text.getText());
+		});
+		
+		
 		Button menu3 = new Button("History"); menu3.setLayoutX(xBase+40); menu3.setLayoutY(yBase+70);
 		menu3.setOnAction(e->{
 			client.sendMessage("request:history\tcontent:");
 		});
 		
-		Button menu4 = new Button("Show more"); menu4.setLayoutX(xBase+40); menu4.setLayoutY(yBase+120);
+		Button menu4 = new Button("Show more"); menu4.setLayoutX(xBase+40+30); menu4.setLayoutY(yBase+120);
 		menu4.setOnAction(e->{
 			String feedtext = feed.getText();
 			if (feedtext.length()>100){
@@ -62,11 +74,27 @@ public class ChatWindow implements Window{
 				}
 				}
 		});
+		Button menu5 = new Button("Logout"); menu5.setLayoutX(xBase-10+30);menu5.setLayoutY(yBase+120);
+		menu5.setOnAction(e->{
+			client.sendMessage("request:logout\tcontent:");
+		});
 		
-		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, text);
+		Label serverIn = new Label("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); serverIn.setAlignment(Pos.TOP_LEFT);
+		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");
+		
+		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase+40); menu2.setLayoutY(yBase+40);
+		menu2.setOnAction(e->{
+			feed.setText("Window cleared");
+			serverIn.setText("Window cleared");
+		});
+		
+		
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, menu6, menu7, text, serverIn);
 		Scene scene = new Scene(root, 400, 400);
 		FeedUpdater updater = new FeedUpdater(client, feed, client.ChatWindow);
 		updater.start();
+		FeedUpdater updater1 = new FeedUpdater(client, serverIn, client.ChatWindowInfo);
+		updater1.start();
 		return scene;
 	}
 	

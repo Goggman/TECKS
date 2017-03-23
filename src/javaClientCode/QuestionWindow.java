@@ -19,6 +19,7 @@ public class QuestionWindow implements Window {
 	int index;
 	int quizStarted;
 	Stage stage;
+	Stage chat;
 	GUIController ctrl;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>();
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
@@ -29,12 +30,13 @@ public class QuestionWindow implements Window {
 		setSchema(qs);
 	}
 	
-	QuestionWindow(Stage stageInput, GUIController ctrlIn, ServerClient clientIn){
+	QuestionWindow(Stage stageInput, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		client = clientIn;
 		index=0;
 		quizStarted = 0;
 		stage=stageInput;
 		ctrl=ctrlIn;
+		chat=chatIn;
 		
 	}
 
@@ -93,7 +95,14 @@ public class QuestionWindow implements Window {
 			
 		});
 		
-		
+		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+620);showChat.setLayoutY(yBase+50);
+		showChat.setOnAction(e->{
+			chat.show();
+		});
+		Button hideChat = new Button("Hide chat"); hideChat.setLayoutX(xBase+620);hideChat.setLayoutY(yBase+80);
+		hideChat.setOnAction(e->{
+			chat.hide();
+		});
 		
 		
 		Button questBut = new Button("Confirm Answer"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
@@ -214,7 +223,7 @@ public class QuestionWindow implements Window {
 		});
 	
 		
-		root.getChildren().addAll(feed, questBut, nextQ, prevQ, pickCategory, menu, load, setSubject,loadQuestionsFromServer, serverIn);
+		root.getChildren().addAll(feed, questBut, nextQ, prevQ, pickCategory, menu, load, setSubject,loadQuestionsFromServer, serverIn, showChat, hideChat);
 		Scene scene1 = new Scene(root, 1300, 700);
 		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 

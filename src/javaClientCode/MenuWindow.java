@@ -41,6 +41,7 @@ public class MenuWindow implements Window{
 		menu3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(3));
 		});
+		menu3.setDisable(true);
 		Button menu4 = new Button("Goto login"); menu4.setLayoutX(xBase+0); menu4.setLayoutY(yBase+150);
 		menu4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));

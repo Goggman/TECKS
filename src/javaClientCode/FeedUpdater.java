@@ -21,15 +21,11 @@ public class FeedUpdater implements Runnable{
 		public void run(){
 			while (true){
 				try {
-					Thread.sleep(500);
+					Thread.sleep(800);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				
-				
-			//	for(long x=0;x<10000000;x++){
-					//Wait
-			//	}
 				String payload = queue.poll();
 				if (payload!=null){
 					Platform.runLater(()->{
