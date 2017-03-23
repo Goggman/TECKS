@@ -158,6 +158,7 @@ public class CreateQWindow implements Window {
 	 * @param q Question object to be saved
 	 * @throws IOException
 	 */
+	/*
 	public void saveFile(String filename, ArrayList<Question> q) throws IOException{
 		
 		String path = System.getProperty("user.dir");
@@ -174,6 +175,7 @@ public class CreateQWindow implements Window {
 		}
 		p.close();
 	}
+	*/
 	public void createQuestionToServer(ArrayList<Question> q){
 		//String quiz = "";
 		for (Question question : q){

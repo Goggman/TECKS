@@ -150,13 +150,13 @@ public class QuestionWindow implements Window {
 			if (pickCategory.getItems().size() < schemas.size()){
 				for (int i = 0; i < schemas.size(); i++){
 					
-					MenuItem temp = new MenuItem("quiz" + (i + 1));
+					MenuItem temp = new MenuItem(""+(i + 1));
 					pickCategory.getItems().add(temp); 
 					temp.setOnAction(ev -> {
 						index = 0;
 						
 						try {
-							schema = schemas.get(0);
+							schema = schemas.get(Integer.parseInt(temp.getText())-1);
 							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
 							quizStarted=1;
 							
