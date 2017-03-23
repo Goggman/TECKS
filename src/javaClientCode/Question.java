@@ -4,10 +4,40 @@ import java.util.ArrayList;
 
 public class Question {
 	
-	private String questionText, correctAnswer, header, category; 
-	private ArrayList<String> options = new ArrayList<>();
-	private int difficulty;
+	String questionText, correctAnswer, header, category; 
+	ArrayList<String> options = new ArrayList<>();
+	int difficulty;
 	
+	Question(){
+		
+	}
+	
+	/**
+	 * Create Question object
+	 * @param categoryInput category of the question
+	 * @param question question text
+	 * @param answer answer text
+	 * @param header header text
+	 * @param options list of options
+	 */
+	Question(String categoryInput, String question, String answer, String header, Object... options){
+		this.questionText = question;
+		String[] props = header.split(",");
+		for (String words : props){
+			if (words.contains("difficulty")) {
+				this.difficulty = Integer.parseInt(words.split("-")[words.split("-").length-1]);
+				
+			}
+		}
+		this.correctAnswer  = answer;
+		this.category=categoryInput;
+		this.header = header;
+		if (options.length > 0){
+			for (int i = 0; i < options.length; i++){
+				this.getOptions().add((String)options[i]);
+			}
+		}
+	}
 	/**
 	 * getter method for the question text
 	 * @return String question text
@@ -47,36 +77,9 @@ public class Question {
 	/**
 	 * create empty question object
 	 */
-	public Question(){
-		
-	}
 	
-	/**
-	 * Create Question object
-	 * @param categoryInput category of the question
-	 * @param question question text
-	 * @param answer answer text
-	 * @param header header text
-	 * @param options list of options
-	 */
-	public Question(String categoryInput, String question, String answer, String header, String... options){
-		this.questionText = question;
-		String[] props = header.split(",");
-		for (String words : props){
-			if (words.contains("difficulty")) {
-				this.difficulty = Integer.parseInt(words.split("-")[words.split("-").length-1]);
-				
-			}
-		}
-		this.correctAnswer  = answer;
-		this.category=categoryInput;
-		this.header = header;
-		if (options.length > 0){
-			for (int i = 0; i < options.length; i++){
-				this.getOptions().add(options[i]);
-			}
-		}
-	}
+	
+
 	
 	/**
 	 * getter method for options

@@ -27,8 +27,13 @@ public class LoginWindow implements Window{
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150); feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(400, 400);
+
 		TextField username = new TextField(); username.setLayoutX(xBase); username.setLayoutY(yBase-50);
 		username.setPromptText("Enter username");
+    username.setOnAction(e->{
+			client.sendMessage("request:login\tcontent:"+username.getText());
+		});
+
 		//TextField password = new TextField();
 		Button menu1 = new Button("Log in"); menu1.setLayoutX(xBase); menu1.setLayoutY(yBase-20);
 		menu1.setOnAction(e->{

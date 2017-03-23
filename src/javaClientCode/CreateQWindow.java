@@ -150,9 +150,9 @@ public class CreateQWindow implements Window {
 	 */
 
 	public void createQuestionToServer(ArrayList<Question> q){
-		//String quiz = "";
+
 		for (Question question : q){
-			String questionToServer ="request:add_question\tcontent:"+"Header;"+question.getHeader()+"|"
+			String questionToServer ="request:add_question\tcontent:"+"Header; "+question.getHeader()+"|"
 																	+"c; "+question.getCategory()+"|"
 																	+"q; "+question.getQuestionText()+"|";
 			
