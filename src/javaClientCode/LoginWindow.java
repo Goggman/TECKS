@@ -27,30 +27,33 @@ public class LoginWindow implements Window{
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150); feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(400, 400);
-		TextField username = new TextField("Enter username"); username.setLayoutX(xBase+0); username.setLayoutY(yBase-50);
+		TextField username = new TextField(); username.setLayoutX(xBase); username.setLayoutY(yBase-50);
+		username.setPromptText("Enter username");
 		//TextField password = new TextField();
-		Button menu1 = new Button("Log in"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+20);
+		Button menu1 = new Button("Log in"); menu1.setLayoutX(xBase); menu1.setLayoutY(yBase-20);
 		menu1.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText());
 		});
-		Button menu2 = new Button("Show chat"); menu2.setLayoutX(xBase+0);menu2.setLayoutY(yBase+50);
+		Button menu2 = new Button("Show chat"); menu2.setLayoutX(xBase+520);menu2.setLayoutY(yBase+50);
 		menu2.setOnAction(e->{
 			chat.show();
 		});
-		Button menu3 = new Button("Hide chat"); menu3.setLayoutX(xBase+0);menu3.setLayoutY(yBase+100);
+		Button menu3 = new Button("Hide chat"); menu3.setLayoutX(xBase+520);menu3.setLayoutY(yBase+80);
 		menu3.setOnAction(e->{
 			chat.hide();
 		});
-		Button menu4 = new Button("To Menu"); menu4.setLayoutX(xBase+0);menu4.setLayoutY(yBase+150);
+		Button menu4 = new Button("Menu"); menu4.setLayoutX(xBase);menu4.setLayoutY(yBase-yBase);
 		menu4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 		});
-		Button menu5 = new Button("Clear window"); menu5.setLayoutX(xBase+0);menu5.setLayoutY(yBase+200);
+		Button menu5 = new Button("Clear window"); menu5.setLayoutX(xBase-500);menu5.setLayoutY(yBase+170);
+		menu5.setStyle("-fx-pref-width: 100");
 		menu5.setOnAction(e->{
 			feed.setText("Window cleared");
 		});
 		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, username);
 		Scene scene = new Scene(root, 1300, 700);
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		FeedUpdater updater = new FeedUpdater(client, feed, client.LoginWindow);
 		//FeedUpdater updater = new FeedUpdater(client, feed);
 		updater.start();
