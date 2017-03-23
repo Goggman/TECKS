@@ -126,6 +126,7 @@ public class CreateQWindow implements Window {
 		
 		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category);
 		Scene scene = new Scene(root, 1300, 700);
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
 	}
 	
