@@ -61,9 +61,9 @@ public class QuestionWindow implements Window {
 		
 		
 		//
-		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-xBase); serverIn.setLayoutY(yBase-yBase); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
+		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-300); serverIn.setLayoutY(yBase); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
 		Label metafeed = new Label("");
-		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase+100); setSubject.setLayoutY(yBase+450);
+		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase-300); setSubject.setLayoutY(yBase-150);
 		setSubject.setPromptText("Set subject");
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());

@@ -60,7 +60,7 @@ public class CreateQWindow implements Window {
 		
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
-		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+250);qType.setLayoutY(yBase);
+		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+240);qType.setLayoutY(yBase);
 		//choose question type
 		mulChoice.setOnAction(e -> {
 			op1.setVisible(true);
