@@ -158,28 +158,11 @@ public class CreateQWindow implements Window {
 	 * @param q Question object to be saved
 	 * @throws IOException
 	 */
-	/*
-	public void saveFile(String filename, ArrayList<Question> q) throws IOException{
-		
-		String path = System.getProperty("user.dir");
-		PrintWriter p = new PrintWriter(path + "/" +filename);
-		
-		for (int j = 0; j < q.size(); j++){
-			p.println("Header: " + q.get(j).getHeader());
-			p.println("c: "+q.get(j).getCategory());
-			p.println("q: " + q.get(j).getQuestionText());
-			for (int i = 0; i < q.get(j).getOptions().size(); i++){
-				p.println("op: " + q.get(j).getOptions().get(i));
-			}
-			p.println("a: " + q.get(j).getCorrectAnswer());
-		}
-		p.close();
-	}
-	*/
+
 	public void createQuestionToServer(ArrayList<Question> q){
-		//String quiz = "";
+
 		for (Question question : q){
-			String questionToServer ="request:add_question\tcontent:"+"Header;"+question.getHeader()+"|"
+			String questionToServer ="request:add_question\tcontent:"+"Header; "+question.getHeader()+"|"
 																	+"c; "+question.getCategory()+"|"
 																	+"q; "+question.getQuestionText()+"|";
 			

@@ -28,6 +28,9 @@ public class LoginWindow implements Window{
 		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150); feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(400, 400);
 		TextField username = new TextField("Enter username"); username.setLayoutX(xBase+0); username.setLayoutY(yBase-50);
+		username.setOnAction(e->{
+			client.sendMessage("request:login\tcontent:"+username.getText());
+		});
 		//TextField password = new TextField();
 		Button menu1 = new Button("Log in"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+20);
 		menu1.setOnAction(e->{

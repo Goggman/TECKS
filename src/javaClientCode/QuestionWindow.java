@@ -26,7 +26,7 @@ public class QuestionWindow implements Window {
 	public void addSchema(QuestionSchema qs){
 		
 		schemas.add(qs);
-		schema = qs;
+		setSchema(qs);
 	}
 	
 	QuestionWindow(Stage stageInput, GUIController ctrlIn, ServerClient clientIn){
@@ -70,6 +70,8 @@ public class QuestionWindow implements Window {
 			client.sendMessage("request:get_questions\tcontent:");
 
 		});
+		
+		
 		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase+0); loadQuestionsFromServer.setLayoutY(yBase+450);
 		loadQuestionsFromServer.setOnAction(e->{
 			
@@ -239,23 +241,30 @@ public class QuestionWindow implements Window {
 		//Header;header1|c;category1|op;op1|op;op2|a;answer1
 		ArrayList<ArrayList<String>> textData = new ArrayList<>();
 		String[] rawQuestionArray = content.split("@"); // array of questions
+		int i =-1;
 		for(String rawQuestion : rawQuestionArray){
+			System.out.println(rawQuestion);
 			String q = rawQuestion.replace('|', '\n');
 			q=q.replace(';', ':');
-			//System.out.println(q);
-			int i =-1;
+			
 			Scanner scanner = new Scanner(q);
 			while (scanner.hasNext()){
 				String next = scanner.nextLine();
+				System.out.println(""+next+"");
+				System.out.println(""+i);
 				if (next.contains("Header:")){
 					textData.add(new ArrayList<String>());
 					i++;
-				}
+					}
 				textData.get(i).add(next);
 			}
 			scanner.close();
 		}
-		return new QuestionSchema(textData);
+		
+		
+		QuestionSchema s = new QuestionSchema(textData);
+		
+		return s;
 		}
 	
 	
