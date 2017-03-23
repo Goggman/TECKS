@@ -298,7 +298,14 @@ public class ClientHandler implements Runnable{
 		
 	}
 	void parse_logout(String payload){
-		
+		if (getChat()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Need to log in to log out";
+			out.println(returnToClient);
+			return;
+		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"

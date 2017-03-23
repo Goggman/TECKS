@@ -26,11 +26,11 @@ public class LoginWindow implements Window{
 		int xBase=600; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label("Please log in"); feed.setLayoutX(xBase-500); feed.setLayoutY(yBase-150); feed.setAlignment(Pos.TOP_LEFT);
-		feed.setPrefSize(400, 400);
+		feed.setPrefSize(400, 400); feed.setStyle("-fx-border-color:black");
 
 		TextField username = new TextField(); username.setLayoutX(xBase); username.setLayoutY(yBase-50);
 		username.setPromptText("Enter username");
-    username.setOnAction(e->{
+		username.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText());
 		});
 
@@ -51,12 +51,16 @@ public class LoginWindow implements Window{
 		menu4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 		});
-		Button menu5 = new Button("Clear window"); menu5.setLayoutX(xBase-500);menu5.setLayoutY(yBase+170);
+		Button menu5 = new Button("Clear window"); menu5.setLayoutX(xBase-500);menu5.setLayoutY(yBase+250);
 		menu5.setStyle("-fx-pref-width: 100");
 		menu5.setOnAction(e->{
 			feed.setText("Window cleared");
 		});
-		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, username);
+		Button menu6 = new Button("Logout"); menu6.setLayoutX(xBase);menu6.setLayoutY(yBase+20);
+		menu6.setOnAction(e->{
+			client.sendMessage("request:logout\tcontent:");
+		});
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5,menu6, username);
 		Scene scene = new Scene(root, 1300, 700);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		FeedUpdater updater = new FeedUpdater(client, feed, client.LoginWindow);
