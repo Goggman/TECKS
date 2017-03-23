@@ -29,7 +29,7 @@ public class QuestionSchema {
 				if (temp.length < 1){
 					//do nothing
 				}
-				else if (s.contains("Header: ")){
+				else if (s.contains("Header:")){
 					q.setHeader(temp[1].trim());
 				}
 				else if (s.contains("q:")){
@@ -46,7 +46,7 @@ public class QuestionSchema {
 				}
 			}
 			questions.add(q);
-			
+			answers.put(q, "");
 			
 		}
 	

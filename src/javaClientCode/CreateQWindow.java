@@ -142,10 +142,11 @@ public class CreateQWindow implements Window {
 	 * @param q Question object to be saved
 	 * @throws IOException
 	 */
+	/**
 	public void saveFile(String filename, ArrayList<Question> q) throws IOException{
 		
-		String path = System.getProperty("user.dir");
-		PrintWriter p = new PrintWriter(path + "/" +filename);
+		*String path = System.getProperty("user.dir");
+		*PrintWriter p = new PrintWriter(path + "/" +filename);
 		
 		for (int j = 0; j < q.size(); j++){
 			p.println("Header: " + q.get(j).getHeader());
@@ -157,6 +158,6 @@ public class CreateQWindow implements Window {
 			p.println("a: " + q.get(j).getCorrectAnswer());
 		}
 		p.close();
-	}
 
 }
+*/

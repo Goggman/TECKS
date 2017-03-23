@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
-
+import java.util.Scanner;
 public class LoadQWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
@@ -153,5 +153,12 @@ public class LoadQWindow implements Window {
 		return textData;
 		
 	}
+	
+
+		
+		
+		
+		
+		
 
 }

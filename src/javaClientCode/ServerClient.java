@@ -10,9 +10,11 @@ public class ServerClient {
     PrintWriter out;
     BufferedReader in;
     MessageReceiver receiver;
-    Queue<String> serverIn;
-    Queue<String> messageIn;
-    
+    Queue<String> LoginWindow;
+    Queue<String> ChatWindow;
+    Queue<String> CreateQWindow;
+    Queue<String> QuestionWindowQuestions;
+    Queue<String> QuestionWindowInfo;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -42,8 +44,11 @@ public class ServerClient {
 	        catch (IOException e) {
 	            System.out.println("Couldn't get I/O for the connection to " +hostName);
 	        }
-	        serverIn = new LinkedList<String>();
-	        messageIn = new LinkedList<String>();
+	        LoginWindow = new LinkedList<String>();
+	        ChatWindow = new LinkedList<String>();
+	        CreateQWindow = new LinkedList<String>();
+	        QuestionWindowQuestions = new LinkedList<String>();
+	        QuestionWindowInfo = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -93,25 +98,30 @@ public class ServerClient {
 		
 	}
 	void parse_error(String payload){
-		serverIn.add(payload);
+		LoginWindow.add(payload);
+		CreateQWindow.add(payload);
+		QuestionWindowInfo.add(payload);
+		
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
-		messageIn.add(payload);
+		ChatWindow.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
-		serverIn.add(payload);
+		QuestionWindowInfo.add(payload);
+		LoginWindow.add(payload);
+		CreateQWindow.add(payload);
 		//messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
-		messageIn.add(payload);
+		ChatWindow.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	
 	void parse_question(String payload){
-		serverIn.add(payload);
+		QuestionWindowQuestions.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){

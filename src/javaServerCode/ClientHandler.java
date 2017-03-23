@@ -176,7 +176,7 @@ public class ClientHandler implements Runnable{
 		else if(getRequest(payload).equals("get_questions")){//getquestions <subject>
 			parse_get_questions(payload);
 		}
-		else if(getRequest(payload).equals("set_current_subject")){ //set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
+		else if(getRequest(payload).equals("set_subject")){ //TODO: possible to set subject without having it added, fix this---set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
 			parse_set_subject(payload);
 		}
 		else if(getRequest(payload).equals("create_subject")){ //getsubjects <None>, creates a new subject
@@ -206,9 +206,9 @@ public class ClientHandler implements Runnable{
 		else if(getRequest(payload).equals("get_subject")){
 			parse_get_subject(payload);
 		}
-		//else if(get_request().equals("set<property>")){ // setters for all different types of things one want to change with a user, type, subjects,
-			//create all parse_set<> to
-		//}
+		else if (getRequest(payload).equals("get_questions")){
+			parse_get_questions(payload);
+		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
 		}
@@ -421,7 +421,7 @@ public class ClientHandler implements Runnable{
 					+ "response:info\t"
 					+ "content:Current subject set successfully";
 			out.println(returnToClient);
-			this.current_subject=getContent(payload);
+			setCurrentSubject(getContent(payload));
 		}
 	}
 	void parse_add_subject(String payload){
@@ -440,7 +440,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:Subject does not exist";
+					+ "content:Subject does not exist, or you already have registered in the subject";
 			out.println(returnToClient);
 		}
 		else{
@@ -487,7 +487,7 @@ public class ClientHandler implements Runnable{
 				+ "content:Question added successfully in "+getCurrentSubject();
 		out.println(returnToClient);
 	}
-	void parse_get_subjects(String payload){//didnt return properly, need to fix
+	void parse_get_subjects(String payload){
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -537,7 +537,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_remove_subject(String payload){
+	void parse_remove_subject(String payload){//TODO: Not done with remove subject, do this
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -582,7 +582,7 @@ public class ClientHandler implements Runnable{
 		while(question_iterator.hasNext()){
 			questions+=question_iterator.next();
 			if (question_iterator.hasNext()){
-				questions+="  ";
+				questions+="@";
 			}
 		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -748,6 +748,46 @@ public class ClientHandler implements Runnable{
 	}
 	
 	
+	void parse_get_questions(){
+		if (getCurrentSubject()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:you need to set the current subject";
+			out.println(returnToClient);
+			return;
+		}
+		if (getUsername()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:you need to log in to use this function";
+			out.println(returnToClient);
+			return;
+		}
+		try{
+		ArrayList<String> questionList = (ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions");
+		String content="";
+		for(String question : questionList){
+			content+=question+"@";
+			
+		}
+		content=content.substring(0, content.length()-2);
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:question\t"
+				+ "content:"+content;
+		out.println(returnToClient);
+		}
+		catch(NullPointerException e){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:No questions to send";
+			out.println(returnToClient);
+			return;
+		}
+	}
 	
 	
 	

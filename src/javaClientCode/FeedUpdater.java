@@ -20,6 +20,12 @@ public class FeedUpdater implements Runnable{
 
 		public void run(){
 			while (true){
+			//	try {
+			//		this.wait(1000000);
+			//	} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+			//		e.printStackTrace();
+			//	}
 				for(long x=0;x<10000000;x++){
 					//Wait
 				}
