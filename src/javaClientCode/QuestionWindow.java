@@ -129,7 +129,6 @@ public class QuestionWindow implements Window {
 			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
 			}
 		});
-		//
 		Button prevQ = new Button("Prev Question"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+50);
 		prevQ.setOnAction(e->{
 			if (quizStarted==1){
