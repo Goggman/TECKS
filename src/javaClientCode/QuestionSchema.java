@@ -46,7 +46,7 @@ public class QuestionSchema {
 				}
 			}
 			questions.add(q);
-			
+			answers.put(q, "");
 			
 		}
 	

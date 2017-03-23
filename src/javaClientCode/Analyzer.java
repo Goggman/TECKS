@@ -36,16 +36,10 @@ public class Analyzer {
 	/**
 	 * Maybe some methods to decide what category to ask, or maybe even find wich questions to ask
 	 */
-	String findCategory(){  
-		return "programming";
-		
-	}
+
 	
 	/**
 	 * method to request files from central server, maybe needed 
 	 */
-	void loadFromServer(){ 
-		
-	}
 	
 }

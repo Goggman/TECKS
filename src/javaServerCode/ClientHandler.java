@@ -537,7 +537,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_remove_subject(String payload){
+	void parse_remove_subject(String payload){//TODO: Not done with remove subject, do this
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -582,7 +582,7 @@ public class ClientHandler implements Runnable{
 		while(question_iterator.hasNext()){
 			questions+=question_iterator.next();
 			if (question_iterator.hasNext()){
-				questions+="  ";
+				questions+="@";
 			}
 		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()

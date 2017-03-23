@@ -154,30 +154,7 @@ public class LoadQWindow implements Window {
 		
 	}
 	
-	public ArrayList<ArrayList<String>> readToArray(String content){ //Returnerer en liste av spørsmål i standard format, fra server til gjennomførbar quiz
-		//Ment for bruk av Question WIndow når skal sjekke hvilke quizer som er tilgjengelige
-		
-		//; instead of :, | instead of \n, @ for start of new question
-		//Header;header1|c;category1|op;op1|op;op2|a;answer1
-		ArrayList<ArrayList<String>> textData = new ArrayList<>();
-		String[] rawQuestionArray = content.split("@"); // array of questions
-		for(String rawQuestion : rawQuestionArray){
-			String q = rawQuestion.replace('|', '\n');
-			q=q.replace(';', ':');
-			int i =-1;
-			Scanner scanner = new Scanner(q);
-			while (scanner.hasNext()){
-				String next = scanner.nextLine();
-				if (next.contains("Header")){
-					textData.add(new ArrayList<String>());
-					i++;
-				}
-				textData.get(i).add(next);
-			}
-			scanner.close();
-		}
-		return textData;
-		}
+
 		
 		
 		
