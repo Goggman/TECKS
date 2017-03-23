@@ -1,0 +1,428 @@
+Header: multiple-choice, difficulty-1, tdt4105
+q: What defines integers?
+op: All real numbers
+op: All positive numbers
+op: Fractions
+a: All whole numbers
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: Can an integer be zero? 
+op: Yes, but only in loops
+op: Yes, only not in loops
+op: No, never
+a: Yes, always
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What do you write to define a variable as an integer in java?
+op: integer
+op: num
+a: int
+op: integ
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What is a boolean variable? 
+op: A variable with a sequence of characters
+a: A variable that is either TRUE og FALSE
+op: A list
+op: A variable that is either TRUE, FALSE or UNSURE
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What do you write to define a variable as boolean in java? 
+op: bool
+op: boole
+op: log
+a: boolean
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “less than”?
+a: <
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “greater than”?
+a: >
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “not equal to”?
+a: !=
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “equal to”?
+a: ==
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “greater than or equal to”?
+a: >=
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the arithmetic expression “less than or equal to”?
+a: <=
+
+Header: fill-in, difficulty-1, tdt4105 
+q: How can you write “answer == false” easier? 
+A: !answer
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the logical operator “and”?
+A: &&
+
+Header: fill-in, difficulty-1, tdt4105
+q: How do you write the logical operator “or”?
+A: ||
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What is a string? 
+op: a variable used to define text rather than numbers
+op: a set of characters that can also contain spaces and numbers
+op: a data type on which arithmetical operations will not be performed 
+a: all of the above 
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: How do you give the variable “name” the string value of “student” in java?
+a: string name = “student”
+op: name == student
+op: “name” = string student
+op: string name == “student”
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What expression do you use to check if the variable “name” has the string value of “student”?
+op: string name = “student”
+op: name == student
+op: “name” = string student
+a: name == “student”
+
+Header: multiple-choice, difficulty-1, tdt4105
+What defines a float variable? 
+q: it has a fractional value and will be stored with numbers on both sides of the decimal point
+op: it is either true or false
+op: it consists of a sequence of characters from a set called the alphabet
+op: it is a whole number and cannot have numbers on the right side of the decimal point. 
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: What is a variable? 
+a:  a value that can change, depending on conditions or on information passed to the program
+op: a value that can change suddenly, independent of the conditions of the program
+op: a script with the ability to alter its own code
+op: a variable is either an integer, a string or a floating number.
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm does not allow cycles?
+op: BFS
+op: Bellman-Ford
+op: DFS
+a: Dag-Shortest-Path
+op: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm allows positive edge weights but not negative?
+op: BFS
+op: Bellman-Ford
+op: DFS
+op: Dag-Shortest-Path
+a: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm will not necessarily find the shortest path in a directed acyclic graph where all edges weigh 1? 
+op: BFS
+op: Bellman-Ford
+a: DFS
+op: Dag-Shortest-Path
+op: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm should you use to find an augmenting path?
+a: BFS
+op: Bellman-Ford
+op: DFS
+op: Dag-Shortest-Path
+op: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm returnes FALSE when it discovers negative cycles?
+op: BFS
+a: Bellman-Ford
+op: DFS
+op: Dag-Shortest-Path
+op: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: fill-in, difficulty-4, tdt4120
+q: What does Prim’s algorithm keep in its min-priority queue?
+a: nodes
+
+Header: multiple-choice, difficulty-3, tdt4120
+q: Which algorithm do we use for topological sorting?
+op: BFS
+op: Bellman-Ford
+a: DFS
+op: Dag-Shortest-Path
+op: Dijkstra
+op: Faster-All-Pairs-Shortest-Paths
+op: Floyd-Warshall
+op: Slow-All-Pairs-Shortest-Paths
+
+Header: fill-in, difficulty-4, tdt4120
+q: Which design method would you use to design an algorithm to fully parenthesize
+a matrix-chain multiplication?
+a: dynamic programming
+
+Header: fill-in, difficulty-2, tdt4120
+q: Which problem does Dijkstra’s algorithm solve?
+a: shortest path
+
+Header: fill-in, difficulty-5, tdt4120
+q: Which design method would you use in designing an algorithm for the fractional
+knapsack problem?
+a: greed
+
+Header: fill-in, difficulty-5, tdt4120
+q: Which problem does Ford-Fulkerson solve?
+a: maximum flow
+
+Header: multiple-choice, difficulty-4, tdt4120
+q: Which problem does Floyd-Warshall solve?
+op: maximum flow
+op: shortest path
+op: the knapsack problem
+a: all-pairs shortest path
+
+Header: fill-in, difficulty-4, tdt4120
+q: What is the minimum number of edges in a connected, undirected graph
+with n nodes? 
+a: n-1
+
+Header: fill-in, difficulty-4, tdt4120
+q: What is the maximum number of edges in a connected, undirected graph
+with n nodes? 
+a: n(n-1)/2
+
+Header: fill-in, difficulty-4, tdt4120
+q: What is the minimum number of nodes in a rooted binary tree of depth n?
+(The depth is the maximum number of edges in any path from the root.)
+a: n+1
+
+Header: fill-in, difficulty-4, tdt4120
+q: What is the maximum number of nodes in a rooted binary tree of depth n?
+(The depth is the maximum number of edges in any path from the root.)
+a: 2^(n+1)-1
+
+Header: multiple-choice, difficulty-3, tdt4105
+q:What is Set Interface?
+op: Set is a collection of element which contains elements along with their key.
+op: Set is a collection of element which contains hashcode of elements.
+a: Set is a collection of element which cannot contain duplicate elements.
+op: Set is a collection of element which can contain duplicate elements.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What is function overloading?
+a: Methods with same name but different parameters.
+op: Methods with same name but different return types.
+op: Methods with same name, same parameter types but different parameter names.
+op: None of the above.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What is Serialization?
+op: Serialization is the process of writing the state of an object to another object.
+a: Serialization is the process of writing the state of an object to a byte stream.
+op: Both of the above.
+op: None of the above.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: Is deletion faster in LinkedList than ArrayList?
+a: yes
+op: no
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Which operator is considered to be with highest precedence?
+a: () , []
+op: =
+op: ?:
+op: %
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What is Abstraction?
+op: Abstraction is a technique to define different methods of same type.
+op: Abstraction is the ability of an object to take on many forms.
+a: It refers to the ability to make a class abstract in OOP.
+op: None of the above.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: Which of the following is false about String?
+op: String is immutable.
+op: String can be created using new operator.
+a: String is a primary data type.
+op: None of the above.
+
+Header: fill-in, difficulty-3, tdt4105
+q: What is the default value of short variable?
+a: 0.0
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What is an Interface?
+op: An interface is a collection of abstract methods.
+op: Interface is an abstract class.
+a: Interface is an concrete class.
+op: None of the above
+
+Header: multiple-choice, difficulty-4, tdt4105
+q: What is an applet?
+a: An applet is a Java program that runs in a Web browser.
+op: Applet is a standalone java program.
+op: Applet is a tool.
+op: Applet is a run time environment.
+
+Header: multiple-choice, difficulty-4, tdt4105
+q: What are Wrapper classes?
+a: These are classes that allow primitive types to be accessed as objects.
+op: These are classes that wraps functionality of an existing class.
+op: Both of the above.
+op: None of the above.
+
+Header: multiple-choice, difficulty-4, tdt4105
+q: What will happen if static modifier is removed from the signature of the main method?
+op: Compilation Error.
+a: RunTime Error: NoSuchMethodError.
+op: Program will compile and run without any output.
+op: Program will compile and run to show the required output.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What is a marker interface?
+a: marker interface is an interface with no method.
+op: marker interface is an interface with single method, mark().
+op: marker interface is an interface with single method, marker().
+op: none of the above.
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Can we have multiple classes in same java file?
+a: yes
+op: no
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: What happens when thread's yield() method is called?
+a: Thread returns to the ready state.
+op: Thread returns to the waiting state.
+op: Thread starts running.
+op: None of the above.
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Can a top level class be private or protected?
+op: yes
+a: no
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: Which of the following is Faster, StringBuilder or StringBuffer?
+a: StringBuilder
+op: StringBuffer
+op: Both of the above.
+op: none of the above.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: Which of the following is true about public access modifier?
+a: Variables, methods and constructors which are declared public can be accessed by any class.
+op: Variables, methods and constructors which are declared public can be accessed by any class lying in same package.
+op: Variables, methods and constructors which are declared public in the superclass can be accessed only by its child class.
+op: None of the above.
+
+Header: multiple-choice, difficulty-3, tdt4105
+q: Can try statements be nested?
+a: yes
+op: no
+
+Header: fill-in, difficulty-2, tdt4105
+q: What is the length of the data type float? Write the number in bits
+a: 32
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Which of the following is not a unary operator?
+op: Negation
+op: Decrement
+op: Bitwise complement
+a: Assignment
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: What are the rules of a programming language?
+op: Format
+op: Logic
+op: Object
+a: Syntax
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Using the declaration below, what will be the final element of the array?\n int [ ] grades = new int[35];
+op: Grades[0] 
+a: Grades[34]
+op: Grades[35]
+op: Impossible to tell
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: What is the Java keyword that creates inheritance?
+op: enlarge
+a: extends
+op: inherits
+op: inheritance
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: Which of the following is an invalid first character of an identifier?
+op: __
+op: $
+op: A
+a: 8
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: Which symbol terminates every line of code in Java?
+op: }
+op: )
+a: ;
+op: .
+
+Header: multiple-choice, difficulty-1, tdt4105
+q: Which of the following is an invalid variable declaration in Java?
+op: Int NumberOfStudents = 250;
+op: Double Salary =0.0;
+op: String NAME =
+a: Char CivilStatus =
+
+Header: multiple-choice, difficulty-2, tdt4105
+What defines the common variables and methods of a set of objects?
+op: Objects
+a: Class
+op: Function
+op: Method
+
+Header: fill-in, difficulty-2, tdt4105
+q: If A=10, then after B=++A, what is the value of B?
+a: 11
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Which of the following is not a primitive data type?
+op: Byte
+a: String
+op: Char
+op: Long
+
+Header: multiple-choice, difficulty-2, tdt4105
+q: Which of the following keywords allows a subclass to access a superclass method even when the subclass has overridden the superclass method?
+op: base
+op: this
+op: public
+a: super
+
+Header: multiple-choice, difficulty-2, tdt4105
+Using the protected keyword gives a member:
+op: public access
+a:	package access
+op:	private access
+op: block scope.
+ 
