@@ -23,7 +23,7 @@ public class QuestionWindow implements Window {
 	ArrayList<QuestionSchema> schemas = new ArrayList<>();
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
-	public void addSchema(QuestionSchema qs ){
+	public void addSchema(QuestionSchema qs){
 		
 		schemas.add(qs);
 		schema = qs;
@@ -68,7 +68,7 @@ public class QuestionWindow implements Window {
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
 			client.sendMessage("request:get_questions\tcontent:");
-			//setSubject.clear();
+
 		});
 		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase+0); loadQuestionsFromServer.setLayoutY(yBase+450);
 		loadQuestionsFromServer.setOnAction(e->{
@@ -146,6 +146,7 @@ public class QuestionWindow implements Window {
 		
 		Button load = new Button("Load"); load.setLayoutX(xBase+300);load.setLayoutY(yBase);
 		load.setOnAction(e -> {
+			
 			if (pickCategory.getItems().size() < schemas.size()){
 				for (int i = 0; i < schemas.size(); i++){
 					
@@ -168,6 +169,12 @@ public class QuestionWindow implements Window {
 						}
 					});
 				}
+				
+			
+			
+			
+			
+			
 				String qType = schema.getQuestions().get(index).getHeader();
 				
 				int xRadio = xBase + 50, yRadio = 400;
@@ -236,7 +243,7 @@ public class QuestionWindow implements Window {
 		for(String rawQuestion : rawQuestionArray){
 			String q = rawQuestion.replace('|', '\n');
 			q=q.replace(';', ':');
-			System.out.println(q);
+			//System.out.println(q);
 			int i =-1;
 			Scanner scanner = new Scanner(q);
 			while (scanner.hasNext()){
