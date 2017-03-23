@@ -19,16 +19,18 @@ public class FeedUpdater implements Runnable{
 
 
 		public void run(){
-			while (true){
-			//	try {
-			//		this.wait(1000000);
-			//	} catch (InterruptedException e) {
+			while (true){//TODO: this needs to be done better, drains way to much CPU
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-			//		e.printStackTrace();
-			//	}
-				for(long x=0;x<10000000;x++){
-					//Wait
+					e.printStackTrace();
 				}
+				
+				
+			//	for(long x=0;x<10000000;x++){
+					//Wait
+			//	}
 				String payload = queue.poll();
 				if (payload!=null){
 					Platform.runLater(()->{
@@ -39,6 +41,7 @@ public class FeedUpdater implements Runnable{
 					
 			}
 		}
+
 		public void start(){
 			if (this.t==null){
 				this.t= new Thread(this);
