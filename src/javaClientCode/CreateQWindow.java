@@ -27,6 +27,7 @@ public class CreateQWindow implements Window {
 		stage=stageIn;
 		ctrl=ctrlIn;
 		client=clientIn;
+		
 	}
 	
 	/**
@@ -45,15 +46,8 @@ public class CreateQWindow implements Window {
 
 		root.setStyle("-fx-background-color: white");
 		
-		Label serverFeed = new Label("Info from server"); serverFeed.setLayoutX(xBase-600); serverFeed.setLayoutY(yBase+0); serverFeed.setStyle("-fx-border-color: black");
-		serverFeed.setPrefSize(300, 500); serverFeed.setAlignment(Pos.TOP_LEFT);
-		TextField setSubject = new TextField(); setSubject.setPromptText("enter subject name, enter to set"); setSubject.setLayoutX(xBase);setSubject.setLayoutY(yBase-200);
-		setSubject.setPrefSize(100, 30);
-		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
-		});
-		
-		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-300); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
+
+		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
 		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("filename");
 		
 		TextField op1 = new TextField(); op1.setLayoutX(xBase);op1.setLayoutY(yBase+130);op1.setPromptText("Option 1");op1.setVisible(false);
@@ -62,11 +56,11 @@ public class CreateQWindow implements Window {
 		
 		Label error = new Label("Needs filename");error.setVisible(false);
 		Button save = new Button("Save quiz");save.setLayoutX(xBase+200);save.setLayoutY(yBase+150);
-		//save.setDisable(true);
+		save.setDisable(true);
 		
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
-		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+250);qType.setLayoutY(yBase);
+		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+240);qType.setLayoutY(yBase);
 		//choose question type
 		mulChoice.setOnAction(e -> {
 			op1.setVisible(true);
@@ -91,11 +85,11 @@ public class CreateQWindow implements Window {
 			String answerText = aText.getText();
 			String headerText = head.getText();
 			String categoryText = category.getText();
-			/*if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
+			if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
 				feed.setText("Need values for Header, Question and answer");
 			}else {
 				save.setDisable(false);
-			}*/
+			}
 			qText.setText(""); aText.setText("");head.setText("");
 			
 			
@@ -116,7 +110,7 @@ public class CreateQWindow implements Window {
 		
 		//save to file
 		save.setOnAction(e -> {
-			/*
+			/**
 			if (fileName.getText().equals("")){
 				error.setLayoutX(fileName.getLayoutX()+5);error.setLayoutY(fileName.getLayoutY()+30);
 				error.setTextFill(Paint.valueOf("red"));error.setVisible(true);
@@ -128,21 +122,17 @@ public class CreateQWindow implements Window {
 				/*
 				try {
 					saveFile(fileName.getText(), quiz);
-					
 				}
 				catch (IOException ex){
 					ex.printStackTrace();
-			}
-				
-				}
-				*/
+			}}
+			*/
 		});
 		
 		
-		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category, serverFeed, setSubject);
+		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category);
 		Scene scene = new Scene(root, 1300, 700);
-		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
-		updater.start();
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
 	}
 	
@@ -172,9 +162,7 @@ public class CreateQWindow implements Window {
 			questionToServer+="a; "+question.getCorrectAnswer();
 			
 			client.sendMessage(questionToServer);
+		}		
 		
 	}
-		
-
-}
 }

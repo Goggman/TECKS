@@ -61,18 +61,20 @@ public class QuestionWindow implements Window {
 		
 		
 		//
-		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-xBase); serverIn.setLayoutY(yBase-yBase); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
+		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-300); serverIn.setLayoutY(yBase-90); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
 		Label metafeed = new Label("");
-		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase+100); setSubject.setLayoutY(yBase+450);
+		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase-300); setSubject.setLayoutY(yBase-150);
+		setSubject.setPrefWidth(200);
 		setSubject.setPromptText("Set subject");
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
 			client.sendMessage("request:get_questions\tcontent:");
 
 		});
-		
-		
-		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase+0); loadQuestionsFromServer.setLayoutY(yBase+450);
+
+		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase-xBase); loadQuestionsFromServer.setLayoutY(yBase-124);
+		loadQuestionsFromServer.setStyle("-fx-pref-width: 100");
+
 		loadQuestionsFromServer.setOnAction(e->{
 			
 			if (!metafeed.getText().equals("")){
@@ -120,7 +122,7 @@ public class QuestionWindow implements Window {
 		});
 		
 		//
-		Button nextQ = new Button("Next Question"); nextQ.setLayoutX(xBase+0); nextQ.setLayoutY(yBase+100);
+		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+0); nextQ.setLayoutY(yBase+100);
 		nextQ.setOnAction(e->{
 			
 			if (quizStarted==1){
@@ -131,7 +133,7 @@ public class QuestionWindow implements Window {
 			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
 			}
 		});
-		Button prevQ = new Button("Prev Question"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+50);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+50);
 		prevQ.setOnAction(e->{
 			if (quizStarted==1){
 			if (index!=0){
@@ -145,7 +147,8 @@ public class QuestionWindow implements Window {
 		
 		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);pickCategory.setText("Pick category");
 		
-		Button load = new Button("Load"); load.setLayoutX(xBase+300);load.setLayoutY(yBase);
+		Button load = new Button("Load"); load.setLayoutX(xBase-145);load.setLayoutY(yBase-124);
+		load.setStyle("-fx-pref-width: 44");
 		load.setOnAction(e -> {
 			
 			if (pickCategory.getItems().size() < schemas.size()){
@@ -204,7 +207,7 @@ public class QuestionWindow implements Window {
 		});
 
 		
-		Button menu = new Button("Menu"); menu.setLayoutX(xBase+0); menu.setLayoutY(yBase+150);
+		Button menu = new Button("Menu"); menu.setLayoutX(xBase+300); menu.setLayoutY(yBase-yBase);
 		menu.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 			
@@ -213,7 +216,8 @@ public class QuestionWindow implements Window {
 		
 		root.getChildren().addAll(feed, questBut, nextQ, prevQ, pickCategory, menu, load, setSubject,loadQuestionsFromServer, serverIn);
 		Scene scene1 = new Scene(root, 1300, 700);
-		//scene1.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+
 		FeedUpdater updater1 = new FeedUpdater(client, metafeed, client.QuestionWindowQuestions);
 		updater1.start();
 		FeedUpdater updater2 = new FeedUpdater(client, serverIn, client.QuestionWindowInfo);
@@ -234,8 +238,8 @@ public class QuestionWindow implements Window {
 		
 	}
 	
-	public QuestionSchema readToSchema(String content){ //Returnerer en liste av spørsmål i standard format, fra server til gjennomførbar quiz
-		//Ment for bruk av Question WIndow når skal sjekke hvilke quizer som er tilgjengelige
+	public QuestionSchema readToSchema(String content){ //Returnerer en liste av spÃ¸rsmÃ¥l i standard format, fra server til gjennomfÃ¸rbar quiz
+		//Ment for bruk av Question WIndow nÃ¥r skal sjekke hvilke quizer som er tilgjengelige
 		
 		//; instead of :, | instead of \n, @ for start of new question
 		//Header;header1|c;category1|op;op1|op;op2|a;answer1
