@@ -39,11 +39,11 @@ public class LoginWindow implements Window{
 		menu1.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText());
 		});
-		Button menu2 = new Button("Show chat"); menu2.setLayoutX(xBase+520);menu2.setLayoutY(yBase+50);
+		Button menu2 = new Button("Show chat"); menu2.setLayoutX(xBase+520);menu2.setLayoutY(yBase-20);
 		menu2.setOnAction(e->{
 			chat.show();
 		});
-		Button menu3 = new Button("Hide chat"); menu3.setLayoutX(xBase+520);menu3.setLayoutY(yBase+80);
+		Button menu3 = new Button("Hide chat"); menu3.setLayoutX(xBase+520);menu3.setLayoutY(yBase+10);
 		menu3.setOnAction(e->{
 			chat.hide();
 		});
@@ -56,7 +56,7 @@ public class LoginWindow implements Window{
 		menu5.setOnAction(e->{
 			feed.setText("Window cleared");
 		});
-		Button menu6 = new Button("Logout"); menu6.setLayoutX(xBase);menu6.setLayoutY(yBase+20);
+		Button menu6 = new Button("Logout"); menu6.setLayoutX(xBase);menu6.setLayoutY(yBase+10);
 		menu6.setOnAction(e->{
 			client.sendMessage("request:logout\tcontent:");
 		});

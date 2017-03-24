@@ -47,7 +47,7 @@ public class QuestionWindow implements Window {
 	public Scene createScene(){
 		int xBase=300, yBase=200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase+50); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
+		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
 		root.getChildren().add(userInput);
 		userInput.setOnAction(e -> {
@@ -95,17 +95,17 @@ public class QuestionWindow implements Window {
 			
 		});
 		
-		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+620);showChat.setLayoutY(yBase+50);
+		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+820);showChat.setLayoutY(yBase+50);
 		showChat.setOnAction(e->{
 			chat.show();
 		});
-		Button hideChat = new Button("Hide chat"); hideChat.setLayoutX(xBase+620);hideChat.setLayoutY(yBase+80);
+		Button hideChat = new Button("Hide chat"); hideChat.setLayoutX(xBase+820);hideChat.setLayoutY(yBase+80);
 		hideChat.setOnAction(e->{
 			chat.hide();
 		});
 		
 		
-		Button questBut = new Button("Confirm Answer"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
+		Button questBut = new Button("Confirm"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
 		questBut.setOnAction(e-> {
 			Analyzer analyzer = new Analyzer();
 			if (quizStarted == 1){
@@ -131,7 +131,7 @@ public class QuestionWindow implements Window {
 		});
 		
 		//
-		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+0); nextQ.setLayoutY(yBase+100);
+		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+520); nextQ.setLayoutY(yBase+230);
 		nextQ.setOnAction(e->{
 			
 			if (quizStarted==1){
@@ -142,7 +142,7 @@ public class QuestionWindow implements Window {
 			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
 			}
 		});
-		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+50);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+435); prevQ.setLayoutY(yBase+230);
 		prevQ.setOnAction(e->{
 			if (quizStarted==1){
 			if (index!=0){
@@ -154,7 +154,7 @@ public class QuestionWindow implements Window {
 		});
 		//
 		
-		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase+0);pickCategory.setText("Pick category");
+		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase-yBase);pickCategory.setText("Pick category");
 		
 		Button load = new Button("Load"); load.setLayoutX(xBase-145);load.setLayoutY(yBase-124);
 		load.setStyle("-fx-pref-width: 44");
