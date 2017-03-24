@@ -48,7 +48,7 @@ public class QuestionWindow implements Window {
 		int xBase=300, yBase=200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
-		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+400);
+		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+230);
 		root.getChildren().add(userInput);
 		userInput.setOnAction(e -> {
 			if (quizStarted == 1){
@@ -105,7 +105,7 @@ public class QuestionWindow implements Window {
 		});
 		
 		
-		Button questBut = new Button("Confirm"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+400);
+		Button questBut = new Button("Confirm"); questBut.setLayoutX(xBase+300); questBut.setLayoutY(yBase+230);
 		questBut.setOnAction(e-> {
 			Analyzer analyzer = new Analyzer();
 			if (quizStarted == 1){
