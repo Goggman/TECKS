@@ -3,5 +3,6 @@ import javafx.scene.Scene;
 
 public interface Window {
 	Scene createScene();
+	void wakeUp();
 
 }
