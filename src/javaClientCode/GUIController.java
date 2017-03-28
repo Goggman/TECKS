@@ -58,6 +58,7 @@ public class GUIController {
 	 * @return Scene object
 	 */
 	Scene getScene(int index){
+		((Window)windows.get(index)).wakeUp();
 		return windows.get(index);
 	}
 	

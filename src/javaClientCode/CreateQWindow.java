@@ -48,8 +48,10 @@ public class CreateQWindow implements Window {
 		
 
 		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
-		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("filename");
-		
+		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("set working subject");
+		fileName.setOnAction(e->{
+			client.sendMessage("request:set_subject\tcontent:"+fileName.getText());
+		});
 		TextField op1 = new TextField(); op1.setLayoutX(xBase);op1.setLayoutY(yBase+130);op1.setPromptText("Option 1");op1.setVisible(false);
 		
 		TextField op2 = new TextField(); op2.setLayoutX(xBase);op2.setLayoutY(yBase+160);op2.setPromptText("Option 2");op2.setVisible(false);
@@ -137,11 +139,6 @@ public class CreateQWindow implements Window {
 	}
 	
 	
-	
-	
-	
-	
-	
 	/**
 	 * Load question object to file
 	 * @param filename 
@@ -149,6 +146,8 @@ public class CreateQWindow implements Window {
 	 * @throws IOException
 	 */
 
+	
+	
 	public void createQuestionToServer(ArrayList<Question> q){
 
 		for (Question question : q){
@@ -163,6 +162,19 @@ public class CreateQWindow implements Window {
 			
 			client.sendMessage(questionToServer);
 		}		
+		
+
+		
+	}
+
+
+
+
+
+
+
+
+	public void wakeUp(){
 		
 	}
 }

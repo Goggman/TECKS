@@ -99,6 +99,8 @@ public class ChatWindow implements Window{
 	}
 	
 	
-	
+	public void wakeUp(){
+		
+	}
 	
 }
