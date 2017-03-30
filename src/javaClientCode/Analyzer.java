@@ -20,26 +20,11 @@ public class Analyzer {
 	 */
 	void init_score(){
 		categories = new HashMap<String, Integer>();
-		/*
-		categories.put("String_Formatting", 0);
-		categories.put("If_else", 0);
-		categories.put("Loops",0);
-		categories.put("Scope",0);
-		categories.put("Conventions",0);*/
 		
 	}
 	
 	HashMap<String, Integer> getCategories(){
 		return categories;
 	}
-	
-	/**
-	 * Maybe some methods to decide what category to ask, or maybe even find wich questions to ask
-	 */
-
-	
-	/**
-	 * method to request files from central server, maybe needed 
-	 */
-	
+	//TODO: make this prepare and/or send a add_results message to server
 }
