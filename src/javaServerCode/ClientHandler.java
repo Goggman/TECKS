@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable{
     private String username;
     private String chatroom;
     private String current_subject;
+    private String userType;
     
 	ClientHandler(ServerHost server, Socket clientSocket)  {
 		this.server=server;
@@ -124,7 +125,12 @@ public class ClientHandler implements Runnable{
 	String get_sender(String payload){
 		return payload.split("\t")[1].split(":")[1];
 	}
-	
+	String getUserType(){
+		return this.userType;
+	}
+	void setUserType(String type){
+		this.userType = type;
+	}
 	String get_content(String payload){
 		try{
 			return payload.split("\t")[3].split(":")[1];
@@ -145,69 +151,86 @@ public class ClientHandler implements Runnable{
 	
 	
 	void parse(String payload){
-		if (getRequest(payload).equals("login")){
+		String request = getRequest(payload);
+		
+		if (request.equals("login")){
 			parse_login(payload);
 			
 		}
-		else if(getRequest(payload).equals("logout")){
+		else if(request.equals("logout")){
 			parse_logout(payload);
 		}
-		else if(getRequest(payload).equals("msg")){
+		else if(request.equals("msg")){
 			parse_msg(payload);
 			
 		}
-		else if(getRequest(payload).equals("help")){
+		else if(request.equals("help")){
 			parse_help(payload);
 		}
 		//else if(get_request(payload).equals("get<property>")){ //getters for all user data
 		//}
-		else if(getRequest(payload).equals("get_subjects")){ //getsubjects <None>
+		else if(request.equals("get_subjects")){ //getsubjects <None>
 			parse_get_subjects(payload);
 		}
-		else if(getRequest(payload).equals("add_subject")){ //addsjubject <subject>, adds a subject from one of the existing ones
+		else if(request.equals("add_subject")){ //addsjubject <subject>, adds a subject from one of the existing ones
 			parse_add_subject(payload);
 		}
-		else if(getRequest(payload).equals("remove_subject")){ //removesubjects <subject>
+		else if(request.equals("remove_subject")){ //removesubjects <subject>
 			parse_remove_subject(payload);
 		}
-		else if(getRequest(payload).equals("history")){ //get chatlog in current chatroom, history <null>
+		else if(request.equals("history")){ //get chatlog in current chatroom, history <null>
 			parse_history(payload);
 		}
-		else if(getRequest(payload).equals("get_questions")){//getquestions <subject>
+		else if(request.equals("get_questions")){//getquestions <subject>
 			parse_get_questions(payload);
 		}
-		else if(getRequest(payload).equals("set_subject")){ //TODO: possible to set subject without having it added, fix this---set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
+		else if(request.equals("set_subject")){ //TODO: possible to set subject without having it added, fix this---set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
 			parse_set_subject(payload);
 		}
-		else if(getRequest(payload).equals("create_subject")){ //getsubjects <None>, creates a new subject
+		else if(request.equals("create_subject")){ //getsubjects <None>, creates a new subject
 			parse_create_subject(payload);
 		}
-		else if(getRequest(payload).equals("add_question")){//addquestion <question in defined string format> into current suject
+		else if(request.equals("add_question")){//addquestion <question in defined string format> into current suject
 			parse_add_question(payload);
 		}
-		else if(getRequest(payload).equals("set_chatroom")){
+		else if(request.equals("set_chatroom")){
 			parse_set_chatroom(payload);
 		}
-		else if(getRequest(payload).equals("add_chatroom")){
+		else if(request.equals("add_chatroom")){
 			parse_add_chatroom(payload);
 		} 
-		else if(getRequest(payload).equals("get_chatrooms")){
+		else if(request.equals("get_chatrooms")){
 			parse_get_chatrooms(payload);
 		}
-		else if(getRequest(payload).equals("save_server")){
+		else if(request.equals("save_server")){
 			parse_save_server(payload);
 		}
-		else if(getRequest(payload).equals("get_username")){
+		else if(request.equals("get_username")){
 			parse_get_username(payload);
 		}
-		else if(getRequest(payload).equals("get_chatroom")){
+		else if(request.equals("get_chatroom")){
 			parse_get_chatroom(payload);
 		}
-		else if(getRequest(payload).equals("get_subject")){
+		else if(request.equals("get_subject")){
 			parse_get_subject(payload);
 		}
-		else if (getRequest(payload).equals("get_questions")){
+		else if (request.equals("get_questions")){
 			parse_get_questions(payload);
+		}
+		else if (request.equals("get_best_questions")){
+			parse_get_best_questions(payload);
+		}
+		else if (request.equals("get_stats")){
+			parse_get_stats(payload);
+		}
+		else if (request.equals("add_results")){
+			parse_add_results(payload);
+		}
+		else if (request.equals("reset_score")){
+			parse_reset_score(payload);
+		}
+		else if (request.equals("get_names")){
+			parse_get_names(payload);
 		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
@@ -219,13 +242,14 @@ public class ClientHandler implements Runnable{
 	
 	
 	void parse_login(String payload){
-		String username= getContent(payload).split("&")[0];
-		String password= getContent(payload).split("&")[1];
+		String username= getContent(payload).split("@")[0];
+		String password= getContent(payload).split("@")[1];
+		
 		if (username.equals("")){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:you need to provide username for login";
+					+ "content:you need to provide username for login, format is <username>@<PW>@<type>";
 			out.println(returnToClient);
 			return;
 		}
@@ -238,20 +262,21 @@ public class ClientHandler implements Runnable{
 			return;
 			
 		}
+
 		
 		
-		Iterator userIterator= (Iterator)server.getProperties().get("connected_clients").keySet().iterator();		// check if username already logged in
+		Iterator userIterator= (Iterator)server.getProperties().get("connected_clients").keySet().iterator();// check if username already logged in
 		try{
-		while (userIterator.hasNext()){
-			if (((ClientHandler)userIterator.next()).getUsername().equals(username)){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-						+"\tsender:server\t"
-						+ "response:error\t"
-						+ "content:Username already in use";
-				out.println(returnToClient);
-				return;
+			while (userIterator.hasNext()){
+				if (((ClientHandler)userIterator.next()).getUsername().equals(username)){
+					String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+							+"\tsender:server\t"
+							+ "response:error\t"
+							+ "content:Username already logged in";
+					out.println(returnToClient);
+					return;
+				}
 			}
-		}
 		}
 		catch(NullPointerException e){
 			//System.out.println("Null pointer in connected_clients, no one added yet");
@@ -259,18 +284,11 @@ public class ClientHandler implements Runnable{
 		
 
 		
+		HashMap users = (HashMap)server.getProperties().get("users");//set up the user properties, add the user to user etc
 		
 		
-		if (getChat() == null){
-			setChat("start");
-		}
-		
-		
-		HashMap prop = (HashMap)server.getProperties().get("users");//set up the user properties, add the user to user etc
-		
-		
-		if(prop.containsKey(username)){					//Check if already create user, check password
-			if (!password.equals(((HashMap)prop.get(username)).get("password"))){
+		if(users.containsKey(username)){					//Check if already create user, check password
+			if (!password.equals(((HashMap)users.get(username)).get("password"))){
 				String returnToClient = "timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:info\t"
@@ -278,26 +296,44 @@ public class ClientHandler implements Runnable{
 				out.println(returnToClient);
 				return;
 			}
+			
+			setUserType((String)((HashMap)server.getProperties().get("users").get(username)).get("type"));
 		}
 		else {
-			prop.put(username,new HashMap());
-			((HashMap)prop.get(username)).put("password",password);
+			String userType= getContent(payload.split("@")[2]); // "admin" for admin, "student" for student, "lecturer" for lecturer
+			if (userType.equals("") || !(userType.equals("admin")||userType.equals("student")||userType.equals("lecturer"))){
+				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+						+"\tsender:server\t"
+						+ "response:error\t"
+						+ "content:You need to supply a usertype, <username>@<PW>@<type>, either admin, student, lecturer";
+				out.println(returnToClient);
+				return;
+			}
+			users.put(username,new HashMap());
+			((HashMap)users.get(username)).put("password",password);
+			((HashMap)users.get(username)).put("type",userType);
+			setUserType(userType);
 		}
+		
+		if (getChat() == null){
+			setChat("start");
+		}
+		
 		HashMap userdata = (HashMap)server.getProperties().get("users").get(username);
 		userdata.put("subjects", new HashMap<String,HashMap>());
-		//userdata.put("overall_score",0);
 		setUsername(username);
+		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
-				+ "content:OK - Login successful as "+this.username+" into chatroom - "+getChat();
+				+ "response:message\t"
+				+ "content:OK - Login successful as "+this.username+" as "+getUserType()+" into chatroom - "+getChat();
 		String returnToClients = "timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
+				+ "response:message\t"
 				+ "content:"+this.username+" logged in";
 		
-		HashMap users= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users");
-		users.put(this, new ArrayList());																	//add user to chat
+		HashMap chatUsers= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users");
+		chatUsers.put(this, new ArrayList());																	//add user to chat
 		
 		Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();  				//send message to every client in chat
 		while(clients.hasNext()){
@@ -310,11 +346,6 @@ public class ClientHandler implements Runnable{
 		ArrayList chat= (ArrayList) ((HashMap) server.getProperties().get("chatrooms").get(getChat())).get("log");			//add login notification to chat
 		chat.add(returnToClients);
 		out.println(returnToClient);																//send receipt
-		//ArrayList chatlog = (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log"); // print every message received so far
-		//for(int x=chatlog.size()-1;x>chatlog.size()-4;x--){ // 4 last messages from chat
-		//	out.println(chatlog.get(x));
-		//}
-		
 		server.getProperties().get("connected_clients").put(this, new HashMap());
 		
 	}
@@ -333,20 +364,26 @@ public class ClientHandler implements Runnable{
 				+ "content:Logout successful";
 		String returnToClients = "timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
+				+ "response:message\t"
 				+ "content:"+this.username+" logged out";
 		
 		ArrayList chat= (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("log");  //add message to chat
 		chat.add(returnToClients);
 		HashMap users= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users"); //remove oneself from chatroom
 		users.remove(this);
+		HashMap connectedClients = server.getProperties().get("connected_clients");
+		connectedClients.remove(this);
 		((HashMap)server.getProperties().get("connected_clients")).remove(this); 								 //remove oneself from connected clients 
 		Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();
 		while(clients.hasNext()){
 			((ClientHandler)clients.next()).getOut().println(returnToClients);
 		}
 		out.println(returnToClient);
+		
 		setUsername(null);
+		setChat(null);
+		setUserType(null);
+		setCurrentSubject(null);
 	}
 	void parse_msg(String payload){
 		if (getUsername()==null || getChat()==null){
@@ -405,6 +442,14 @@ public class ClientHandler implements Runnable{
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
+			out.println(returnToClient);
+			return;
+		}
+		if(getUserType().equals("student")){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Students are not allowed to utilize this function";
 			out.println(returnToClient);
 			return;
 		}
@@ -476,11 +521,9 @@ public class ClientHandler implements Runnable{
 			
 			HashMap subjects = (HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects");
 			subjects.put(subject, new HashMap());   //casing out of control, TODO: make this easier to understand, create more temp variables
-			((HashMap) subjects.get(subject)).put("score",null);
+			((HashMap) subjects.get(subject)).put("score",0);
 			((HashMap) subjects.get(subject)).put("categories",new HashMap());  
-			((HashMap) subjects.get(subject)).put("#questions",new HashMap());
-			((HashMap) ((HashMap) subjects.get(subject)).get("categories")).put("score",0);
-			((HashMap) ((HashMap) subjects.get(subject)).get("categories")).put("#questions",0);
+			((HashMap) subjects.get(subject)).put("#questions",-1);
 			((ArrayList)((HashMap)server.getProperties().get("subjects").get(subject)).get("members")).add(getUsername());
 			
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -499,13 +542,19 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		
-		
 		if(getCurrentSubject()==null ){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to set the working subject";
+			out.println(returnToClient);
+			return;
+		}
+		if(getUserType().equals("student")){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Students are not allowed to utilize this function";
 			out.println(returnToClient);
 			return;
 		}
@@ -567,7 +616,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_remove_subject(String payload){//TODO: Not done with remove subject, do this
+	void parse_remove_subject(String payload){
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -598,7 +647,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_questions(String payload){
+	void parse_get_questions(String payload){//idea, could supply argument, category, to only ask questions in this category
 		if(getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -727,7 +776,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:Null";
+					+ "content:No current subject";
 			out.println(returnToClient);
 		}
 	}
@@ -747,7 +796,16 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_save_server(String payload){
+	void parse_save_server(String payload){ 
+		if(!getUserType().equals("admin")){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Students and lecturers are not allowed to utilize this function";
+			out.println(returnToClient);
+			return;
+		}
+		
 		if (saveProperties()){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -755,6 +813,7 @@ public class ClientHandler implements Runnable{
 					+ "content:Server status saved";
 			out.println(returnToClient);
 		}
+
 		else{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -764,9 +823,55 @@ public class ClientHandler implements Runnable{
 			
 		}
 	}
-	//add methods to save status on score and grade for each user in each subject
+	void parse_get_names(String payload){// get names in current chatroom, argument, local or global
+		String content = getContent(payload);
+		if (content.equals("global")){
+			String contentToClient="";
+			Iterator connectedClients_it = ((HashMap)server.getProperties().get("connected_clients")).keySet().iterator();
+			
+			while (connectedClients_it.hasNext()){
+				contentToClient+=((ClientHandler)connectedClients_it.next()).getUsername();
+				
+			}
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:"+contentToClient;
+			out.println(returnToClient);
+		}
+		else if (content.equals("local")){
+			if (getChat()==null){
+				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+						+"\tsender:server\t"
+						+ "response:error\t"
+						+ "content:You need to log in to get local users";
+				out.println(returnToClient);
+			}
+			else{
+				String contentToClient="";
+				Iterator connectedClients_it = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();
+				while (connectedClients_it.hasNext()){
+					contentToClient+=((ClientHandler)connectedClients_it.next()).getUsername();
+					
+				}
+				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+						+"\tsender:server\t"
+						+ "response:info\t"
+						+ "content:"+contentToClient;
+				out.println(returnToClient);
+				
+			}
+		}
+		else{
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to suply an argument, global or local";
+			out.println(returnToClient);
+		}
+	}
 	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked TODO: If subject arg provided, give stats in only that subject
-		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...&<subject>|<overall score>|<overall_score>|<category>|<score>
+		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...@<subject>|<overall score>|<overall_score>|<category>|<score>...
 		//
 		String content = "";
 		Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
@@ -791,7 +896,7 @@ public class ClientHandler implements Runnable{
 			totalScore=totalScore/(int)subject.get("#questions");
 			content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
 			if (subject_it.hasNext()){
-				content+="&";
+				content+="@";
 			}
 			
 		}
@@ -804,7 +909,7 @@ public class ClientHandler implements Runnable{
 		
 	}
 	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
-		//adds to current subject, payload is request:add_results\tcontent:<#questions>&<category>|<score>&<category>|<score>.... TODO: this needs testing, currently no element in GUI actually sends results, also needs to be implemented
+		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... TODO: this needs testing, currently no element in GUI actually sends results, also needs to be implemented
 		if (getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -813,29 +918,36 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		String[] rawContent = getContent(payload).split("&");
+		String[] rawContent = getContent(payload).split("@");
 		int numberOfQuestions = Integer.parseInt(rawContent[0]);
 		ArrayList categoryScore = new ArrayList();
 		
 		int numberOfQuestionsOld = (int)  ((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("#questions");
+		if (numberOfQuestionsOld == -1){
+			numberOfQuestionsOld = 0;
+		}
 		((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).put("#questions", numberOfQuestionsOld+numberOfQuestions ); //Update the amount of questions asked in total
 		
-		for (int x=1;x<rawContent.length;x+=2){
+		for (int x=1;x<rawContent.length;x+=3){
 			String category = rawContent[x].split("|")[0];
 			int score = Integer.parseInt(rawContent[x].split("|")[1]);
+			int questionsAskedInCategory = Integer.parseInt(rawContent[x].split("|")[2]);
 			try{
 				HashMap userCategory = (HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("categories")).get(category);
 				int userScore = (int)userCategory.get("score");
 				userCategory.put("score", userScore+score);
 				int numberOfCategoryQuestions = (int)userCategory.get("#questions");
-				userCategory.put("questions", numberOfCategoryQuestions+1);
+				if (numberOfCategoryQuestions == -1){
+					numberOfCategoryQuestions=0;
+				}
+				userCategory.put("questions", numberOfCategoryQuestions+questionsAskedInCategory);
 				 
 			}
 			catch(NullPointerException e){ // if category has not yet been added, do this
-				//create categories and add them, set number of questions to 0 etc
+				//create categories and add them, set number of questions, score etc
 				HashMap subjectCategories = (HashMap)((HashMap) ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("categories");
 				subjectCategories.put(category,new HashMap());
-				((HashMap) subjectCategories.get(category)).put("#questions", 1);
+				((HashMap) subjectCategories.get(category)).put("#questions", questionsAskedInCategory);
 				((HashMap) subjectCategories.get(category)).put("score", score);
 				
 				
@@ -849,7 +961,11 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_get_best_questions(String payload){ // server chooses which questions to send, based on score and the current subject, args maybe subject or category
 		if (getUsername()==null || getCurrentSubject()==null){
-			//error message to client TODO: finish this, copy paste from somewhere else
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to log in and/or set th working subject";
+			out.println(returnToClient);
 			return;
 		}
 		int percent_min=100;
@@ -884,59 +1000,96 @@ public class ClientHandler implements Runnable{
 			}
 			
 		}
-		
-		//iterate over each questions, appending each to the content field of a response:question message back to the server TODO: finish this
-		
-		
-		
-	}
-	void parse_reset_score(String payload){ // set score and questions asked in active subject, and in every category under active subject to 0
-		//resets total questions in categories, subjects, args should be global or local
-		
-	}
-	void parse_get_questions(){
-		if (getCurrentSubject()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-					+"\tsender:server\t"
-					+ "response:error\t"
-					+ "content:you need to set the current subject";
-			out.println(returnToClient);
-			return;
-		}
-		if (getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-					+"\tsender:server\t"
-					+ "response:error\t"
-					+ "content:you need to log in to use this function";
-			out.println(returnToClient);
-			return;
-		}
-		try{
-		ArrayList<String> questionList = (ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions");
-		String content="";
-		for(String question : questionList){
+		String content = "";
+		for(String question : questionsToClient){ 
 			content+=question+"@";
-			
 		}
-		content=content.substring(0, content.length()-2);
+		content = content.substring(0, content.length()-2);
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:question\t"
 				+ "content:"+content;
 		out.println(returnToClient);
-		}
-		catch(NullPointerException e){
+		
+		
+	}
+	void parse_reset_score(String payload){ // set score and questions asked in active subject, and in every category under active subject to 0
+		if (getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:No questions to send";
+					+ "content:You need to log in and/or set the working subject";
 			out.println(returnToClient);
 			return;
 		}
+		String content = getContent(payload);
+		if (content.equals("local")){
+			HashMap currentSubject = (HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject());
+			currentSubject.put("#questions", 0);
+			currentSubject.put("score",0);
+			Iterator category_it = ((HashMap)currentSubject.get("categories")).keySet().iterator();
+			while (category_it.hasNext()){
+				String category = (String)category_it.next();
+				((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("#questions", 0);
+				((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("score", 0);
+			}
+			
+			
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:Score reset successfully in "+getCurrentSubject();
+			out.println(returnToClient);
+		
+		}
+		else if (content.equals("global")){
+			Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
+			while(subject_it.hasNext()){
+				String subject = (String)subject_it.next();
+				
+				HashMap currentSubject = (HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(subject);
+				currentSubject.put("#questions", 0);
+				currentSubject.put("score",0);
+				Iterator category_it = ((HashMap)currentSubject.get("categories")).keySet().iterator();
+				while (category_it.hasNext()){
+					String category = (String)category_it.next();
+					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("#questions", 0);
+					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("score", 0);
+				}
+			}
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:info\t"
+					+ "content:Score reset successfully in all subjects";
+			out.println(returnToClient);
+
+		}
+		else{
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to supply an rgument for this function, local or global";
+			out.println(returnToClient);
+		}
+	}
+
+	void parse_get_type(){
+		if (getUsername()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to log in to get the usertype";
+			out.println(returnToClient);
+			return;
+		}
+		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				+"\tsender:server\t"
+				+ "response:info\t"
+				+ "content:"+getUserType();
+		out.println(returnToClient);
+		
 	}
 	
-	
-	
 
-	
+	//TODO:test the newly added or changed functions, get_names, get_stats, get_best_questions, reset_score, login, logout, remove_subject, maybe more, dont remember
 }

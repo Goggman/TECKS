@@ -27,4 +27,7 @@ public class StatWindow implements Window { //TODO: Make a statistics window, or
 	public void wakeUp(){
 		
 	}
+	public void sleep(){
+		
+	}
 }

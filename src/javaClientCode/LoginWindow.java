@@ -71,5 +71,8 @@ public class LoginWindow implements Window{
 	public void wakeUp(){
 		
 	}
+	public void sleep(){
+		
+	}
 
 }

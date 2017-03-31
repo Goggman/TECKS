@@ -59,4 +59,7 @@ public class MenuWindow implements Window{
 	public void wakeUp(){
 		
 	}
+	public void sleep(){
+		
+	}
 }

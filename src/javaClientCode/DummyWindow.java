@@ -23,4 +23,7 @@ public class DummyWindow implements Window {
 	public void wakeUp(){
 		
 	}
+	public void sleep(){
+		
+	}
 }
