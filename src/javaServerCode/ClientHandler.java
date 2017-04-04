@@ -184,7 +184,7 @@ public class ClientHandler implements Runnable{
 		else if(request.equals("get_questions")){//getquestions <subject>
 			parse_get_questions(payload);
 		}
-		else if(request.equals("set_subject")){ //TODO: possible to set subject without having it added, fix this---set_current_subject <subject>, should check if you have membership in the subject, or if it is a subject at all
+		else if(request.equals("set_subject")){
 			parse_set_subject(payload);
 		}
 		else if(request.equals("create_subject")){ //getsubjects <None>, creates a new subject
@@ -608,13 +608,13 @@ public class ClientHandler implements Runnable{
 			while(subject_iterator.hasNext()){
 				subjects+=subject_iterator.next();
 				if (subject_iterator.hasNext()){
-					subjects+=", ";
+					subjects+="@";
 				}
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:Subjects registered - "+subjects;
+					+ "content:"+subjects;
 			out.println(returnToClient);
 		}
 			
@@ -624,13 +624,13 @@ public class ClientHandler implements Runnable{
 			while(subject_iterator.hasNext()){
 				subjects+=subject_iterator.next();
 				if (subject_iterator.hasNext()){
-					subjects+=", ";
+					subjects+="@";
 				}
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:Your subjects - "+subjects;
+					+ "content:"+subjects;
 			out.println(returnToClient);
 		}
 		else{
@@ -949,7 +949,7 @@ public class ClientHandler implements Runnable{
 		
 	}
 	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
-		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... TODO: this needs testing, currently no element in GUI actually sends results, also needs to be implemented
+		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... TODO: currently no element in GUI actually sends results, also needs to be implemented
 		if (getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -1153,5 +1153,5 @@ public class ClientHandler implements Runnable{
 	}
 	
 
-	//TODO:test the newly added or changed functions, get_names, get_stats, get_best_questions, reset_score, login, logout, remove_subject, maybe more, dont remember
+	
 }
