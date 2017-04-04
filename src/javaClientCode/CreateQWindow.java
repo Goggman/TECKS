@@ -177,4 +177,7 @@ public class CreateQWindow implements Window {
 	public void wakeUp(){
 		
 	}
+	public void sleep(){
+		
+	}
 }

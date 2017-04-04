@@ -417,5 +417,9 @@ public class QuestionWindow implements Window {
 		
 	}	
 	
+	public void sleep(){
+		
+	}
+	
 
 }
