@@ -413,7 +413,9 @@ public class QuestionWindow implements Window {
 		return s;
 		}
 	
-	
+	public void wakeUp(){
+		
+	}	
 	
 
 }
