@@ -336,7 +336,9 @@ public class ClientHandler implements Runnable{
 		}
 		
 		HashMap userdata = (HashMap)server.getProperties().get("users").get(username);
-		userdata.put("subjects", new HashMap<String,HashMap>());
+		if (!userdata.containsKey("subjects")){
+			userdata.put("subjects", new HashMap<String,HashMap>());
+		}
 		setUsername(username);
 		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -349,7 +351,7 @@ public class ClientHandler implements Runnable{
 				+ "content:"+this.username+" logged in";
 		
 		HashMap chatUsers= (HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users");
-		chatUsers.put(this, new ArrayList());																	//add user to chat
+		chatUsers.put(this, new HashMap());																	//add user to chat
 		
 		Iterator clients = ((HashMap)((HashMap)server.getProperties().get("chatrooms").get(getChat())).get("users")).keySet().iterator();  				//send message to every client in chat
 		while(clients.hasNext()){
@@ -601,7 +603,6 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		
-		
 		if (getContent(payload).equals("global")){
 			String subjects="";
 			Iterator subject_iterator = ((HashMap)server.getProperties().get("subjects")).keySet().iterator();
@@ -679,6 +680,7 @@ public class ClientHandler implements Runnable{
 		}
 	}
 	void parse_get_questions(String payload){//idea, could supply argument, category, to only ask questions in this category
+		
 		if(getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -962,7 +964,7 @@ public class ClientHandler implements Runnable{
 		double numberOfQuestions = Double.parseDouble(rawContent[0]);
 		ArrayList categoryScore = new ArrayList();
 		
-		double numberOfQuestionsOld = (int)  ((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("#questions");
+		double numberOfQuestionsOld = (double)  ((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("#questions");
 		if (numberOfQuestionsOld == -1){
 			numberOfQuestionsOld = 0;
 		}
@@ -1017,7 +1019,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		int percent_min=100;
+		double percent_min=100;
 		String minCategory="error, something went wrong";
 		HashMap subject = (HashMap)((HashMap)((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject());
 		HashMap categories = (HashMap)subject.get("categories");
@@ -1025,9 +1027,9 @@ public class ClientHandler implements Runnable{
 		Iterator category_it = categories.keySet().iterator();
 		while (category_it.hasNext()){
 			String nextCategory = (String)category_it.next();
-			int score = (int)((HashMap)categories.get(nextCategory)).get("score");
-			int questions = (int)((HashMap)categories.get(nextCategory)).get("#questions");
-			int percent = (score/questions)*100;
+			double score = (double)((HashMap)categories.get(nextCategory)).get("score");
+			double questions = (double)((HashMap)categories.get(nextCategory)).get("#questions");
+			double percent = (score/questions)*100;
 			if (percent<percent_min){
 				percent_min = percent;
 				minCategory = nextCategory;
@@ -1057,7 +1059,7 @@ public class ClientHandler implements Runnable{
 			for(String question : questionsToClient){ 
 			content+=question+"@";
 			}
-			content = content.substring(0, content.length()-2);
+			content = content.substring(0, content.length());
 		}
 		else{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()

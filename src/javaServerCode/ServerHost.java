@@ -46,14 +46,14 @@ public class ServerHost {
 			System.out.println("Creating new properties");
 			properties=new HashMap<String,HashMap>();
 			properties.put("connected_clients", new HashMap<ClientHandler, String>());
-			properties.put("users", new HashMap<String, HashMap<String, String>>());
+			properties.put("users", new HashMap<String, HashMap>());
 			properties.put("chatrooms", new HashMap<String, ArrayList>());
 			properties.get("chatrooms").put("start", new HashMap<String, ArrayList<String>>());
 			HashMap start= (HashMap)properties.get("chatrooms").get("start");
 			start.put("log",new ArrayList<String>());
 			start.put("users", new HashMap<ClientHandler,HashMap>());
 		
-			properties.put("subjects", new HashMap<String, HashMap<String, ArrayList<String>>>());
+			properties.put("subjects", new HashMap<String, HashMap>());
 		
 		
 		
