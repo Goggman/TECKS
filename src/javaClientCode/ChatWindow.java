@@ -102,5 +102,7 @@ public class ChatWindow implements Window{
 	public void wakeUp(){
 		
 	}
-	
+	public void sleep(){
+		
+	}
 }

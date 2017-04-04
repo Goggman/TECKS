@@ -16,6 +16,7 @@ public class ServerClient {
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
     Queue<String> ChatWindowInfo;
+    Queue<String> StatWindowStat;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -51,6 +52,7 @@ public class ServerClient {
 	        QuestionWindowQuestions = new LinkedList<String>();
 	        QuestionWindowInfo = new LinkedList<String>();
 	        ChatWindowInfo = new LinkedList<String>();
+	        StatWindowStat = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -59,31 +61,36 @@ public class ServerClient {
 	    
 	
 	void parse(String payload){
-		if (get_response(payload).equals("info")){
+		String response = getResponse(payload);
+		if (response.equals("info")){
 			parse_info(payload);
 			
 		}
-		else if(get_response(payload).equals("message")){
+		else if(response.equals("message")){
 			parse_message(payload);
 		}
-		else if(get_response(payload).equals("history")){
+		else if(response.equals("history")){
 			parse_history(payload);
 			
 		}
-		else if(get_response(payload).equals("error")){
+		else if(response.equals("error")){
 			parse_error(payload);
 		}
-		else if(get_response(payload).equals("question")){
+		else if(response.equals("question")){
 			parse_question(payload);
 		}
+		else if (response.equals("stats")){
+			parse_stats(payload);
+		}
+		
 		else{
 			System.out.println("Bad request");
 		}
 	}
-	String get_response(String payload){
+	String getResponse(String payload){
 		return payload.split("\t")[2].split(":")[1];
 	}
-	String get_content(String payload){
+	String getContent(String payload){
 		try{
 			return payload.split("\t")[3].split(":")[1];
 		}
@@ -91,10 +98,10 @@ public class ServerClient {
 			return "";
 		}
 	}
-	String get_sender(String payload){
+	String getSender(String payload){
 		return payload.split("\t")[1].split(":")[1];
 	}
-	String get_timestamp(String payload){
+	String getTimestamp(String payload){
 		return payload.split("\t")[0].split("timestamp:")[1];
 		//timestamp:
 		
@@ -122,17 +129,20 @@ public class ServerClient {
 		ChatWindow.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
-	
+	void parse_stats(String payload){
+		StatWindowStat.add(payload);
+		printPrettyMessageGeneral(payload);
+	}
 	void parse_question(String payload){
 		QuestionWindowQuestions.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){
 		System.out.println(
-				"time:\t\t"+get_timestamp(payload)+"\n"+
-				"sender:\t\t"+get_sender(payload)+"\n"+
-				"response:\t"+get_response(payload)+"\n"+
-				"content:\t"+get_content(payload)+"\n"
+				"time:\t\t"+getTimestamp(payload)+"\n"+
+				"sender:\t\t"+getSender(payload)+"\n"+
+				"response:\t"+getResponse(payload)+"\n"+
+				"content:\t"+getContent(payload)+"\n"
 				
 						);
 	}
@@ -204,11 +214,6 @@ public class ServerClient {
 
 	
 
-	//public static void main(String[] args) {
-	//	ServerClient sender = new ServerClient();
-		
-		
-	//}
 
 
 
