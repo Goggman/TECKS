@@ -1,6 +1,6 @@
 package javaClientCode;
 import java.util.HashMap;
-
+import java.util.Iterator;
 
 /**
  * 
@@ -9,8 +9,8 @@ import java.util.HashMap;
  *
  */
 public class Analyzer {
-	HashMap<String, Integer> categories;
-	
+	HashMap<String, int[]> categories;
+	int totalNumberOfQuestions;
 	Analyzer(){
 		init_score();
 	}
@@ -18,13 +18,66 @@ public class Analyzer {
 	/**
 	 * initilialize categories
 	 */
+	
 	void init_score(){
-		categories = new HashMap<String, Integer>();
-		
+		categories = new HashMap<String, int[]>();
+		totalNumberOfQuestions = 0;
+	}
+	void registerAnswer(String categoryIn, boolean isCorrect){
+		if (getCategories().containsKey(categoryIn)){
+			int scoreOld = categories.get(categoryIn)[0];
+			int numberOfQuestionsOld = categories.get(categoryIn)[1];
+			if (isCorrect){
+				int[] newArray = new int[]{scoreOld+1, numberOfQuestionsOld+1};
+				categories.put(categoryIn, newArray);
+				totalNumberOfQuestions += 1;
+			}
+			else{
+				int[] newArray = new int[]{scoreOld, numberOfQuestionsOld+1};
+				categories.put(categoryIn, newArray);
+				totalNumberOfQuestions += 1;
+				
+			}
+			
+		}
+		else{
+			
+			if(isCorrect){
+				int[] newArray = new int[]{1, 1};
+				categories.put(categoryIn, newArray);
+				totalNumberOfQuestions += 1;
+			}
+			else{
+				int[] newArray = new int[]{0, 1};
+				categories.put(categoryIn, newArray);
+				totalNumberOfQuestions += 1;
+			}
+			
+		}
 	}
 	
-	HashMap<String, Integer> getCategories(){
+	HashMap<String, int[]> getCategories(){
 		return categories;
 	}
-	//TODO: make this prepare and/or send a add_results message to server
+	int[] getScoreAndQuestions(String categoryIn){
+		return categories.get(categoryIn);
+	}
+	
+	String prepareContent(){
+		String content = totalNumberOfQuestions+"@";
+		Iterator category_it = categories.keySet().iterator();
+		
+		while (category_it.hasNext()){
+			String category = (String) category_it.next();
+			int[] array = categories.get(category);
+			content+=category+"|"+array[0]+"|"+array[1];
+			if (category_it.hasNext()){
+				content+="@";
+			}
+			
+			
+		}
+		return content;
+	}
+	
 }

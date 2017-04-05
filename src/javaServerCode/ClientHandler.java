@@ -347,7 +347,7 @@ public class ClientHandler implements Runnable{
 		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:message\t"
+				+ "response:info\t"
 				+ "content:OK - Login successful as "+this.username+" as "+getUserType()+" into chatroom - "+getChat();
 		String returnToClients = "timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
@@ -910,7 +910,6 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked TODO: If subject arg provided, give stats in only that subject
 		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...@<subject>|<overall score>|<overall_score>|<category>|<score>...
-		//TODO: Does not provide correct score, some bugs here
 			if (getUsername()==null){
 				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
@@ -974,7 +973,7 @@ public class ClientHandler implements Runnable{
 		}
 		((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).put("#questions", numberOfQuestionsOld+numberOfQuestions ); //Update the amount of questions asked in total
 		
-		for (int x=1;x<rawContent.length;x+=3){
+		for (int x=1;x<rawContent.length;x++){
 			String[] rawContentItem = rawContent[x].split("[|]");
 			String category = rawContentItem[0];
 			double score = Double.parseDouble(rawContentItem[1]);
@@ -1093,8 +1092,8 @@ public class ClientHandler implements Runnable{
 		String content = getContent(payload);
 		if (content.equals("local")){
 			HashMap currentSubject = (HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject());
-			currentSubject.put("#questions", 0);
-			currentSubject.put("score",0);
+			currentSubject.put("#questions", (double)-1);
+			currentSubject.put("score",(double) 0);
 			Iterator category_it = ((HashMap)currentSubject.get("categories")).keySet().iterator();
 			while (category_it.hasNext()){
 				String category = (String)category_it.next();
@@ -1116,13 +1115,13 @@ public class ClientHandler implements Runnable{
 				String subject = (String)subject_it.next();
 				
 				HashMap currentSubject = (HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(subject);
-				currentSubject.put("#questions", 0);
-				currentSubject.put("score",0);
+				currentSubject.put("#questions", (double) -1);
+				currentSubject.put("score", (double) 0);
 				Iterator category_it = ((HashMap)currentSubject.get("categories")).keySet().iterator();
 				while (category_it.hasNext()){
 					String category = (String)category_it.next();
-					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("#questions", 0);
-					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("score", 0);
+					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("#questions", (double)-1);
+					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("score", (double) 0);
 				}
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -1136,7 +1135,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:You need to supply an rgument for this function, local or global";
+					+ "content:You need to supply an argument for this function, local or global";
 			out.println(returnToClient);
 		}
 	}
