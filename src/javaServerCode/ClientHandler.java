@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 public class ClientHandler implements Runnable{
@@ -215,7 +217,9 @@ public class ClientHandler implements Runnable{
 		else if(request.equals("get_subject")){
 			parse_get_subject(payload);
 		}
+
 		else if (request.equals("get_questions")){
+
 			parse_get_questions(payload);
 		}
 		else if (request.equals("get_best_questions")){
@@ -645,8 +649,13 @@ public class ClientHandler implements Runnable{
 					+ "content:Must supply argument, global or local";
 			out.println(returnToClient);
 		}
+
 	}
+	
+
+	
 	void parse_remove_subject(String payload){
+
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -817,6 +826,32 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
+	/*void parse_get_subjects(String payload){
+		
+		try {
+			String returnToClient = "timestamp:"+LocalTime.now().toString()
+									+"\tsender:server\t"
+									+"response:info\t"
+									+"content:";
+			//server.getProperties().get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
+			
+			Iterator set = ((HashMap) server.getProperties().get("subjects")).keySet().iterator();
+			while (set.hasNext()){
+				returnToClient+=set.next();
+				if(set.hasNext()){
+					returnToClient+="@";
+				}
+			}
+			
+			out.println(returnToClient);
+		} catch (NullPointerException e){
+			String returnToClient = "timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+"response:info\t"
+					+"content:Null";
+			out.println(returnToClient);
+		}
+	}*/
 	void parse_get_username(String payload){
 		try{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
