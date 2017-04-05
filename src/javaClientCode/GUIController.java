@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 public class GUIController { 
 	
 	ArrayList<Scene> windows;
+	ArrayList<Window> vindauge; 
 	
 	Stage stage;
 	ServerClient client;
@@ -27,6 +28,7 @@ public class GUIController {
 		stage=stageInput;
 
 		windows = new ArrayList<Scene>();
+		vindauge = new ArrayList<Window>();
 		
 		Window mw = new MenuWindow(stage, this);//Create the scenes to use, then add them in the list of windows/scenes
 
@@ -38,10 +40,16 @@ public class GUIController {
 		Window linw = new LoginWindow(stage, this, client, chatStage);
 		addScene(mw.createScene()); addScene(qw.createScene()); addScene(cqw.createScene());addScene(lqw.createScene());
 		addScene(linw.createScene());
-
+		addWindow(mw); addWindow(qw); addWindow(cqw);addWindow(lqw);
+		addWindow(linw);
 		
 	}
 	
+	private void addWindow(Window mw) {
+		// TODO Auto-generated method stub
+		vindauge.add(mw);
+	}
+
 	/**
 	 * add new scene
 	 * @param window
@@ -58,7 +66,7 @@ public class GUIController {
 	 * @return Scene object
 	 */
 	Scene getScene(int index){
-		((Window)windows.get(index)).wakeUp();
+		((Window)vindauge.get(index)).wakeUp();
 		return windows.get(index);
 	}
 	
