@@ -122,7 +122,6 @@ public class ServerClient {
 		LoginWindow.add(payload);
 		CreateQWindow.add(payload);
 		ChatWindowInfo.add(payload);
-		//messageIn.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
