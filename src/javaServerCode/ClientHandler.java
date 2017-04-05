@@ -1192,6 +1192,9 @@ public class ClientHandler implements Runnable{
 		
 	}
 	
+	void parse_get_subject_scores(){
+		//TODO: make something that gives the results of every user in the current subject, only for lecturers and admins
+	}
 
 	
 }

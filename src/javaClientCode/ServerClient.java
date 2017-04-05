@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 public class ServerClient {
+	
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
@@ -16,7 +17,7 @@ public class ServerClient {
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
     Queue<String> ChatWindowInfo;
-    Queue<String> StatWindowStat;
+    Queue<String> ProfileWindow;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
