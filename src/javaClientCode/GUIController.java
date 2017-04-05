@@ -14,16 +14,17 @@ public class GUIController {
 	
 	Stage stage;
 	ServerClient client;
-	
+	Window chat;
+	Stage chatStage;
 	/**
 	 * contains all the scenes that are accessable in the GUI
 	 * @param stageInput
 	 */
 	GUIController(Stage stageInput){
 		client=new ServerClient();
-		Stage chatStage = new Stage();
+		chatStage = new Stage();
 		chatStage.hide();
-		Window chat = new ChatWindow(chatStage, client);
+		chat = new ChatWindow(chatStage, client);
 		chatStage.setScene(chat.createScene());
 		stage=stageInput;
 
@@ -35,18 +36,19 @@ public class GUIController {
 		Window qw = new QuestionWindow(stage, this, client, chatStage);
 		Window cqw = new CreateQWindow(stage, this, client);
 		Window lqw = new LoadQWindow(stage, this, (QuestionWindow)qw);
-		
+		Window pw = new ProfileWindow(stage, this, client);
 		
 		Window linw = new LoginWindow(stage, this, client, chatStage);
+		
 		addScene(mw.createScene()); addScene(qw.createScene()); addScene(cqw.createScene());addScene(lqw.createScene());
-		addScene(linw.createScene());
+		addScene(linw.createScene()); addScene(pw.createScene());
+		
 		addWindow(mw); addWindow(qw); addWindow(cqw);addWindow(lqw);
-		addWindow(linw);
+		addWindow(linw); addWindow(pw);
 		
 	}
 	
 	private void addWindow(Window mw) {
-		// TODO Auto-generated method stub
 		vindauge.add(mw);
 	}
 

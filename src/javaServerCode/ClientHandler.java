@@ -622,7 +622,7 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
+					+ "response:subjects\t"
 					+ "content:"+subjects;
 			out.println(returnToClient);
 		}
@@ -638,7 +638,7 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
+					+ "response:stats\t"
 					+ "content:"+subjects;
 			out.println(returnToClient);
 		}
@@ -666,15 +666,15 @@ public class ClientHandler implements Runnable{
 		}
 		boolean hasSubject = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).containsKey(getContent(payload));
 		if (hasSubject){
-			/*
+			
 			if(getCurrentSubject()!=null){
 				if (getCurrentSubject().equals(getContent(payload))){
 					setCurrentSubject(null);
 					}
 				}
 			
-			*/
-			setCurrentSubject(null);
+			
+			//setCurrentSubject(null);
 			((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).remove(getContent(payload));
 			((ArrayList)((HashMap)server.getProperties().get("subjects").get(getContent(payload))).get("members")).remove(getUsername());
 			
@@ -856,15 +856,15 @@ public class ClientHandler implements Runnable{
 		try{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
+				+ "response:stats\t"
 				+ "content:"+getUsername().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
-					+ "content:Null";
+					+ "response:stats\t"
+					+ "content:No username";
 			out.println(returnToClient);
 		}
 	}

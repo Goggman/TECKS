@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
@@ -47,7 +47,7 @@ public class CreateQWindow implements Window {
 		root.setStyle("-fx-background-color: white");
 		
 
-		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
+		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
 		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("set working subject");
 		fileName.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+fileName.getText());
@@ -56,7 +56,7 @@ public class CreateQWindow implements Window {
 		
 		TextField op2 = new TextField(); op2.setLayoutX(xBase);op2.setLayoutY(yBase+160);op2.setPromptText("Option 2");op2.setVisible(false);
 		
-		Label error = new Label("Needs filename");error.setVisible(false);
+		TextArea error = new TextArea("Needs filename");error.setVisible(false);
 		Button save = new Button("Save quiz");save.setLayoutX(xBase+200);save.setLayoutY(yBase+150);
 		save.setDisable(true);
 		
@@ -78,7 +78,7 @@ public class CreateQWindow implements Window {
 		TextField category = new TextField(); category.setLayoutX(xBase+200);category.setLayoutY(yBase+50);category.setPromptText("Category");
 		
 		
-		feed.setPrefSize(300, 300); feed.setAlignment(Pos.TOP_LEFT);
+		feed.setPrefSize(300, 300); //feed.setAlignment(Pos.TOP_LEFT);
 		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+0); createQ.setLayoutY(yBase+200);
 		
 		//create new question
@@ -132,7 +132,7 @@ public class CreateQWindow implements Window {
 		});
 		
 		//Setup serverFeed and the updater to maintain the feed
-		Label serverFeed = new Label(); feed.setLayoutX(0); feed.setLayoutY(0); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
+		TextArea serverFeed = new TextArea(); feed.setLayoutX(0); feed.setLayoutY(0); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); //feed.setAlignment(Pos.TOP_LEFT);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
 		
