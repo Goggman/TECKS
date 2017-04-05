@@ -1,6 +1,7 @@
 package javaClientCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import javafx.beans.value.ChangeListener;
@@ -63,7 +64,7 @@ public class QuestionWindow implements Window {
 		options.add("a)");
 		options.add("b)");
 		options.add("c)");
-		options.add("d");
+		
 		
 		ToggleGroup tg = new ToggleGroup(); //group of radiobuttons
 		int radX = xBase+100, radY = yBase + 230;
@@ -115,13 +116,18 @@ public class QuestionWindow implements Window {
 		loadQuestionsFromServer.setOnAction(e->{
 			System.out.println("metafeed: " + metafeed.getText());
 			if (!metafeed.getText().equals("")){
+				try {
 				Scanner scanner = new Scanner(metafeed.getText());
-				scanner.nextLine();scanner.nextLine();//Skips first lines, as it contains sender
+				System.out.println("120: " + scanner.nextLine());scanner.nextLine();//Skips first lines, as it contains sender
 				String content = scanner.nextLine();
 				addSchema(readToSchema(content));
 				scanner.close();
 				metafeed.setText("");
 				serverIn.setText("Load successfull");
+				}
+				catch (IndexOutOfBoundsException ex){
+					serverIn.setText("no quiz found for this subject");
+				}
 				
 			}
 			else{
@@ -174,10 +180,14 @@ public class QuestionWindow implements Window {
 					index++;
 				}
 			Question q = schema.getQuestions().get(index);
-			if (q.getOptions().size() > 0){
+			if (q.getOptions().size() > 1){
 				userInput.setVisible(false);
 				for (RadioButton rb : radiOptions){
 					rb.setVisible(true);
+				}
+				Collections.shuffle(q.getOptions());
+				for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
+					radiOptions.get(j).setText(q.getOptions().get(k));
 				}
 			}
 			else {
@@ -196,11 +206,18 @@ public class QuestionWindow implements Window {
 				index--;
 			}
 			Question q = schema.getQuestions().get(index);
-			if (q.getOptions().size() > 0){
+			if (q.getOptions().size() > 1){
 				userInput.setVisible(false);
 				for (RadioButton rb : radiOptions){
 					rb.setVisible(true);
 				}
+				
+				Collections.shuffle(q.getOptions());
+				for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
+					radiOptions.get(j).setText(q.getOptions().get(k));
+					
+				}
+				
 			}
 			else {
 				userInput.setVisible(true);
@@ -287,22 +304,19 @@ public class QuestionWindow implements Window {
 					pickCategory.getItems().add(temp); 
 					temp.setOnAction(ev -> {
 						index = 0;
-						System.out.println("test");
 						try {
 							//TODO: switch between option and fillin
 							//TODO: set test multiple choice questions
 							schema = schemas.get(Integer.parseInt(temp.getText())-1);
 							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
 							
-							if (schema.getQuestions().get(0).getOptions().size() > 0){
+							if (schema.getQuestions().get(0).getOptions().size() > 1){
 								
 								for (int k = 0, j = 0; k < schema.getQuestions().get(0).getOptions().size() &&
 										j < radiOptions.size(); k++, j++){
 									radiOptions.get(j).setText(schema.getQuestions().get(0).getOptions().get(k));
 									radiOptions.get(j).setOnAction(eve -> {
 										if (quizStarted == 1){
-										//answers.set(index, ((RadioButton) eve.getSource()).getText());
-											System.out.println("selected");
 											schema.getAnswers().put(schema.getQuestions().get(index), ((RadioButton) eve.getSource()).getText());
 											feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+((RadioButton) eve.getSource()).getText());
 											
@@ -321,30 +335,7 @@ public class QuestionWindow implements Window {
 						}
 					});
 				}
-			
-				String qType = schema.getQuestions().get(index).getHeader();
-				//TODO: make this shit work
-				int xRadio = xBase + 50, yRadio = 400;
-				/*if (qType.substring(0, qType.indexOf(",")).equals("fill-in")){
-					
-				}
-				else if (qType.substring(0, qType.indexOf(",")).equals("multiple-choice")){
-					if (quizStarted == 1){
-						for (String op : schema.getQuestions().get(index).getOptions()){
-							RadioButton temp = new RadioButton(op);temp.setLayoutX(xRadio);temp.setLayoutY(yRadio);
-							temp.setOnAction(ev -> {
-								if (temp.isSelected()){
-									schema.getAnswers().put(schema.getQuestions().get(index), temp.getText());
-								}
-							});
-							
-							
-							
-							root.getChildren().add(temp);
-						}
-					}
-				}*/
-				}
+			}
 			else if (schemas.size() < 1){
 				feed.setText("No schema found \n try loading one from file");
 			}
@@ -382,11 +373,12 @@ public class QuestionWindow implements Window {
 		
 	}
 	
-	public QuestionSchema readToSchema(String content){ //Returnerer en liste av spørsmål i standard format, fra server til gjennomførbar quiz
+	public QuestionSchema readToSchema(String content) throws IndexOutOfBoundsException{ //Returnerer en liste av spørsmål i standard format, fra server til gjennomførbar quiz
 		//Ment for bruk av Question WIndow når skal sjekke hvilke quizer som er tilgjengelige
 		
 		//; instead of :, | instead of \n, @ for start of new question
 		//Header;header1|c;category1|op;op1|op;op2|a;answer1
+		//TODO: indexoutofboundsexception => rawQuestionArray is empty
 		ArrayList<ArrayList<String>> textData = new ArrayList<>();
 		String[] rawQuestionArray = content.split("@"); // array of questions
 		int i =-1;
@@ -399,7 +391,7 @@ public class QuestionWindow implements Window {
 			while (scanner.hasNext()){
 				String next = scanner.nextLine();
 				System.out.println(""+next+"");
-				System.out.println(""+i);
+				System.out.println("index"+i);
 				if (next.contains("Header:")){
 					textData.add(new ArrayList<String>());
 					i++;
