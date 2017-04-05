@@ -54,7 +54,7 @@ public class ServerHost {
 			start.put("users", new HashMap<ClientHandler,HashMap>());
 		
 			properties.put("subjects", new HashMap<String, HashMap<String, ArrayList<String>>>());
-			properties.get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
+			//properties.get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
 			//System.out.println(properties.get("subjects").get("TDT4100").toString());
 		
 		

@@ -595,7 +595,7 @@ public class ClientHandler implements Runnable{
 				+ "content:Question added successfully in "+getCurrentSubject();
 		out.println(returnToClient);
 	}
-	/*void parse_get_subjects(String payload){
+	void parse_get_subjects(String payload){
 		if(getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -644,8 +644,8 @@ public class ClientHandler implements Runnable{
 					+ "content:Must supply argument, global or local";
 			out.println(returnToClient);
 		}
-<
-	}*/
+
+	}
 	
 
 	
@@ -820,19 +820,23 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_subjects(String payload){
+	/*void parse_get_subjects(String payload){
 		
 		try {
 			String returnToClient = "timestamp:"+LocalTime.now().toString()
 									+"\tsender:server\t"
 									+"response:info\t"
 									+"content:";
-			server.getProperties().get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
+			//server.getProperties().get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
 			
-			HashMap set = ((HashMap) server.getProperties().get("subjects"));
-			for (Map.Entry<String, HashMap> entry : ((HashMap<String, HashMap>) set).entrySet()){
-				returnToClient += entry.getKey() + ",";
+			Iterator set = ((HashMap) server.getProperties().get("subjects")).keySet().iterator();
+			while (set.hasNext()){
+				returnToClient+=set.next();
+				if(set.hasNext()){
+					returnToClient+="@";
+				}
 			}
+			
 			out.println(returnToClient);
 		} catch (NullPointerException e){
 			String returnToClient = "timestamp:"+LocalTime.now().toString()
@@ -841,7 +845,7 @@ public class ClientHandler implements Runnable{
 					+"content:Null";
 			out.println(returnToClient);
 		}
-	}
+	}*/
 	void parse_get_username(String payload){
 		try{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()

@@ -25,6 +25,7 @@ public class QuestionWindow implements Window {
 	Stage stage;
 	Stage chat;
 	GUIController ctrl;
+	Label metafeed;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
@@ -97,7 +98,7 @@ public class QuestionWindow implements Window {
 		
 		//
 		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-300); serverIn.setLayoutY(yBase-90); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
-		Label metafeed = new Label("");
+		metafeed = new Label("");
 		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase-300); setSubject.setLayoutY(yBase-150);
 		setSubject.setPrefWidth(200);
 		setSubject.setPromptText("Set subject");
@@ -112,7 +113,7 @@ public class QuestionWindow implements Window {
 		loadQuestionsFromServer.setStyle("-fx-pref-width: 100");
 
 		loadQuestionsFromServer.setOnAction(e->{
-			
+			System.out.println("metafeed: " + metafeed.getText());
 			if (!metafeed.getText().equals("")){
 				Scanner scanner = new Scanner(metafeed.getText());
 				scanner.nextLine();scanner.nextLine();//Skips first lines, as it contains sender
@@ -225,8 +226,9 @@ public class QuestionWindow implements Window {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
 				if (newValue){
-					
+					System.out.println("printing");
 					//TODO: metafeed is empty
+					System.out.println("metafeed: " + metafeed.getText());
 					if (!	metafeed.getText().equals("")){
 						Scanner scanner = new Scanner(metafeed.getText());
 						
@@ -291,7 +293,7 @@ public class QuestionWindow implements Window {
 							//TODO: set test multiple choice questions
 							schema = schemas.get(Integer.parseInt(temp.getText())-1);
 							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
-							System.out.println(schema.getQuestions().get(0).getOptions().size() > 0);
+							
 							if (schema.getQuestions().get(0).getOptions().size() > 0){
 								
 								for (int k = 0, j = 0; k < schema.getQuestions().get(0).getOptions().size() &&
@@ -414,6 +416,9 @@ public class QuestionWindow implements Window {
 		}
 	
 	public void wakeUp(){
+		client.sendMessage("request:get_subjects\tcontent:global");
+		System.out.println("metafeed: " + metafeed.getText());
+		String servertext = "";
 		
 	}	
 	
