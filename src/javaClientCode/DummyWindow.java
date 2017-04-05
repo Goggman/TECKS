@@ -20,4 +20,10 @@ public class DummyWindow implements Window {
 		Pane root = new Pane();
 		return new Scene(root, 1300, 700);
 	}
+	public void wakeUp(){
+		
+	}
+	public void sleep(){
+		
+	}
 }

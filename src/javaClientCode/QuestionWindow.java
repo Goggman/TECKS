@@ -280,7 +280,13 @@ public class QuestionWindow implements Window {
 		return s;
 		}
 	
+	public void wakeUp(){
+		
+	}	
 	
+	public void sleep(){
+		
+	}
 	
 
 }

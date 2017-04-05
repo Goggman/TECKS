@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.time.LocalTime;
 import java.util.Iterator;
+import java.util.Set;
 public class PropertiesHandler {
 	String path= System.getProperties().getProperty("user.dir") +"/TECKS/src/javaServerCode/serverSave.ser";
+	
+	
 	HashMap purgeMap(HashMap map){								//helper function, clears the map from non .ser -able objects (objects that cannot be written to file easily), particularly clienthandler objects, which are to be found in the properties map
 		HashMap newmap = new HashMap<String, HashMap>();
-		newmap.put("users", map.get("users"));
+		newmap.put("users", (HashMap)map.get("users"));
 		newmap.put("chatrooms", new HashMap());
 		
 		Iterator keyit = ((HashMap)map.get("chatrooms")).keySet().iterator();
@@ -21,7 +24,7 @@ public class PropertiesHandler {
 			chatroom.put("users", new HashMap());
 		}
 		
-		newmap.put("subjects", map.get("subjects"));
+		newmap.put("subjects", (HashMap)map.get("subjects"));
 		newmap.put("connected_clients", new HashMap<ClientHandler, String>());
 		newmap.put("help", map.get("help"));
 		

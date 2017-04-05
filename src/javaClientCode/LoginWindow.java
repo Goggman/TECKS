@@ -68,6 +68,11 @@ public class LoginWindow implements Window{
 		updater.start();
 		return scene;
 	}
-
+	public void wakeUp(){
+		
+	}
+	public void sleep(){
+		
+	}
 
 }

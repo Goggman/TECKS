@@ -55,5 +55,11 @@ public class MenuWindow implements Window{
 		return scene;
 		
 	}
-
+	
+	public void wakeUp(){
+		
+	}
+	public void sleep(){
+		
+	}
 }

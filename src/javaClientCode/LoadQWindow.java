@@ -157,7 +157,12 @@ public class LoadQWindow implements Window {
 
 		
 		
+	public void wakeUp(){
 		
+	}
+	public void sleep(){
+		
+	}
 		
 		
 
