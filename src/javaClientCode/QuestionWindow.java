@@ -59,7 +59,6 @@ public class QuestionWindow implements Window {
 			}
 			
 		});
-		//TODO: different question types
 		
 		
 		//
@@ -116,17 +115,12 @@ public class QuestionWindow implements Window {
 					String answer = schema.getAnswers().get(question); //user input
 					String category = question.getCategory();
 					
-					analyzer.getCategories().putIfAbsent(category, 0);
-					
-
-					if (correctAnswer.equals(answer)){
-						analyzer.getCategories().put(category, analyzer.getCategories().get(category)+1);
-						
-					}
+					analyzer.registerAnswer(category, correctAnswer.equals(answer));
 					
 					
 				}
 				feed.setText("Your results: \n"+analyzer.getCategories().toString());
+				client.sendMessage("request:add_results\tcontent:"+analyzer.prepareContent());
 			}
 		});
 		

@@ -131,8 +131,12 @@ public class CreateQWindow implements Window {
 			*/
 		});
 		
+		//Setup serverFeed and the updater to maintain the feed
+		Label serverFeed = new Label(); feed.setLayoutX(0); feed.setLayoutY(0); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
+		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
+		updater.start();
 		
-		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category);
+		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category, serverFeed);
 		Scene scene = new Scene(root, 1300, 700);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
