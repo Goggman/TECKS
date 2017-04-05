@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+
 public class ClientHandler implements Runnable{
 	private Thread t;
 	private ServerHost server;
@@ -231,6 +232,9 @@ public class ClientHandler implements Runnable{
 		}
 		else if (request.equals("get_names")){
 			parse_get_names(payload);
+		}
+		else if (request.equals("get_type")){
+			parse_get_type(payload);
 		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
@@ -914,39 +918,39 @@ public class ClientHandler implements Runnable{
 						+ "content:You need to log in to use this function";
 				out.println(returnToClient);
 			}
-		
+			
 			String content = "";
 			Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
 			while(subject_it.hasNext()){
-			String nextSubject = (String)subject_it.next();
-			HashMap subject = (HashMap)((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(nextSubject);
+				String nextSubject = (String)subject_it.next();
+				HashMap subject = (HashMap)((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(nextSubject);
 			
-			Iterator category_it = ((HashMap)subject.get("categories")).keySet().iterator();
-			String categoryAndScore = "";
-			double totalScore = 0;
-			while (category_it.hasNext()){
-				String nextCategory = (String)category_it.next();
+				Iterator category_it = ((HashMap)subject.get("categories")).keySet().iterator();
+				String categoryAndScore = "";
+				double totalScore = 0;
+				while (category_it.hasNext()){
+					String nextCategory = (String)category_it.next();
 				
-				HashMap category = (HashMap)((HashMap)subject.get("categories")).get(nextCategory);
-				totalScore += (double) category.get("score");
-				double categoryScore = (double)category.get("score") / (double)category.get("#questions");
-				categoryAndScore+=nextCategory+"|"+categoryScore;
-				if (category_it.hasNext()){
-					categoryAndScore +="|";
+					HashMap category = (HashMap)((HashMap)subject.get("categories")).get(nextCategory);
+					totalScore += (double) category.get("score");
+					double categoryScore = ((double)category.get("score") / (double)category.get("#questions"));
+					categoryAndScore+=nextCategory+"|"+categoryScore;
+					if (category_it.hasNext()){
+						categoryAndScore +="|";
+						}
 				}
-			}
-			totalScore=totalScore/(double)subject.get("#questions");
-			content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
-			if (subject_it.hasNext()){
-				content+="@";
-			}
+				totalScore=totalScore/(double)subject.get("#questions");
+				content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
+				if (subject_it.hasNext()){
+					content+="@";
+				}
 			
-		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-				+"\tsender:server\t"
-				+ "response:stats\t"
-				+ "content:"+content;
-		out.println(returnToClient);
+			}
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:stats\t"
+					+ "content:"+content;
+			out.println(returnToClient);
 		
 		
 	}
@@ -973,8 +977,8 @@ public class ClientHandler implements Runnable{
 		for (int x=1;x<rawContent.length;x+=3){
 			String[] rawContentItem = rawContent[x].split("[|]");
 			String category = rawContentItem[0];
-			double score = Integer.parseInt(rawContentItem[1]);
-			double questionsAskedInCategory = Integer.parseInt(rawContentItem[2]);
+			double score = Double.parseDouble(rawContentItem[1]);
+			double questionsAskedInCategory = Double.parseDouble(rawContentItem[2]);
 			try{
 				HashMap userCategory = (HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).get("categories")).get(category);
 				double userScore = (double)userCategory.get("score");
@@ -983,7 +987,7 @@ public class ClientHandler implements Runnable{
 				if (numberOfCategoryQuestions == -1){
 					numberOfCategoryQuestions=0;
 				}
-				userCategory.put("questions", numberOfCategoryQuestions+questionsAskedInCategory);
+				userCategory.put("#questions", numberOfCategoryQuestions+questionsAskedInCategory);
 				 
 			}
 			catch(NullPointerException e){ // if category has not yet been added, do this
@@ -1137,7 +1141,7 @@ public class ClientHandler implements Runnable{
 		}
 	}
 
-	void parse_get_type(){
+	void parse_get_type(String payload){
 		if (getUsername()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
