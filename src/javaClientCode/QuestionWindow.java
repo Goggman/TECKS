@@ -46,7 +46,7 @@ public class QuestionWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
-		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
+		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+230);
 		root.getChildren().add(userInput);
@@ -75,7 +75,7 @@ public class QuestionWindow implements Window {
 		});
 
 		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase-xBase); loadQuestionsFromServer.setLayoutY(yBase-124);
-		loadQuestionsFromServer.setStyle("-fx-pref-width: 100");
+		loadQuestionsFromServer.setStyle("-fx-pref-width: 110");
 
 		loadQuestionsFromServer.setOnAction(e->{
 			
@@ -156,8 +156,8 @@ public class QuestionWindow implements Window {
 		
 		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase-yBase);pickCategory.setText("Pick category");
 		
-		Button load = new Button("Load"); load.setLayoutX(xBase-145);load.setLayoutY(yBase-124);
-		load.setStyle("-fx-pref-width: 44");
+		Button load = new Button("Load"); load.setLayoutX(xBase-155);load.setLayoutY(yBase-124);
+		load.setStyle("-fx-pref-width: 54");
 		load.setOnAction(e -> {
 			
 			if (pickCategory.getItems().size() < schemas.size()){
