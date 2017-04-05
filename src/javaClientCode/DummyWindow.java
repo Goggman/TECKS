@@ -8,25 +8,16 @@ import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 
-public class GUI extends Application{
-	
-	
-	public void start(Stage stage) throws Exception{
-
-		GUIController ctrl = new GUIController(stage);
-		stage.setScene(ctrl.getScene(4));
-		stage.setTitle("TECKS");
-		stage.show();
-	}
-	
-	
-	public static void main(String[] args){
-		launch();
+public class DummyWindow implements Window {
+	Stage stage;
+	GUIController ctrl;
+	DummyWindow(Stage stageInput, GUIController CtrlIn){
+		ctrl=CtrlIn;
+		stage=stageInput;
 		
 	}
-	
-	
-
-	
-
+	public Scene createScene(){
+		Pane root = new Pane();
+		return new Scene(root, 1300, 700);
+	}
 }
