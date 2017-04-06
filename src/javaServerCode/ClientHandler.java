@@ -639,7 +639,7 @@ public class ClientHandler implements Runnable{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:stats\t"
-					+ "content:"+subjects;
+					+ "content:Your registered subjects; "+subjects;
 			out.println(returnToClient);
 		}
 		else{
@@ -857,7 +857,7 @@ public class ClientHandler implements Runnable{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:stats\t"
-				+ "content:"+getUsername().toString();
+				+ "content:Your username; "+getUsername().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
@@ -951,6 +951,7 @@ public class ClientHandler implements Runnable{
 						+ "response:error\t"
 						+ "content:You need to log in to use this function";
 				out.println(returnToClient);
+				return;
 			}
 			
 			String content = "";
@@ -1186,8 +1187,8 @@ public class ClientHandler implements Runnable{
 		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
-				+ "content:"+getUserType();
+				+ "response:stats\t"
+				+ "content:User type; "+getUserType();
 		out.println(returnToClient);
 		
 	}

@@ -45,4 +45,13 @@ public class FeedUpdater implements Runnable{
 			}
 		}
 		
+		void sleep(){
+			try {
+				this.wait();
+			}
+			catch (InterruptedException e){
+				
+			}
+		}
+		
 	}

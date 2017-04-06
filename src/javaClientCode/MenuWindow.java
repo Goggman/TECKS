@@ -55,7 +55,7 @@ public class MenuWindow implements Window{
 		menu5.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
-		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4);
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5);
 		Scene scene = new Scene(root, 1300, 700);
 		return scene;
 		

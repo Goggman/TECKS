@@ -20,6 +20,9 @@ public class GUIController {
 	 * contains all the scenes that are accessable in the GUI
 	 * @param stageInput
 	 */
+	GUIController(){
+		
+	}
 	GUIController(Stage stageInput){
 		client=new ServerClient();
 		chatStage = new Stage();

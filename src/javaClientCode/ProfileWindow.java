@@ -34,42 +34,53 @@ public class ProfileWindow implements Window {
 	}
 	//TODO: need  to test this window, check if the data is shown properly, and is readable, resize the textAreas etc
 	public Scene createScene(){
-		int xBase = 100, yBase = 100;
+		int xBase = 500, yBase = 200;
 		Pane root = new Pane();
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase); subjectsGlobal.setLayoutY(yBase+50);
-		stats = new TextArea(); stats.setLayoutX(xBase); stats.setLayoutY(yBase+100);
-		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+150);
+		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase); subjectsGlobal.setLayoutY(yBase+200);
+		subjectsGlobal.setPrefHeight(100);subjectsGlobal.setPrefWidth(200);
+		stats = new TextArea("Global subjects"); stats.setLayoutX(xBase); stats.setLayoutY(yBase);
+		stats.setPrefHeight(150); stats.setPrefWidth(300);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(50); serverFeed.setLayoutY(50);
+		//serverFeed.setStyle("-fx-pref-width: 80"); serverFeed.setStyle("-fx-pref-height: 300");
+		serverFeed.setPrefHeight(300); serverFeed.setPrefWidth(300);
 		
-		TextField addSubjects = new TextField(); addSubjects.setLayoutX(xBase+50); addSubjects.setLayoutY(yBase+200);
-		addSubjects.setPromptText("type in the subject you want to add");
+		
+		TextField addSubjects = new TextField(); addSubjects.setLayoutX(xBase+500); addSubjects.setLayoutY(yBase);
+		addSubjects.setPromptText("addSubject");
 		addSubjects.setOnAction(e->{
 			client.sendMessage("request:add_subject\tcontent:"+addSubjects.getText());
 		});
-		TextField removeSubject = new TextField(); removeSubject.setLayoutX(xBase+50); removeSubject.setLayoutY(yBase+250);
-		removeSubject.setPromptText("type here to remove subject");
+		TextField removeSubject = new TextField(); removeSubject.setLayoutX(xBase+500); removeSubject.setLayoutY(yBase+50);
+		removeSubject.setPromptText("removeSubject");
 		removeSubject.setOnAction(e->{
 			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
 		});
-		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+50); resetScore.setLayoutY(yBase+300);
+		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+500); resetScore.setLayoutY(yBase+100);
 		resetScore.setOnAction(e->{
-			client.sendMessage("request:reset_score\tcontent:"+resetScore.getText());
+			client.sendMessage("request:reset_score\tcontent:local"+resetScore.getText());
 		});
-		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+50); createSubject.setLayoutY(yBase+350);
-		createSubject.setPromptText("type here to create subject");
+		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+500); createSubject.setLayoutY(yBase+150);
+		createSubject.setPromptText("createSubject");
 		createSubject.setOnAction(e->{
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
 		});
 		
-		Button backToMenu = new Button("Goto Menu"); resetScore.setLayoutX(xBase+50); resetScore.setLayoutY(yBase+400);
+		Button backToMenu = new Button("Goto Menu"); backToMenu.setLayoutX(xBase+500); backToMenu.setLayoutY(yBase+200);
 		backToMenu.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
+		});
+		
+		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+500); setSubject.setLayoutY(yBase+250);
+		setSubject.setPromptText("setSubject");
+		setSubject.setOnAction(e->{
+			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
 		});
 		
 		//TextArea subjects = new TextArea(); subjects.setLayoutX(xBase); subjects.setLayoutY(yBase+100);
 		//TextArea score = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+150);
 		//TextArea classScore = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+200);
 		
-		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubjects);
+		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubjects, backToMenu, createSubject, resetScore, removeSubject, setSubject);
 		
 		
 		updater1 = new FeedUpdater(client, stats, client.ProfileWindowStats);
@@ -84,10 +95,13 @@ public class ProfileWindow implements Window {
 	}
 	
 	public void wakeUp(){
-		stats.setText("");
-		serverFeed.setText("");
+		stats.setText("You stats:");
+		serverFeed.setText("Messages from server:");
+		subjectsGlobal.setText("Global subjects:");
 		client.sendMessage("request:get_username\tcontent:");
+		client.sendMessage("request:get_type\tcontent:");
 		client.sendMessage("request:get_subjects\tcontent:local");
+		client.sendMessage("request:get_subjects\tcontent:global");
 		client.sendMessage("request:get_stats\tcontent:");
 		
 		
