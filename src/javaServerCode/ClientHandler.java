@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.Set;
 
 public class ClientHandler implements Runnable{
 	private Thread t;
@@ -692,7 +692,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_questions(String payload){//idea, could supply argument, category, to only ask questions in this category
+	void parse_get_questions(String payload){
 		
 		if(getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -704,12 +704,30 @@ public class ClientHandler implements Runnable{
 		}
 		String questions="";
 		Iterator question_iterator = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions")).iterator();
-		while(question_iterator.hasNext()){
-			questions+=question_iterator.next();
-			if (question_iterator.hasNext()){
-				questions+="@";
+		if (!getContent(payload).equals("")){ //If an argument is supplied, try to find every question in the category
+			String category = getContent(payload);
+			while(question_iterator.hasNext()){
+				
+				String nextQuestion = (String)question_iterator.next();
+				for(String element : nextQuestion.split("[|]")){
+					if (element.split("[;]")[0].equals("c")){
+						if (element.split("[;]")[1].equals(category)){
+							questions+=nextQuestion+"@";
+						}
+					}
+				}
 			}
 		}
+		else{
+			while(question_iterator.hasNext()){
+				String nextQuestion = (String)question_iterator.next();
+				questions+=nextQuestion+"@";
+			}
+		}
+		if (!(questions.length()==0)){
+			questions = questions.substring(0, questions.length()-1);
+		}
+		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:question\t"
@@ -1193,9 +1211,80 @@ public class ClientHandler implements Runnable{
 		
 	}
 	
-	void parse_get_subject_scores(){
+	void parse_get_subject_scores(String payload){
 		//TODO: make something that gives the results of every user in the current subject, only for lecturers and admins
+		if (getUsername()==null || getCurrentSubject()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to log in to use this function, or you need to set the current subject";
+			out.println(returnToClient);
+			return;
+		}
+		if (getContent(payload).equals("local")){ //Get each members sore and progress TODO: this is not implemented properly
+		
+			String content = ""+getCurrentSubject()+"@";
+			HashMap usernamesInSubject_map = new HashMap();
+			Iterator usernamesInSubject_it = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("members")).iterator();
+			while (usernamesInSubject_it.hasNext()){
+				usernamesInSubject_map.put((String)usernamesInSubject_it.next(), "");
+			}
+		
+			Iterator globalUsers_it = server.getProperties().get("users").keySet().iterator();
+			Set userSet = usernamesInSubject_map.keySet();
+			while (globalUsers_it.hasNext()){
+				String member = (String)globalUsers_it.next();
+				if (userSet.contains(member)){
+					Iterator categories_it = ((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).keySet().iterator();
+					content +=member+";";
+					while (categories_it.hasNext()){
+					
+					}
+				
+				}
+			}
+		}
+		else if (getContent(payload).equals("global")) { // do not include members, just summarize everything in a total score, in each subject
+			String content = ""+getCurrentSubject()+"@";
+			HashMap usernamesInSubject_map = new HashMap();
+			Iterator usernamesInSubject_it = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("members")).iterator();
+			while (usernamesInSubject_it.hasNext()){
+				usernamesInSubject_map.put((String)usernamesInSubject_it.next(), "");
+			}
+		
+			Iterator globalUsers_it = server.getProperties().get("users").keySet().iterator();
+			Set userSet = usernamesInSubject_map.keySet();
+			HashMap categoriesAndScore = new HashMap();
+			
+			while (globalUsers_it.hasNext()){
+				String member = (String)globalUsers_it.next();
+				if (userSet.contains(member)){
+					HashMap subjectCategories = (HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories");
+					Iterator categories_it = subjectCategories.keySet().iterator();
+					
+					while (categories_it.hasNext()){
+						String category = (String)categories_it.next();
+						if (categoriesAndScore.containsKey(category)){
+							double oldScore = (double)categoriesAndScore.get(category);
+							double newScore = (double)((HashMap)subjectCategories.get(category)).get("score");
+							categoriesAndScore.put(category, oldScore+newScore); // Need to make this a percentage, and include number of questions
+						}
+						else{
+							categoriesAndScore.put(category, ((HashMap)subjectCategories.get(category)).get("score"));
+						}
+						
+					
+					}
+				
+				}
+			}
+		
+		}
+		else{
+		//Send error message, need to provide argument
+		}
+	
 	}
-
+		
 	
 }
