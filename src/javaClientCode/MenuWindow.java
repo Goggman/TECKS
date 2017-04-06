@@ -57,6 +57,7 @@ public class MenuWindow implements Window{
 		});
 		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5);
 		Scene scene = new Scene(root, 1300, 700);
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
 		
 	}

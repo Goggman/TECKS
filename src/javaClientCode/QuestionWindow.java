@@ -57,8 +57,10 @@ public class QuestionWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
+
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		TextArea feed = new TextArea(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); //((Labeled) feed).setAlignment(Pos.TOP_LEFT);
+
 		//userinput
 		ArrayList<RadioButton> radiOptions = new ArrayList<>();
 		ArrayList<String> options = new ArrayList<String>();
@@ -111,7 +113,7 @@ public class QuestionWindow implements Window {
 		});
 
 		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase-xBase); loadQuestionsFromServer.setLayoutY(yBase-124);
-		loadQuestionsFromServer.setStyle("-fx-pref-width: 100");
+		loadQuestionsFromServer.setStyle("-fx-pref-width: 110");
 
 		loadQuestionsFromServer.setOnAction(e->{
 			System.out.println("metafeed: " + metafeed.getText());
@@ -137,10 +139,12 @@ public class QuestionWindow implements Window {
 		});
 		
 		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+820);showChat.setLayoutY(yBase+50);
+		showChat.setStyle("-fx-pref-width: 100");
 		showChat.setOnAction(e->{
 			chat.show();
 		});
 		Button hideChat = new Button("Hide chat"); hideChat.setLayoutX(xBase+820);hideChat.setLayoutY(yBase+80);
+		hideChat.setStyle("-fx-pref-width: 100");
 		hideChat.setOnAction(e->{
 			chat.hide();
 		});
@@ -286,10 +290,10 @@ public class QuestionWindow implements Window {
 		
 		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+0); pickCategory.setLayoutY(yBase-yBase);pickCategory.setText("Pick category");
 		
-		
-		//load questions to pick category
-		Button load = new Button("Load"); load.setLayoutX(xBase-145);load.setLayoutY(yBase-124);
-		load.setStyle("-fx-pref-width: 44");
+
+		Button load = new Button("Load"); load.setLayoutX(xBase-155);load.setLayoutY(yBase-124);
+		load.setStyle("-fx-pref-width: 54");
+
 		load.setOnAction(e -> {
 			
 			if (pickCategory.getItems().size() < schemas.size()){
