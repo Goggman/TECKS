@@ -29,7 +29,8 @@ public class LoginWindow implements Window{
 		feed.setPrefSize(400, 400); feed.setStyle("-fx-border-color:black");
 
 		TextField username = new TextField(); username.setLayoutX(xBase); username.setLayoutY(yBase-50);
-		username.setPromptText("Enter username");
+		username.setPromptText("Enter username@password");
+		username.setStyle("-fx-pref-width: 160");
 		username.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText());
 		});
@@ -40,10 +41,12 @@ public class LoginWindow implements Window{
 			client.sendMessage("request:login\tcontent:"+username.getText());
 		});
 		Button menu2 = new Button("Show chat"); menu2.setLayoutX(xBase+520);menu2.setLayoutY(yBase-20);
+		menu2.setStyle("-fx-pref-width: 100");
 		menu2.setOnAction(e->{
 			chat.show();
 		});
 		Button menu3 = new Button("Hide chat"); menu3.setLayoutX(xBase+520);menu3.setLayoutY(yBase+10);
+		menu3.setStyle("-fx-pref-width: 100");
 		menu3.setOnAction(e->{
 			chat.hide();
 		});

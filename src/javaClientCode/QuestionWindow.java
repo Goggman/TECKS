@@ -136,10 +136,12 @@ public class QuestionWindow implements Window {
 		});
 		
 		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+820);showChat.setLayoutY(yBase+50);
+		showChat.setStyle("-fx-pref-width: 100");
 		showChat.setOnAction(e->{
 			chat.show();
 		});
 		Button hideChat = new Button("Hide chat"); hideChat.setLayoutX(xBase+820);hideChat.setLayoutY(yBase+80);
+		hideChat.setStyle("-fx-pref-width: 100");
 		hideChat.setOnAction(e->{
 			chat.hide();
 		});

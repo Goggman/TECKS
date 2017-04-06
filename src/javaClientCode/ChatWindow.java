@@ -27,7 +27,8 @@ public class ChatWindow implements Window{
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label("Welcome to Chat"); feed.setLayoutX(xBase-195); feed.setLayoutY(yBase-200); feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(200, 350); feed.setStyle("-fx-border-color:black");
-		TextField text = new TextField(); text.setLayoutX(xBase+20); text.setLayoutY(yBase+150);
+		TextField text = new TextField(); text.setLayoutX(xBase-195); text.setLayoutY(yBase+150);
+		text.setStyle("-fx-pref-width: 200");
 		text.setPromptText("TypeHere");
 		text.setOnAction(e->{
 			feed.setText(feed.getText()+"\n"+text.getText());
@@ -35,34 +36,52 @@ public class ChatWindow implements Window{
 		});
 		//TextField password = new TextField();
 		
-		Button menu1 = new Button("CreateChat"); menu1.setLayoutX(xBase-180); menu1.setLayoutY(yBase+150);
-		menu1.setStyle("-fx-pref-width: 54");
+		Button menu1 = new Button("Create room"); menu1.setLayoutX(xBase+40); menu1.setLayoutY(yBase+40);
+		menu1.setStyle("-fx-pref-width: 120");
 		menu1.setOnAction(e->{
 			//feed.setText(feed.getText()+"\n"+text.getText());
 			client.sendMessage("request:add_chatroom\tcontent:"+text.getText());
 		});
-		Button menu6 = new Button("Login"); menu6.setLayoutX(xBase-100); menu6.setLayoutY(yBase+150);
-		menu6.setStyle("-fx-pref-width: 54");
+		Button menu6 = new Button("Login to room"); menu6.setLayoutX(xBase+40); menu6.setLayoutY(yBase+100);
+		menu6.setStyle("-fx-pref-width: 120");
 		menu6.setOnAction(e->{
 			//feed.setText(feed.getText()+"\n"+text.getText());
 			client.sendMessage("request:login\tcontent:"+text.getText());
 		});
-		Button menu7 = new Button("SetChat"); menu7.setLayoutX(xBase-50); menu7.setLayoutY(yBase+150);
-		menu7.setStyle("-fx-pref-width: 54");
+		Button menu7 = new Button("Choose room"); menu7.setLayoutX(xBase+40); menu7.setLayoutY(yBase+70);
+		menu7.setStyle("-fx-pref-width: 120");
 		menu7.setOnAction(e->{
 			//feed.setText(feed.getText()+"\n"+text.getText());
 			client.sendMessage("request:set_chatroom\tcontent:"+text.getText());
 		});
 		
 		
-		Button menu3 = new Button("History"); menu3.setLayoutX(xBase+40); menu3.setLayoutY(yBase+70);
-		menu3.setStyle("-fx-pref-width: 54");
+		Button menu3 = new Button("History"); menu3.setLayoutX(xBase-195); menu3.setLayoutY(yBase+180);
+		menu3.setStyle("-fx-pref-width: 97");
 		menu3.setOnAction(e->{
 			client.sendMessage("request:history\tcontent:");
 		});
 		
-		Button menu4 = new Button("Show more"); menu4.setLayoutX(xBase+40+30); menu4.setLayoutY(yBase+120);
-		menu4.setStyle("-fx-pref-width: 54");
+		
+		Button menu5 = new Button("Logout of room"); menu5.setLayoutX(xBase+40);menu5.setLayoutY(yBase+130);
+		menu5.setStyle("-fx-pref-width: 120");
+		menu5.setOnAction(e->{
+			client.sendMessage("request:logout\tcontent:");
+		});
+		
+		Label serverIn = new Label("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); serverIn.setAlignment(Pos.TOP_LEFT);
+		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");
+		
+		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase-93); menu2.setLayoutY(yBase+180);
+		menu2.setStyle("-fx-pref-width: 98");
+		menu2.setOnAction(e->{
+			feed.setText("Window cleared");
+			serverIn.setText("Window cleared");
+		});
+		
+		/*
+		Button menu4 = new Button("Show more"); menu4.setLayoutX(xBase+40); menu4.setLayoutY(yBase+100);
+		menu4.setStyle("-fx-pref-width: 100");
 		menu4.setOnAction(e->{
 			String feedtext = feed.getText();
 			if (feedtext.length()>100){
@@ -79,25 +98,12 @@ public class ChatWindow implements Window{
 				}
 				}
 		});
-		Button menu5 = new Button("Logout"); menu5.setLayoutX(xBase-10+30);menu5.setLayoutY(yBase+120);
-		menu5.setStyle("-fx-pref-width: 54");
-		menu5.setOnAction(e->{
-			client.sendMessage("request:logout\tcontent:");
-		});
-		
-		Label serverIn = new Label("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); serverIn.setAlignment(Pos.TOP_LEFT);
-		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");
-		
-		Button menu2 = new Button("Clear feed"); menu2.setLayoutX(xBase+40); menu2.setLayoutY(yBase+40);
-		menu2.setStyle("-fx-pref-width: 54");
-		menu2.setOnAction(e->{
-			feed.setText("Window cleared");
-			serverIn.setText("Window cleared");
-		});
+		*/
+
 		
 		
-		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5, menu6, menu7, text, serverIn);
-		Scene scene = new Scene(root, 400, 400);
+		root.getChildren().addAll(feed, menu1, menu2, menu3,/* menu4*/ menu5, menu6, menu7, text, serverIn);
+		Scene scene = new Scene(root, 410, 420);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		FeedUpdater updater = new FeedUpdater(client, feed, client.ChatWindow);
 		updater.start();
