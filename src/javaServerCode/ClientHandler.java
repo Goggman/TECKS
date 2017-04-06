@@ -622,7 +622,7 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
+					+ "response:subjects\t"
 					+ "content:"+subjects;
 			out.println(returnToClient);
 		}
@@ -638,8 +638,8 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
-					+ "content:"+subjects;
+					+ "response:stats\t"
+					+ "content:Your registered subjects; "+subjects;
 			out.println(returnToClient);
 		}
 		else{
@@ -666,15 +666,15 @@ public class ClientHandler implements Runnable{
 		}
 		boolean hasSubject = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).containsKey(getContent(payload));
 		if (hasSubject){
-			/*
+			
 			if(getCurrentSubject()!=null){
 				if (getCurrentSubject().equals(getContent(payload))){
 					setCurrentSubject(null);
 					}
 				}
 			
-			*/
-			setCurrentSubject(null);
+			
+			//setCurrentSubject(null);
 			((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).remove(getContent(payload));
 			((ArrayList)((HashMap)server.getProperties().get("subjects").get(getContent(payload))).get("members")).remove(getUsername());
 			
@@ -856,15 +856,15 @@ public class ClientHandler implements Runnable{
 		try{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
-				+ "content:"+getUsername().toString();
+				+ "response:stats\t"
+				+ "content:Your username; "+getUsername().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:info\t"
-					+ "content:Null";
+					+ "response:stats\t"
+					+ "content:No username";
 			out.println(returnToClient);
 		}
 	}
@@ -951,6 +951,7 @@ public class ClientHandler implements Runnable{
 						+ "response:error\t"
 						+ "content:You need to log in to use this function";
 				out.println(returnToClient);
+				return;
 			}
 			
 			String content = "";
@@ -1186,12 +1187,15 @@ public class ClientHandler implements Runnable{
 		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:info\t"
-				+ "content:"+getUserType();
+				+ "response:stats\t"
+				+ "content:User type; "+getUserType();
 		out.println(returnToClient);
 		
 	}
 	
+	void parse_get_subject_scores(){
+		//TODO: make something that gives the results of every user in the current subject, only for lecturers and admins
+	}
 
 	
 }

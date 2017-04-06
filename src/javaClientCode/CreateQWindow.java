@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
@@ -17,12 +17,12 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-
+import javafx.scene.control.Label;
 public class CreateQWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
 	ServerClient client;
-	
+	TextArea serverFeed;
 	CreateQWindow(Stage stageIn, GUIController ctrlIn, ServerClient clientIn){
 		stage=stageIn;
 		ctrl=ctrlIn;
@@ -35,7 +35,7 @@ public class CreateQWindow implements Window {
 	 * @return Scene
 	 */
 	public Scene createScene(){
-		int xBase=600, yBase=200;
+		int xBase=600, yBase=300;
 
 		ArrayList<Question> quiz = new ArrayList<>();
 		
@@ -47,7 +47,9 @@ public class CreateQWindow implements Window {
 		root.setStyle("-fx-background-color: white");
 		
 
-		Label feed = new Label("QuestionMaker"); feed.setLayoutX(xBase-400); feed.setLayoutY(yBase+0); feed.setStyle("-fx-border-color: black");
+		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase+300); feed.setLayoutY(yBase-100); feed.setStyle("-fx-border-color: black");
+		//feed.setPrefSize(300, 300); //feed.setAlignment(Pos.TOP_LEFT);
+		
 		TextField fileName = new TextField(); fileName.setLayoutX(xBase+200); fileName.setLayoutY(yBase+100); fileName.setPromptText("set working subject");
 		fileName.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+fileName.getText());
@@ -78,7 +80,7 @@ public class CreateQWindow implements Window {
 		TextField category = new TextField(); category.setLayoutX(xBase+200);category.setLayoutY(yBase+50);category.setPromptText("Category");
 		
 		
-		feed.setPrefSize(300, 300); feed.setAlignment(Pos.TOP_LEFT);
+		
 		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+0); createQ.setLayoutY(yBase+200);
 		
 		//create new question
@@ -132,13 +134,13 @@ public class CreateQWindow implements Window {
 		});
 		
 		//Setup serverFeed and the updater to maintain the feed
-		Label serverFeed = new Label(); feed.setLayoutX(0); feed.setLayoutY(0); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
+		serverFeed = new TextArea(); feed.setLayoutX(0); serverFeed.setLayoutY(500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(500, 300); //feed.setAlignment(Pos.TOP_LEFT);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
 		
 		root.getChildren().addAll(fileName, qType, qText, aText, feed, back, head, createQ, op1, op2, save, error, category, serverFeed);
 		Scene scene = new Scene(root, 1300, 700);
-		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
 	}
 	
@@ -179,7 +181,7 @@ public class CreateQWindow implements Window {
 
 
 	public void wakeUp(){
-		
+		serverFeed.setText("Messages From Server:");
 	}
 	public void sleep(){
 		

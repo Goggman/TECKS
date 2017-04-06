@@ -10,7 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
-
+import javafx.scene.control.TextArea;
 public class QuestionWindow implements Window {
 	QuestionSchema schema;
 	int index;
@@ -26,7 +27,7 @@ public class QuestionWindow implements Window {
 	Stage stage;
 	Stage chat;
 	GUIController ctrl;
-	Label metafeed;
+	TextArea metafeed;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
@@ -56,8 +57,13 @@ public class QuestionWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
+<<<<<<< HEAD
 		Pane root = new Pane(); 
 		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
+=======
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
+		TextArea feed = new TextArea(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); //((Labeled) feed).setAlignment(Pos.TOP_LEFT);
+>>>>>>> 2b06fef36e07d65168544f82c9b7112bdde414a8
 		//userinput
 		ArrayList<RadioButton> radiOptions = new ArrayList<>();
 		ArrayList<String> options = new ArrayList<String>();
@@ -97,8 +103,8 @@ public class QuestionWindow implements Window {
 		
 		
 		//
-		Label serverIn = new Label("InfoMessagesFromServer");serverIn.setLayoutX(xBase-300); serverIn.setLayoutY(yBase-90); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); serverIn.setAlignment(Pos.TOP_LEFT);
-		metafeed = new Label("");
+		TextArea serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase-300); serverIn.setLayoutY(yBase-90); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(200, 400); //serverIn.setAlignment(Pos.TOP_LEFT);
+		metafeed = new TextArea("");
 		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase-300); setSubject.setLayoutY(yBase-150);
 		setSubject.setPrefWidth(200);
 		setSubject.setPromptText("Set subject");

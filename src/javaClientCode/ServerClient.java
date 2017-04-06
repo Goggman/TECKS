@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 public class ServerClient {
+	
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
@@ -16,7 +17,9 @@ public class ServerClient {
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
     Queue<String> ChatWindowInfo;
-    Queue<String> StatWindowStat;
+    Queue<String> ProfileWindow;
+    Queue<String> ProfileWindowStats;
+    Queue<String> ProfileWindowSubjects;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -52,7 +55,9 @@ public class ServerClient {
 	        QuestionWindowQuestions = new LinkedList<String>();
 	        QuestionWindowInfo = new LinkedList<String>();
 	        ChatWindowInfo = new LinkedList<String>();
-	        StatWindowStat = new LinkedList<String>();
+	       	ProfileWindow = new LinkedList<String>();
+	       	ProfileWindowStats = new LinkedList<String>();
+	       	ProfileWindowSubjects = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -82,6 +87,9 @@ public class ServerClient {
 		else if (response.equals("stats")){
 			parse_stats(payload);
 		}
+		else if (response.equals("subjects")){
+			parse_subjects(payload);
+		}
 		
 		else{
 			System.out.println("Bad request");
@@ -106,34 +114,41 @@ public class ServerClient {
 		//timestamp:
 		
 	}
+	void parse_subjects(String payload){
+		
+		ProfileWindowSubjects.add(getContent(payload));
+		printPrettyMessageGeneral(payload);
+	}
 	void parse_error(String payload){
 		LoginWindow.add(payload);
 		CreateQWindow.add(payload);
 		QuestionWindowInfo.add(payload);
 		ChatWindowInfo.add(payload);
+		ProfileWindow.add(payload);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
-		ChatWindow.add(payload);
+		ChatWindow.add(getSender(payload).toUpperCase()+"\n"+getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_info(String payload){
-		QuestionWindowInfo.add(payload);
-		LoginWindow.add(payload);
-		CreateQWindow.add(payload);
-		ChatWindowInfo.add(payload);
+		QuestionWindowInfo.add(getContent(payload));
+		LoginWindow.add(getContent(payload));
+		CreateQWindow.add(getContent(payload));
+		ChatWindowInfo.add(getContent(payload));
+		ProfileWindow.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_history(String payload){
-		ChatWindow.add(payload);
+		ChatWindow.add(getSender(payload)+"\n"+getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_stats(String payload){
-		StatWindowStat.add(payload);
+		ProfileWindowStats.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_question(String payload){
-		QuestionWindowQuestions.add(payload);
+		QuestionWindowQuestions.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void printPrettyMessageGeneral(String payload){

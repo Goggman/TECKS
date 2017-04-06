@@ -19,7 +19,7 @@ public class MenuWindow implements Window{
 		stage=stageInput;
 		
 	}
-	
+	//TODO: menu should be tabs available in every window in main stage, implement this, making MenuWindow obsolete hopefully
 	/**
 	 * create scene for the main menu
 	 * @return
@@ -50,7 +50,12 @@ public class MenuWindow implements Window{
 		menu4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
-		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4);
+		Button menu5 = new Button("Goto profile"); menu5.setLayoutX(xBase+0); menu5.setLayoutY(yBase+120);
+		menu5.setStyle("-fx-pref-widt: 100");
+		menu5.setOnAction(e->{
+			stage.setScene(ctrl.getScene(5));
+		});
+		root.getChildren().addAll(feed, menu1, menu2, menu3, menu4, menu5);
 		Scene scene = new Scene(root, 1300, 700);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		return scene;
