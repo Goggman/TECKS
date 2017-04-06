@@ -57,13 +57,10 @@ public class QuestionWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=300, yBase=200;
-<<<<<<< HEAD
-		Pane root = new Pane(); 
-		Label feed = new Label(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); feed.setAlignment(Pos.TOP_LEFT);
-=======
+
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		TextArea feed = new TextArea(); feed.setLayoutX(xBase+100); feed.setLayoutY(yBase-90); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(500, 300); //((Labeled) feed).setAlignment(Pos.TOP_LEFT);
->>>>>>> 2b06fef36e07d65168544f82c9b7112bdde414a8
+
 		//userinput
 		ArrayList<RadioButton> radiOptions = new ArrayList<>();
 		ArrayList<String> options = new ArrayList<String>();

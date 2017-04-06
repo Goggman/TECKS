@@ -29,13 +29,9 @@ public class FeedUpdater implements Runnable{
 				String payload = queue.poll();
 				if (payload!=null){
 					Platform.runLater(()->{
-<<<<<<< HEAD
 
-						feed.setText(feed.getText()+"\n"+client.getSender(payload).toUpperCase()+"\n"+client.getContent(payload));
-
-=======
 						feed.setText(feed.getText()+"\n"+payload);
->>>>>>> 2b06fef36e07d65168544f82c9b7112bdde414a8
+
 					});
 					
 				}
