@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 public class DummyWindow implements Window {
 	Stage stage;
 	GUIController ctrl;
-	DummyWindow(Stage stageInput, GUIController CtrlIn){
+	DummyWindow(Stage stageInput, GUIController CtrlIn, ServerClient client, Stage chat){
 		ctrl=CtrlIn;
 		stage=stageInput;
 		

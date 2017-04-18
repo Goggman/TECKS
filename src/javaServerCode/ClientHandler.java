@@ -219,7 +219,6 @@ public class ClientHandler implements Runnable{
 		}
 
 		else if (request.equals("get_questions")){
-
 			parse_get_questions(payload);
 		}
 		else if (request.equals("get_best_questions")){
@@ -239,6 +238,9 @@ public class ClientHandler implements Runnable{
 		}
 		else if (request.equals("get_type")){
 			parse_get_type(payload);
+		}
+		else if (request.equals("get_subject_scores")){ //TODO: this doesnt work why?
+			parse_get_subject_scores(payload);
 		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
@@ -961,7 +963,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked TODO: If subject arg provided, give stats in only that subject
+	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked
 		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...@<subject>|<overall score>|<overall_score>|<category>|<score>...
 			if (getUsername()==null){
 				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -1212,7 +1214,6 @@ public class ClientHandler implements Runnable{
 	}
 	
 	void parse_get_subject_scores(String payload){
-		//TODO: make something that gives the results of every user in the current subject, only for lecturers and admins
 		if (getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -1221,7 +1222,14 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		if (getContent(payload).equals("local")){ //Get each members score, and add theese together in a total summary TODO: this is not implemented properly
+		if (getUserType().equals("student")){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Your username does not have the required privelige";
+			out.println(returnToClient);
+			return;
+		}
 		
 			String content = ""+getCurrentSubject();
 			HashMap usernamesInSubject_map = new HashMap();
@@ -1279,53 +1287,11 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:stats\t"
+					+ "response:scores\t"
 					+ "content:"+content;
 			out.println(returnToClient);
-		}
-		else if (getContent(payload).equals("global")) { // do not include members, just summarize everything in a total score, in each subject TODO: this is not implemented properly, fix
-			String content = ""+getCurrentSubject()+"@";
-			HashMap usernamesInSubject_map = new HashMap();
-			Iterator usernamesInSubject_it = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("members")).iterator();
-			while (usernamesInSubject_it.hasNext()){
-				usernamesInSubject_map.put((String)usernamesInSubject_it.next(), "");
-			}
 		
-			Iterator globalUsers_it = server.getProperties().get("users").keySet().iterator();
-			Set userSet = usernamesInSubject_map.keySet();
-			HashMap categoriesAndScore = new HashMap();
-			
-			while (globalUsers_it.hasNext()){
-				String member = (String)globalUsers_it.next();
-				if (userSet.contains(member)){
-					HashMap subjectCategories = (HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories");
-					Iterator categories_it = subjectCategories.keySet().iterator();
-					
-					while (categories_it.hasNext()){
-						String category = (String)categories_it.next();
-						if (categoriesAndScore.containsKey(category)){
-							double oldScore = (double)categoriesAndScore.get(category);
-							double newScore = (double)((HashMap)subjectCategories.get(category)).get("score");
-							categoriesAndScore.put(category, oldScore+newScore); // Need to make this a percentage, and include number of questions
-						}
-						else{
-							categoriesAndScore.put(category, ((HashMap)subjectCategories.get(category)).get("score"));
-						}
-						
-					
-					}
-				
-				}
-			}
 		
-		}
-		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-					+"\tsender:server\t"
-					+ "response:error\t"
-					+ "content:You need to provide an argument, local or global";
-			out.println(returnToClient);
-		}
 	
 	}
 		
