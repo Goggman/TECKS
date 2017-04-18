@@ -115,6 +115,7 @@ public class ProfileWindow implements Window {
 		
 		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+350); resetScore.setLayoutY(yBase+520);
 		resetScore.setOnAction(e->{
+			client.sendMessage("request:reset_score\tcontent:local");
 		});
 		
 		Button requestScore = new Button("reqScore"); requestScore.setLayoutX(xBase+420); requestScore.setLayoutY(yBase+520);
