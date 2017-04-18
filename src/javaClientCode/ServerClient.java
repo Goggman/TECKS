@@ -14,12 +14,15 @@ public class ServerClient {
     Queue<String> LoginWindow;
     Queue<String> ChatWindow;
     Queue<String> CreateQWindow;
+    Queue<String> CreateQWindowSubjects;
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
     Queue<String> ChatWindowInfo;
     Queue<String> ProfileWindow;
     Queue<String> ProfileWindowStats;
     Queue<String> ProfileWindowSubjects;
+    Queue<String> ProfileWindowScores;
+    Queue<String> QuestionWindowSubjects;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -52,12 +55,15 @@ public class ServerClient {
 	        LoginWindow = new LinkedList<String>();
 	        ChatWindow = new LinkedList<String>();
 	        CreateQWindow = new LinkedList<String>();
+	        CreateQWindowSubjects = new LinkedList<String>();
 	        QuestionWindowQuestions = new LinkedList<String>();
 	        QuestionWindowInfo = new LinkedList<String>();
+	        QuestionWindowSubjects = new LinkedList<String>();
 	        ChatWindowInfo = new LinkedList<String>();
 	       	ProfileWindow = new LinkedList<String>();
 	       	ProfileWindowStats = new LinkedList<String>();
 	       	ProfileWindowSubjects = new LinkedList<String>();
+	       	ProfileWindowScores = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -90,6 +96,9 @@ public class ServerClient {
 		else if (response.equals("subjects")){
 			parse_subjects(payload);
 		}
+		else if (response.equals("scores")){
+			parse_scores(payload);
+		}
 		
 		else{
 			System.out.println("Bad request");
@@ -117,6 +126,11 @@ public class ServerClient {
 	void parse_subjects(String payload){
 		
 		ProfileWindowSubjects.add(getContent(payload));
+
+		printPrettyMessageGeneral(payload);
+	}
+	void parse_scores(String payload){
+		ProfileWindowScores.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_error(String payload){
@@ -145,6 +159,12 @@ public class ServerClient {
 	}
 	void parse_stats(String payload){
 		ProfileWindowStats.add(getContent(payload));
+		try{QuestionWindowSubjects.add(getContent(payload).split("[;]")[1].trim());
+			CreateQWindowSubjects.add(getContent(payload).split("[;]")[1].trim());}
+		catch(ArrayIndexOutOfBoundsException e){//do nothing
+			
+		}
+		
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_question(String payload){
@@ -161,7 +181,12 @@ public class ServerClient {
 						);
 	}
 	void sendMessage(String payload){
-		out.println(payload);
+		try{
+			out.println(payload);
+		}
+		catch (NullPointerException e){
+			System.out.println("Could not send this message, try to connect");
+		}
 	}
 	
 	
@@ -212,6 +237,10 @@ public class ServerClient {
 					break;
 					
 					
+				}
+				catch (NullPointerException e){
+					System.out.println("Nothing to receive");
+					break;
 				}
 					
 			}
