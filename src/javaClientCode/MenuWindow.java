@@ -29,29 +29,29 @@ public class MenuWindow implements Window{
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label feed = new Label();
 		Button menu1 = new Button("Goto quiz"); menu1.setLayoutX(xBase+0); menu1.setLayoutY(yBase+0);
-		menu1.setStyle("-fx-pref-width: 100");
+		menu1.setStyle("-fx-pref-width: 120");
 		menu1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		Button menu2 = new Button("Goto Qcreator"); menu2.setLayoutX(xBase+0); menu2.setLayoutY(yBase+30);
-		menu2.setStyle("-fx-pref-width: 100");
+		menu2.setStyle("-fx-pref-width: 120");
 		menu2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		Button menu3 = new Button("Goto Qloader"); menu3.setLayoutX(xBase+0); menu3.setLayoutY(yBase+60);
-		menu3.setStyle("-fx-pref-width: 100");
+		menu3.setStyle("-fx-pref-width: 120");
 		menu3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(3));
 		});
 		menu3.setDisable(true);
 		Button menu4 = new Button("Goto login"); menu4.setLayoutX(xBase+0); menu4.setLayoutY(yBase+90);
-		menu4.setStyle("-fx-pref-width: 100");
+		menu4.setStyle("-fx-pref-width: 120");
 		menu4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		Button menu5 = new Button("Goto profile"); menu5.setLayoutX(xBase+0); menu5.setLayoutY(yBase+120);
-		menu5.setStyle("-fx-pref-widt: 100");
+		menu5.setStyle("-fx-pref-width: 120");
 		menu5.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});

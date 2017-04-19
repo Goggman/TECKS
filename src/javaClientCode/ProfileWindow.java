@@ -56,6 +56,7 @@ public class ProfileWindow implements Window {
 			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
 		});
 		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+500); resetScore.setLayoutY(yBase+100);
+		resetScore.setStyle("-fx-pref-width: 100");
 		resetScore.setOnAction(e->{
 			client.sendMessage("request:reset_score\tcontent:local"+resetScore.getText());
 		});
@@ -65,7 +66,8 @@ public class ProfileWindow implements Window {
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
 		});
 		
-		Button backToMenu = new Button("Goto Menu"); backToMenu.setLayoutX(xBase+500); backToMenu.setLayoutY(yBase+200);
+		Button backToMenu = new Button("Menu"); backToMenu.setLayoutX(xBase+500); backToMenu.setLayoutY(yBase+200);
+		backToMenu.setStyle("-fx-pref-width: 100");
 		backToMenu.setOnAction(e->{
 			stage.setScene(ctrl.getScene(0));
 		});
@@ -81,7 +83,7 @@ public class ProfileWindow implements Window {
 		//TextArea classScore = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+200);
 		
 		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubjects, backToMenu, createSubject, resetScore, removeSubject, setSubject);
-		
+
 		
 		updater1 = new FeedUpdater(client, stats, client.ProfileWindowStats);
 		updater1.start();
@@ -90,7 +92,7 @@ public class ProfileWindow implements Window {
 		updater3 = new FeedUpdater(client, subjectsGlobal, client.ProfileWindowSubjects);
 		updater3.start();
 		Scene scene = new Scene(root, 1300, 700);
-		
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 	return scene;
 	}
 	
