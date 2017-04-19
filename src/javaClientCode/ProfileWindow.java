@@ -48,29 +48,29 @@ public class ProfileWindow implements Window {
 		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(250);
 		scoreFeed = new TextArea(); scoreFeed.setLayoutX(xBase+100); scoreFeed.setLayoutY(yBase+250);
 		scoreFeed.setPrefSize(200, 150);
-		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0);
-		tab1.setStyle("-fx-pref-width: 100");
+		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0); tab1.setStyle("-fx-focus-color: transparent;-fx-faint-focus-color:transparent");
+		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(200); tab2.setLayoutY(0);
-		tab2.setStyle("-fx-pref-width: 100");
+		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(200); tab2.setLayoutY(0); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
 		////
 		
-		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(0);
-		tab3.setStyle("-fx-pref-width: 100");
+		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(0); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
-		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0);
-		tab4.setStyle("-fx-pref-widt: 100");
+		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab4.setPrefWidth(100);;
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
