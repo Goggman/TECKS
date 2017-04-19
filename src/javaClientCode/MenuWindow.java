@@ -53,6 +53,7 @@ public class MenuWindow implements Window{
 		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0);
 		tab4.setStyle("-fx-pref-widt: 100");
 		tab4.setOnAction(e->{
+
 			stage.setScene(ctrl.getScene(5));
 		});
 		

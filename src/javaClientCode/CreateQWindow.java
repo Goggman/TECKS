@@ -226,11 +226,13 @@ public class CreateQWindow implements Window {
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
+
 		FeedUpdater updater2 = new FeedUpdater(client, subjects, client.CreateQWindowSubjects);
 		updater2.start();
 		root.getChildren().addAll(setSubjectMenu, qType, qText, aText, feed, head, createQ, op1, op2, save, error, category, serverFeed, tab1, tab2, tab3, tab4, showChat, hideChat, nextQ, prevQ, discard);
 		Scene scene = new Scene(root, 600, 600);
 		//scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+
 		return scene;
 	}
 	
