@@ -100,14 +100,18 @@ public class ProfileWindow implements Window {
 			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
 		});
 
-		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+350); createSubject.setLayoutY(yBase+460);
+		
+		
+		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+500); createSubject.setLayoutY(yBase+150);
 		createSubject.setPromptText("createSubject");
 		createSubject.setOnAction(e->{
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
 		});
 
 		
+
 		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+350); setSubject.setLayoutY(yBase+490);
+
 		setSubject.setPromptText("setSubject");
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
@@ -126,6 +130,7 @@ public class ProfileWindow implements Window {
 		//TextArea score = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+150);
 		//TextArea classScore = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+200);
 		
+
 		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubjects, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, scoreFeed, requestScore);
 		
 		
@@ -135,10 +140,14 @@ public class ProfileWindow implements Window {
 		updater2.start();
 		updater3 = new FeedUpdater(client, subjectsGlobal, client.ProfileWindowSubjects);
 		updater3.start();
+
+		//scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+
 		updater4 = new FeedUpdater(client, scoreFeed, client.ProfileWindowScores);
 		updater4.start();
 		Scene scene = new Scene(root, 600, 600);
 		
+
 	return scene;
 	}
 	
