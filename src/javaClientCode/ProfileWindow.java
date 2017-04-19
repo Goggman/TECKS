@@ -40,14 +40,14 @@ public class ProfileWindow implements Window {
 	public Scene createScene(){
 		int xBase = 0, yBase = 0;
 		Pane root = new Pane();
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250);
+		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250);subjectsGlobal.setEditable(false);
 		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200);
-		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);
+		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+400);
-		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(250);
+		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(250);serverFeed.setEditable(false);
 		scoreFeed = new TextArea(); scoreFeed.setLayoutX(xBase+100); scoreFeed.setLayoutY(yBase+250);
-		scoreFeed.setPrefSize(200, 150);
+		scoreFeed.setPrefSize(200, 150);scoreFeed.setEditable(false);
 		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0);
 		tab1.setStyle("-fx-pref-width: 100");
 		tab1.setOnAction(e->{
@@ -102,7 +102,7 @@ public class ProfileWindow implements Window {
 
 		
 		
-		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+500); createSubject.setLayoutY(yBase+150);
+		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+350); createSubject.setLayoutY(yBase+460);
 		createSubject.setPromptText("createSubject");
 		createSubject.setOnAction(e->{
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
@@ -152,7 +152,7 @@ public class ProfileWindow implements Window {
 	}
 	
 	public void wakeUp(){
-		stats.setText("You stats:");
+		stats.setText("You stats:");	
 		serverFeed.setText("Messages from server:");
 		subjectsGlobal.setText("Global subjects:");
 		scoreFeed.setText("Subject scores here:");

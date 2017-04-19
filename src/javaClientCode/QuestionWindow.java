@@ -69,8 +69,8 @@ public class QuestionWindow implements Window {
 		questions = new TextArea();
 		
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);
-		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);
+		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
+		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+300);
 		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+300);
 		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+100); confirm.setLayoutY(yBase+300);
