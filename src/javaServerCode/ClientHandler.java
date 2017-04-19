@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.Set;
 
 public class ClientHandler implements Runnable{
 	private Thread t;
@@ -219,7 +219,6 @@ public class ClientHandler implements Runnable{
 		}
 
 		else if (request.equals("get_questions")){
-
 			parse_get_questions(payload);
 		}
 		else if (request.equals("get_best_questions")){
@@ -239,6 +238,9 @@ public class ClientHandler implements Runnable{
 		}
 		else if (request.equals("get_type")){
 			parse_get_type(payload);
+		}
+		else if (request.equals("get_subject_scores")){ //TODO: this doesnt work why?
+			parse_get_subject_scores(payload);
 		}
 		else{
 			this.out.println("timestamp:"+LocalTime.now().toString()+"\tsender:server\tresponse:error\tcontent:Not a valid command");
@@ -692,7 +694,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_questions(String payload){//idea, could supply argument, category, to only ask questions in this category
+	void parse_get_questions(String payload){
 		
 		if(getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -704,12 +706,30 @@ public class ClientHandler implements Runnable{
 		}
 		String questions="";
 		Iterator question_iterator = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions")).iterator();
-		while(question_iterator.hasNext()){
-			questions+=question_iterator.next();
-			if (question_iterator.hasNext()){
-				questions+="@";
+		if (!getContent(payload).equals("")){ //If an argument is supplied, try to find every question in the category
+			String category = getContent(payload);
+			while(question_iterator.hasNext()){
+				
+				String nextQuestion = (String)question_iterator.next();
+				for(String element : nextQuestion.split("[|]")){
+					if (element.split("[;]")[0].equals("c")){
+						if (element.split("[;]")[1].equals(category)){
+							questions+=nextQuestion+"@";
+						}
+					}
+				}
 			}
 		}
+		else{
+			while(question_iterator.hasNext()){
+				String nextQuestion = (String)question_iterator.next();
+				questions+=nextQuestion+"@";
+			}
+		}
+		if (!(questions.length()==0)){
+			questions = questions.substring(0, questions.length()-1);
+		}
+		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:question\t"
@@ -943,7 +963,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked TODO: If subject arg provided, give stats in only that subject
+	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked
 		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...@<subject>|<overall score>|<overall_score>|<category>|<score>...
 			if (getUsername()==null){
 				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -990,7 +1010,7 @@ public class ClientHandler implements Runnable{
 		
 	}
 	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
-		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... TODO: currently no element in GUI actually sends results, also needs to be implemented
+		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... 
 		if (getUsername()==null || getCurrentSubject()==null){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
@@ -1193,9 +1213,87 @@ public class ClientHandler implements Runnable{
 		
 	}
 	
-	void parse_get_subject_scores(){
-		//TODO: make something that gives the results of every user in the current subject, only for lecturers and admins
+	void parse_get_subject_scores(String payload){
+		if (getUsername()==null || getCurrentSubject()==null){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:You need to log in to use this function, or you need to set the current subject";
+			out.println(returnToClient);
+			return;
+		}
+		if (getUserType().equals("student")){
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:error\t"
+					+ "content:Your username does not have the required privelige";
+			out.println(returnToClient);
+			return;
+		}
+		
+			String content = ""+getCurrentSubject();
+			HashMap usernamesInSubject_map = new HashMap();
+			Iterator usernamesInSubject_it = ((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("members")).iterator();
+			while (usernamesInSubject_it.hasNext()){
+				usernamesInSubject_map.put((String)usernamesInSubject_it.next(), "");
+			}
+			Set userSet = usernamesInSubject_map.keySet();
+			
+			double totalScore = 0;
+			double totalQuestions = 0;
+			HashMap subjectScoreMap = new HashMap();
+			Iterator globalUsers_it = server.getProperties().get("users").keySet().iterator();
+			while (globalUsers_it.hasNext()){
+				String member = (String)globalUsers_it.next();
+				if (userSet.contains(member)){
+					Iterator categories_it = ((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).keySet().iterator();
+					
+					while (categories_it.hasNext()){
+						String category =(String) categories_it.next();
+						if (subjectScoreMap.containsKey(category)){
+							double newQuestions = (double)((HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).get(category)).get("#questions");
+							double newScore = (double)((HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).get(category)).get("score");
+							double oldQuestions = (double)((HashMap)subjectScoreMap.get(category)).get("#questions");
+							double oldScore = (double)((HashMap)subjectScoreMap.get(category)).get("#questions");
+							((HashMap)subjectScoreMap.get(category)).put("score", oldScore+newScore);
+							((HashMap)subjectScoreMap.get(category)).put("#questions", oldQuestions+newQuestions);
+							
+							totalQuestions += newQuestions;
+							totalScore += newScore;
+							}
+						else{
+							double newQuestions = (double)((HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).get(category)).get("#questions");
+							double newScore = (double)((HashMap)((HashMap)((HashMap)((HashMap)((HashMap)server.getProperties().get("users").get(member)).get("subjects")).get(getCurrentSubject())).get("categories")).get(category)).get("score");
+							subjectScoreMap.put(category, new HashMap());
+							((HashMap)subjectScoreMap.get(category)).put("score", newScore);
+							((HashMap)subjectScoreMap.get(category)).put("#questions",newQuestions);
+							
+							totalQuestions += newQuestions;
+							totalScore += newScore;
+						}
+					
+					}
+				
+				}
+			}
+			Iterator categories_it = subjectScoreMap.keySet().iterator();
+			content+="|"+totalScore/totalQuestions+"@";
+			while (categories_it.hasNext()){
+				String category = (String)categories_it.next();
+				content+=category+"|"+((double)((HashMap)subjectScoreMap.get(category)).get("score")/(double)((HashMap)subjectScoreMap.get(category)).get("#questions"));
+				if (categories_it.hasNext()){
+					content+="@";
+				}
+			}
+			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					+"\tsender:server\t"
+					+ "response:scores\t"
+					+ "content:"+content;
+			out.println(returnToClient);
+		
+		
+	
 	}
-
+		
 	
 }
