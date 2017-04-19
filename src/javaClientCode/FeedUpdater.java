@@ -3,15 +3,15 @@ import javafx.scene.control.Label;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
+import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.util.Queue;
 public class FeedUpdater implements Runnable{
 		Thread t;
 		ServerClient client;
-		Label feed;
+		TextArea feed;
 		Queue<String> queue;
-		FeedUpdater(ServerClient client, Label feed, Queue<String> queue){
+		FeedUpdater(ServerClient client, TextArea feed, Queue<String> queue){
 			this.client=client;
 			this.feed=feed;
 			this.queue=queue;
@@ -29,7 +29,9 @@ public class FeedUpdater implements Runnable{
 				String payload = queue.poll();
 				if (payload!=null){
 					Platform.runLater(()->{
-						feed.setText(feed.getText()+"\n"+client.getSender(payload).toUpperCase()+"\n"+client.getContent(payload));
+
+						feed.setText(feed.getText()+"\n"+payload);
+
 					});
 					
 				}
@@ -42,6 +44,15 @@ public class FeedUpdater implements Runnable{
 				this.t= new Thread(this);
 				t.setDaemon(true);
 				t.start();
+			}
+		}
+		
+		void sleep(){
+			try {
+				this.wait();
+			}
+			catch (InterruptedException e){
+				
 			}
 		}
 		

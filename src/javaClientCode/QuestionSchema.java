@@ -4,14 +4,13 @@ import java.util.HashMap;
 public class QuestionSchema {
 	HashMap<Question, String> answers = new HashMap<>();
 	ArrayList<Question> questions = new ArrayList<>();
-	String category;
 	
 	/**
 	 * creates new question; generates empty strings to be filled in
 	 * @param questionQuiz list of Question objects 
 	 */
 	
-	
+
 	
 	QuestionSchema(ArrayList<ArrayList<String>> quizList){
 		
@@ -39,7 +38,7 @@ public class QuestionSchema {
 				}
 				else if (s.contains("a:")){
 					
-					correctAnswer=temp[1].trim();
+				correctAnswer=temp[1].trim();
 				}
 				else if (s.contains("op:")){
 				
@@ -48,7 +47,7 @@ public class QuestionSchema {
 				else if (s.contains("c:")){
 					
 					category=temp[1].trim();
-					this.category = category;
+					//this.category = category;
 				}
 				}
 			Question q = new Question(category, questionText, correctAnswer,header, options.toArray());
@@ -57,6 +56,12 @@ public class QuestionSchema {
 			
 		}
 	
+	}
+
+	QuestionSchema(ArrayList<Question> questionlist, int dummy){
+		for (Question q : questionlist){
+			addQuestion(q);
+		}
 	}
 	
 	
@@ -76,6 +81,15 @@ public class QuestionSchema {
 		return answers;
 	}
 	
+	void removeQuestion(Question q){
+		questions.remove(q);
+		answers.remove(q);
+		
+	}
+	void addQuestion(Question q){
+		questions.add(q);
+		answers.put(q, "");
+	}
 	
 
 	
