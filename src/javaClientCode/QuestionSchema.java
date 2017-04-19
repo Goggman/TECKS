@@ -48,6 +48,7 @@ public class QuestionSchema {
 				else if (s.contains("c:")){
 					
 					category=temp[1].trim();
+					this.category = category;
 				}
 				}
 			Question q = new Question(category, questionText, correctAnswer,header, options.toArray());

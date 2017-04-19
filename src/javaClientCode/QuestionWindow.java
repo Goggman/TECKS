@@ -2,7 +2,9 @@ package javaClientCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -73,10 +75,7 @@ public class QuestionWindow implements Window {
 			RadioButton temp = new RadioButton(s);
 			temp.setLayoutX(radX);temp.setLayoutY(radY);
 			temp.setToggleGroup(tg);
-			/*temp.setOnAction(e -> {
-				answers.set(index, temp.getText());
-				//setAnswer(temp.getText(), userAnswer);
-			});*/
+			temp.setVisible(false);
 			radiOptions.add(temp);
 			radY += 30;
 		}
@@ -104,7 +103,7 @@ public class QuestionWindow implements Window {
 		setSubject.setPromptText("Set subject");
 		//get subject from server
 		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
+			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText().toUpperCase());
 			client.sendMessage("request:get_questions\tcontent:");
 
 		});
@@ -112,28 +111,6 @@ public class QuestionWindow implements Window {
 		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase-xBase); loadQuestionsFromServer.setLayoutY(yBase-124);
 		loadQuestionsFromServer.setStyle("-fx-pref-width: 100");
 
-		loadQuestionsFromServer.setOnAction(e->{
-			System.out.println("metafeed: " + metafeed.getText());
-			if (!metafeed.getText().equals("")){
-				try {
-				Scanner scanner = new Scanner(metafeed.getText());
-				System.out.println("120: " + scanner.nextLine());scanner.nextLine();//Skips first lines, as it contains sender
-				String content = scanner.nextLine();
-				addSchema(readToSchema(content));
-				scanner.close();
-				metafeed.setText("");
-				serverIn.setText("Load successfull");
-				}
-				catch (IndexOutOfBoundsException ex){
-					serverIn.setText("no quiz found for this subject");
-				}
-				
-			}
-			else{
-				serverIn.setText("Load unsuccessfull");
-			}
-			
-		});
 		
 		Button showChat = new Button("Show chat"); showChat.setLayoutX(xBase+820);showChat.setLayoutY(yBase+50);
 		showChat.setOnAction(e->{
@@ -160,104 +137,140 @@ public class QuestionWindow implements Window {
 					
 					
 				}
-				feed.setText("Your results: \n"+analyzer.getCategories().toString());
+				String appender = "";
+				Iterator<String> it = analyzer.getCategories().keySet().iterator();
+				while (it.hasNext()){
+					String next = it.next().toString();
+					appender += next + ": "
+							+ ""+ analyzer.getCategories().get(next)[0] + "/" + analyzer.getCategories().get(next)[1] + "\n";
+					
+				}
+				feed.setText("Your results: \n" + appender);
 				client.sendMessage("request:add_results\tcontent:"+analyzer.prepareContent());
 			}
 		});
 		
 		//
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+520); nextQ.setLayoutY(yBase+230);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+435); prevQ.setLayoutY(yBase+230);
+		
 		nextQ.setOnAction(e->{
 			
 			if (quizStarted==1){
 				if (index < schema.getQuestions().size()-1){
 					index++;
+					
+				} 
+				tg.selectToggle(null);
+				Question q = schema.getQuestions().get(index);
+				if (q.getOptions().size() > 1){
+					userInput.setVisible(false);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(true);
+					}
+					Collections.shuffle(q.getOptions());
+					for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
+						radiOptions.get(j).setText(q.getOptions().get(k));
+					}
 				}
-			Question q = schema.getQuestions().get(index);
-			if (q.getOptions().size() > 1){
-				userInput.setVisible(false);
-				for (RadioButton rb : radiOptions){
-					rb.setVisible(true);
-				}
-				Collections.shuffle(q.getOptions());
-				for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-					radiOptions.get(j).setText(q.getOptions().get(k));
-				}
-			}
-			else {
-				userInput.setVisible(true);
-				for (RadioButton rb : radiOptions){
-					rb.setVisible(false);
-				}
-			}	
-			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
-			}
-		});
-		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+435); prevQ.setLayoutY(yBase+230);
-		prevQ.setOnAction(e->{
-			if (quizStarted==1){
-			if (index!=0){
-				index--;
-			}
-			Question q = schema.getQuestions().get(index);
-			if (q.getOptions().size() > 1){
-				userInput.setVisible(false);
-				for (RadioButton rb : radiOptions){
-					rb.setVisible(true);
-				}
+				else {
+					userInput.setVisible(true);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(false);
+					}
+				}	
+				feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
 				
-				Collections.shuffle(q.getOptions());
-				for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-					radiOptions.get(j).setText(q.getOptions().get(k));
+				if (index == schema.getQuestions().size()-1){
+					System.out.println("false");
+					prevQ.setDisable(false);nextQ.setDisable(true);
+				} else {
+					System.out.println("true");
 					
 				}
-				
 			}
-			else {
-				userInput.setVisible(true);
-				for (RadioButton rb : radiOptions){
-					rb.setVisible(false);
+		});
+		prevQ.setOnAction(e->{
+			if (quizStarted==1){
+				if (index!=0){
+					index--;
 				}
-			}
-			feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
+				tg.selectToggle(null);
+				Question q = schema.getQuestions().get(index);
+				if (q.getOptions().size() > 1){
+					userInput.setVisible(false);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(true);
+					}
+					
+					Collections.shuffle(q.getOptions());
+					for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
+						radiOptions.get(j).setText(q.getOptions().get(k));
+						
+						
+					}
+				}
+				else {
+					userInput.setVisible(true);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(false);
+					}
+				}
+				feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
+				
+				if (index==0){
+					System.out.println("false");
+					nextQ.setDisable(false);prevQ.setDisable(true);
+				}
+				else {
+					System.out.println("true");
+					
+				}
 			}
 		});
 		//
-		//TODO: list all subjects
+		
 		
 		final MenuButton m = new MenuButton("Subjects");
-		m.getItems().add(new MenuItem("TDT4140"));
-		m.setOnMouseEntered(e ->{
-			client.sendMessage("request:get_subjects\tcontent:global");
-			System.out.println("metafeed: " + metafeed.getText());
-			String servertext = "";
-			System.out.println("pumpin in");
-		});
+		
 		m.showingProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
 				if (newValue){
-					System.out.println("printing");
-					//TODO: metafeed is empty
-					System.out.println("metafeed: " + metafeed.getText());
-					if (!	metafeed.getText().equals("")){
-						Scanner scanner = new Scanner(metafeed.getText());
+					
+					if (!	serverIn.getText().equals("")){
+						Scanner scanner = new Scanner(serverIn.getText());
 						
-						System.out.println("pumpin out");
-						scanner.nextLine();scanner.nextLine();//Skips first lines, as it contains sender
-						String content = scanner.nextLine();
-						//addSchema(readToSchema(content));
-						String [] subjects = content.substring(content.indexOf(":")+1).split(",");
-						ArrayList<MenuItem> items = new ArrayList<>();
-						for (String s : subjects){
-							System.out.println("Subject: " + s);
-							MenuItem temp = new MenuItem(s);
-							addMenuItem(temp);
+						
+						while (scanner.hasNextLine()){
+							String next = scanner.nextLine();
+							if (next.contains("@")){
+								
+							String [] subjects = next.split("@");
+							for (String s : subjects){
+								
+								MenuItem temp = new MenuItem(s);
+								addMenuItem(temp);
+								temp.setOnAction(e -> {
+									//TODO: set subject
+									client.sendMessage("request:set_subject\tcontent:" + ((MenuItem) e.getSource()).getText());
+									//client.sendMessage("request:set_subject\tcontent:"+setSubject.getText().toUpperCase());
+									client.sendMessage("request:get_questions\tcontent:");
+									
+									
+									loadQuestionsFromServer.fire();
+									
+									
+								});
+							}
+							}
 						}
+						
+						//addSchema(readToSchema(content));
 						//pickSubject.getItems().setAll(items);
 						scanner.close();
-						metafeed.setText(""); 
-						serverIn.setText("asd");
+						//metafeed.setText(""); 
+						//serverIn.setText("asd");
 					
 					
 					
@@ -266,7 +279,7 @@ public class QuestionWindow implements Window {
 			}
 
 			public void addMenuItem(MenuItem menuItem){
-				MenuItem temp = new MenuItem("new item");
+				MenuItem temp = menuItem;
 				ObservableList<MenuItem> items = m.getItems();
 				boolean go = true;
 				for (MenuItem mi : items){
@@ -290,49 +303,96 @@ public class QuestionWindow implements Window {
 		Button load = new Button("Load"); load.setLayoutX(xBase-145);load.setLayoutY(yBase-124);
 		load.setStyle("-fx-pref-width: 44");
 		load.setOnAction(e -> {
-			
+			System.out.println("clicked");
 			if (pickCategory.getItems().size() < schemas.size()){
 				for (int i = 0; i < schemas.size(); i++){
 					
-					MenuItem temp = new MenuItem(""+(i + 1));
-					pickCategory.getItems().add(temp); 
-					temp.setOnAction(ev -> {
-						index = 0;
-						try {
-							//TODO: switch between option and fillin
-							//TODO: set test multiple choice questions
-							schema = schemas.get(Integer.parseInt(temp.getText())-1);
-							feed.setText(""+schema.getQuestions().get(index).getQuestionText());
-							
-							if (schema.getQuestions().get(0).getOptions().size() > 1){
+					MenuItem temp = new MenuItem(""+(i + 1) +": "+ schemas.get(i).category);
+					boolean go = true;
+					for (MenuItem mi : pickCategory.getItems()){ //check for duplicates 
+						if(mi.getText().equals(temp.getText()) || 
+								mi.getText().endsWith(temp.getText().split(":")[1])){
+							go = false;
+						}
+					}
+					if (go){
+						pickCategory.getItems().add(temp); 
+						temp.setOnAction(ev -> {
+							index = 0;
+							try {
 								
-								for (int k = 0, j = 0; k < schema.getQuestions().get(0).getOptions().size() &&
-										j < radiOptions.size(); k++, j++){
-									radiOptions.get(j).setText(schema.getQuestions().get(0).getOptions().get(k));
-									radiOptions.get(j).setOnAction(eve -> {
-										if (quizStarted == 1){
-											schema.getAnswers().put(schema.getQuestions().get(index), ((RadioButton) eve.getSource()).getText());
-											feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+((RadioButton) eve.getSource()).getText());
-											
-										}
-									});
+								schema = schemas.get(Integer.parseInt(temp.getText().split(":")[0])-1);
+								feed.setText(""+schema.getQuestions().get(index).getQuestionText());
+								
+								if (schema.getQuestions().get(0).getOptions().size() > 1){
+									userInput.setVisible(false);
+									for (int k = 0, j = 0; k < schema.getQuestions().get(0).getOptions().size() &&
+											j < radiOptions.size(); k++, j++){
+										radiOptions.get(j).setText(schema.getQuestions().get(0).getOptions().get(k));
+										radiOptions.get(j).setVisible(true);
+										radiOptions.get(j).setOnAction(eve -> {
+											if (quizStarted == 1){
+												schema.getAnswers().put(schema.getQuestions().get(index), ((RadioButton) eve.getSource()).getText());
+												feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+((RadioButton) eve.getSource()).getText());
+												
+											}
+										});
+									}
 								}
+								else {
+									userInput.setVisible(true);
+									for (RadioButton rb : radiOptions){
+										rb.setVisible(false);
+									}
+								}
+								quizStarted=1;
+								
 							}
-							quizStarted=1;
-							
-						}
-						catch (IndexOutOfBoundsException ex){
-							feed.setText("no quiz selected");
-						}
-						catch (NullPointerException eex){
-							feed.setText("no schema found");
-						}
-					});
+							catch (IndexOutOfBoundsException ex){
+								feed.setText("no quiz selected");
+							}
+							catch (NullPointerException eex){
+								feed.setText("no schema found");
+							}
+						});
+					}
 				}
 			}
 			else if (schemas.size() < 1){
 				feed.setText("No schema found \n try loading one from file");
 			}
+		});
+		loadQuestionsFromServer.setOnAction(e->{
+			System.out.println("questions loaded");
+			try {
+				
+				//TimeUnit.SECONDS.sleep(5);
+				Thread.sleep(3000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (!metafeed.getText().equals("")){
+				try {
+					Scanner scanner = new Scanner(metafeed.getText());
+					scanner.nextLine();scanner.nextLine();//Skips first lines, as it contains sender
+					String content = scanner.nextLine();
+					addSchema(readToSchema(content));
+					scanner.close();
+					metafeed.setText("");
+					serverIn.setText("Load successfull");
+					load.fire();
+				}
+				catch (IndexOutOfBoundsException ex){
+					serverIn.setText("no quiz found for this subject");
+				}
+				
+				
+			}
+			else{
+				serverIn.setText("Load unsuccessfull");
+			}
+			
 		});
 
 		
