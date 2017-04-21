@@ -63,41 +63,41 @@ public class CreateQWindow implements Window {
 		Button discard = new Button("discQ"); discard.setLayoutX(xBase+100); discard.setLayoutY(yBase+300);
 	
 
-		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0);
-		tab1.setStyle("-fx-pref-width: 100");
+		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(200); tab2.setLayoutY(0);
-		tab2.setStyle("-fx-pref-width: 100");
+		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(200); tab2.setLayoutY(0); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
 		////
 		
-		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(0);
-		tab3.setStyle("-fx-pref-width: 100");
+		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(0); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
-		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0);
-		tab4.setStyle("-fx-pref-widt: 100");
+		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
 		Button showChat = new Button("ShowChat"); showChat.setLayoutX(500);showChat.setLayoutY(550);
-		showChat.setStyle("-fx-pref-width: 100");
+		showChat.setPrefWidth(100);
 		showChat.setOnAction(e->{
 			ctrl.chat.wakeUp();
 			chat.show();
 			
 		});
 		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(500);hideChat.setLayoutY(575);
-		hideChat.setStyle("-fx-pref-width: 100");
+		hideChat.setPrefWidth(100);
 		hideChat.setOnAction(e->{
 			ctrl.chat.sleep();
 			chat.hide();
@@ -125,7 +125,7 @@ public class CreateQWindow implements Window {
 			}
 		});
 		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black");
-		feed.setPrefSize(350, 200);
+		feed.setPrefSize(350, 200);feed.setEditable(false);
 		
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
@@ -221,7 +221,7 @@ public class CreateQWindow implements Window {
 		});
 		
 		//Setup serverFeed and the updater to maintain the feed
-		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);serverFeed.setEditable(false);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
 

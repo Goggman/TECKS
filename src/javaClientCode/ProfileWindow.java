@@ -40,46 +40,46 @@ public class ProfileWindow implements Window {
 	public Scene createScene(){
 		int xBase = 0, yBase = 0;
 		Pane root = new Pane();
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(300); subjectsGlobal.setLayoutY(250);
+
+		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250);subjectsGlobal.setEditable(false);
 		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200);
-		
-		stats = new TextArea(); stats.setLayoutX(100); stats.setLayoutY(100);
+		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
-		
-		serverFeed = new TextArea(); serverFeed.setLayoutX(100); serverFeed.setLayoutY(400);
-		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(225);
-		
-		scoreFeed = new TextArea(); scoreFeed.setLayoutX(100); scoreFeed.setLayoutY(250);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+400);
+		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(250);serverFeed.setEditable(false);
+		scoreFeed = new TextArea(); scoreFeed.setLayoutX(xBase+100); scoreFeed.setLayoutY(yBase+250);
+
 		scoreFeed.setPrefSize(200, 150);
+		scoreFeed.setEditable(false);
 		
-		
-		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2);
-		tab1.setStyle("-fx-pref-width: 100");
+		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2);
-		tab2.setStyle("-fx-pref-width: 100");
+
+		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
 		////
 		
-		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2);
-		tab3.setStyle("-fx-pref-width: 100");
+		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(2); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
-		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2);
-		tab4.setStyle("-fx-pref-width: 100");
+
+		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
-		
 
 		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(643);
 		showChat.setStyle("-fx-pref-width: 95");
@@ -110,6 +110,7 @@ public class ProfileWindow implements Window {
 			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
 		});
 		
+
 		TextField createSubject = new TextField(); createSubject.setLayoutX(325); createSubject.setLayoutY(460);
 		createSubject.setPromptText("createSubject");
 		createSubject.setStyle("-fx-pref-width: 175");
@@ -160,7 +161,7 @@ public class ProfileWindow implements Window {
 	}
 	
 	public void wakeUp(){
-		stats.setText("You stats:");
+		stats.setText("You stats:");	
 		serverFeed.setText("Messages from server:");
 		subjectsGlobal.setText("Global subjects:");
 		scoreFeed.setText("Subject scores here:");

@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import java.io.*;
 public class LoginWindow implements Window{
@@ -30,45 +31,54 @@ public class LoginWindow implements Window{
 		int xBase=100, yBase = 0;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		feed = new TextArea("Please log in"); feed.setLayoutX(xBase); feed.setLayoutY(300); //feed.setAlignment(Pos.TOP_LEFT);
+
 		feed.setPrefSize(400, 200); feed.setStyle("-fx-border-color:black");
+		feed.setEditable(false);
 		//Image tecboy = new Image(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
+
+		
+		
+
 		File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
 		Image tecboy = new Image(image.toURI().toString());
 		ImageView poster_boy = new ImageView(); poster_boy.setLayoutX(xBase+70); poster_boy.setLayoutY(yBase+20);
 		poster_boy.setImage(tecboy); poster_boy.setFitWidth(200); poster_boy.setPreserveRatio(true);
 		
 		
-		
-		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2);
-		tab1.setStyle("-fx-pref-width: 100");
+		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2);
-		tab2.setStyle("-fx-pref-width: 100");
+
+		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
 		////
 		
-		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2);
-		tab3.setStyle("-fx-pref-width: 100");
+		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(2); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
-		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2);
-		tab4.setStyle("-fx-pref-width: 100");
+
+		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
 		
 		
-		TextField password = new TextField(); password.setLayoutX(220); password.setLayoutY(180);
-		TextField username = new TextField(); username.setLayoutX(220); username.setLayoutY(145);
+
+		PasswordField password = new PasswordField(); password.setLayoutX(220); password.setLayoutY(yBase+180);
+		TextField username = new TextField(); username.setLayoutX(220); username.setLayoutY(yBase+145);
+
 		username.setPromptText("username");
 		username.setStyle("-fx-pref-width: 160");
 		username.setOnAction(e->{
