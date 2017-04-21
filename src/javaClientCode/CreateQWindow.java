@@ -198,10 +198,8 @@ public class CreateQWindow implements Window {
 			}else {
 				save.setDisable(false);
 			}
-			qText.setText(""); aText.setText("");head.setText("");
 			
-			
-			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+" "+op1.getText());
+			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+"\n"+op2.getText());
 			if (qType.getText().equals("Multiple choice")){
 				quiz.add(new Question(categoryText, questionText, answerText, headerText, op1.getText(), op2.getText()));
 				

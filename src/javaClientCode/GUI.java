@@ -16,6 +16,7 @@ public class GUI extends Application{
 		GUIController ctrl = new GUIController(stage);
 		stage.setScene(ctrl.getScene(4));
 		stage.setTitle("TECKS");
+		stage.sizeToScene();
 		//stage.setMaximized(true);
 		stage.show();
 	}
