@@ -2,7 +2,6 @@
  * Button section
  */
 Button {
-	-fx-pref-width: 80px;
 	-fx-font-size: 13.0px;
 	-fx-base: #00a7d4;
 	-fx-background: #e5f3f6;
@@ -42,8 +41,8 @@ Button:hover {
  * Menu button section
  */
  
+
 MenuButton {
-	-fx-pref-width: 130px;
 	-fx-font-size: 13.0px;
 	-fx-base: #00a7d4;
 	-fx-background: #e5f3f6;
@@ -55,7 +54,7 @@ MenuButton {
 	-fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
 	-fx-background-insets: 0px;
 	-fx-background-radius: 0px;
-	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+	/*-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; */
 	-fx-text-fill: -fx-text-base-color;
 	-fx-alignment: CENTER;
 	-fx-content-display: LEFT;
@@ -73,29 +72,40 @@ MenuButton:hover {
 	-fx-background-color: #ED9C28, #0187ab;
 }
 
-.menu-bar{
-  -fx-background-color: peru;
+Menu-bar{
   -fx-border-color:  #f0cd90;
- -fx-border-width: 2
+  /*-fx-border-width: 2*/
 
 }
-
-.menu-bar .label {
+/* 
+Menu-bar .label {
     -fx-font-size: 13px;
-    -fx-text-fill: #dedede;
+
 
 }
-
+*/
 
 .menu:hover {
     -fx-background-color: #bc784e;
 }
 
-.menu-item .label{
+.menu-item{
     -fx-font-size: 13px;
     -fx-label-line-length: 8;
-    -fx-background-color: #cc66ff;
+    -fx-background-color: #FFFFFF;
+    -fx-text-base-color: #000000;
 }
+.menu-item:hover{
+	-fx-background-color: #0187ab;
+}
+
+.menu-item:focused {
+	-fx-color:#00a7d4;
+	-fx-background-color:#ED9C28, #00a7d4;
+	-fx-background-insets: -1.4, 0, 1, 2;
+	-fx-background-radius: 0;
+}
+	
 /* .menu .label{     -fx-text-fill: black;}*/
 /* 
 MenuItem {

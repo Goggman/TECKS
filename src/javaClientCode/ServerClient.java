@@ -13,16 +13,18 @@ public class ServerClient {
     MessageReceiver receiver;
     Queue<String> LoginWindow;
     Queue<String> ChatWindow;
+    Queue<String> ChatWindowInfo;
     Queue<String> CreateQWindow;
     Queue<String> CreateQWindowSubjects;
-    Queue<String> QuestionWindowQuestions;
-    Queue<String> QuestionWindowInfo;
-    Queue<String> ChatWindowInfo;
     Queue<String> ProfileWindow;
     Queue<String> ProfileWindowStats;
-    Queue<String> ProfileWindowSubjects;
+    Queue<String> ProfileWindowSubjectsGlobal;
+    Queue<String> ProfileWindowSubjectsLocal;
     Queue<String> ProfileWindowScores;
     Queue<String> QuestionWindowSubjects;
+    Queue<String> QuestionWindowQuestions;
+    Queue<String> QuestionWindowInfo;
+    Queue<String> QuestionWindowRecQs;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -59,10 +61,12 @@ public class ServerClient {
 	        QuestionWindowQuestions = new LinkedList<String>();
 	        QuestionWindowInfo = new LinkedList<String>();
 	        QuestionWindowSubjects = new LinkedList<String>();
+	        QuestionWindowRecQs = new LinkedList<String>();
 	        ChatWindowInfo = new LinkedList<String>();
 	       	ProfileWindow = new LinkedList<String>();
 	       	ProfileWindowStats = new LinkedList<String>();
-	       	ProfileWindowSubjects = new LinkedList<String>();
+	       	ProfileWindowSubjectsLocal = new LinkedList<String>();
+	       	ProfileWindowSubjectsGlobal = new LinkedList<String>();
 	       	ProfileWindowScores = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
@@ -93,11 +97,17 @@ public class ServerClient {
 		else if (response.equals("stats")){
 			parse_stats(payload);
 		}
-		else if (response.equals("subjects")){
-			parse_subjects(payload);
+		else if (response.equals("subjectsGlobal")){
+			parse_subjects_global(payload);
+		}
+		else if(response.equals("subjectsLocal")){
+			parse_subjects_local(payload);
 		}
 		else if (response.equals("scores")){
 			parse_scores(payload);
+		}
+		else if (response.equals("bestQuestions")){
+			parse_bestQuestions(payload);
 		}
 		
 		else{
@@ -123,24 +133,38 @@ public class ServerClient {
 		//timestamp:
 		
 	}
-	void parse_subjects(String payload){
+
+	void parse_bestQuestions(String payload){
+		QuestionWindowRecQs.add(getContent(payload));
+	}
+	
+	
+	void parse_subjects_global(String payload){
 		String subjectsGlobal = getContent(payload).replace("@", ", ");
-		
-		ProfileWindowSubjects.add(subjectsGlobal);
+		ProfileWindowSubjectsGlobal.add(subjectsGlobal);
+
 
 		printPrettyMessageGeneral(payload);
 	}
+	void parse_subjects_local(String payload){
+		ProfileWindowStats.add(getContent(payload));
+		ProfileWindowSubjectsLocal.add(getContent(payload));
+
+		printPrettyMessageGeneral(payload);
+	}
+	
+	
 	void parse_scores(String payload){
 		ProfileWindowScores.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_error(String payload){
-		String error = getContent(payload);
-		LoginWindow.add(error);
-		CreateQWindow.add(error);
-		QuestionWindowInfo.add(error);
-		ChatWindowInfo.add(error);
-		ProfileWindow.add(error);
+		LoginWindow.add(getContent(payload));
+		CreateQWindow.add(getContent(payload));
+		QuestionWindowInfo.add(getContent(payload));
+		ChatWindowInfo.add(getContent(payload));
+		ProfileWindow.add(getContent(payload));
+
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){

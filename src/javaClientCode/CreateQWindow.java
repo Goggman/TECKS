@@ -42,64 +42,91 @@ public class CreateQWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=100, yBase=0;
-		int fieldBaseX=200, fieldBaseY=300;
+
+		int fieldBaseX=200, fieldBaseY=350;
+
 
 		quiz = new ArrayList<>();
 		subjects = new TextArea();
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		Label title = new Label("Create Quiz");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+fieldBaseX); setSubject.setLayoutY(yBase+fieldBaseY); setSubject.setPromptText("set working subject");
+
 		
-		TextField head = new TextField(); head.setLayoutX(xBase+fieldBaseX+0); head.setLayoutY(yBase+fieldBaseY+60); head.setPromptText("Set header");
-		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+90);category.setPromptText("Category");
-		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+120);qText.setPromptText("Question");
-		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+150);aText.setPromptText("Answer");
-		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+180);op1.setPromptText("Option 1");op1.setVisible(false);
-		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+210);op2.setPromptText("Option 2");op2.setVisible(false);
-		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+240);
-		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+50);save.setLayoutY(yBase+fieldBaseY+240);
+		TextField head = new TextField(); head.setLayoutX(xBase+fieldBaseX+0); head.setLayoutY(yBase+fieldBaseY+30); head.setPromptText("Set header"); head.setVisible(false); head.setDisable(true);
+		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+60);category.setPromptText("Category");
+		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+90);qText.setPromptText("Question");
+		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+120);aText.setPromptText("Answer");
+		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+150);op1.setPromptText("Option 1");op1.setVisible(false);
+		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+180);op2.setPromptText("Option 2");op2.setVisible(false);
+		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+210);
+		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+50);save.setLayoutY(yBase+fieldBaseY+210);
+
+
 		
-		Button nextQ = new Button("next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+300);
-		Button prevQ = new Button("prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+300);
-		Button discard = new Button("discQ"); discard.setLayoutX(xBase+100); discard.setLayoutY(yBase+300);
+		createQ.setStyle("-fx-pref-width: 73");
+		
+	
+		save.setStyle("-fx-pref-width: 73");
+
+		
+		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+51); nextQ.setLayoutY(yBase+302);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+302);
+		Button discard = new Button("discQ"); discard.setLayoutX(xBase+103); discard.setLayoutY(yBase+302);
 	
 
-		Button tab1 = new Button("Quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
+		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Create Quiz"); tab2.setLayoutX(200); tab2.setLayoutY(0); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+
+		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
+		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
-		////
+
 		
-		Button tab3 = new Button("Log out"); tab3.setLayoutX(400); tab3.setLayoutY(0); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
+		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 			//TODO: log user out
 		});
-		
-		Button tab4 = new Button("Profile"); tab4.setLayoutX(300); tab4.setLayoutY(0); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+
+		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
+		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
-		Button showChat = new Button("ShowChat"); showChat.setLayoutX(500);showChat.setLayoutY(550);
-		showChat.setPrefWidth(100);
+		
+		
+		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(543);
+		showChat.setStyle("-fx-pref-width: 95");
 		showChat.setOnAction(e->{
 			ctrl.chat.wakeUp();
 			chat.show();
 			
 		});
-		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(500);hideChat.setLayoutY(575);
-		hideChat.setPrefWidth(100);
+		
+		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(573);
+		hideChat.setStyle("-fx-pref-width: 95");
 		hideChat.setOnAction(e->{
 			ctrl.chat.sleep();
 			chat.hide();
@@ -139,7 +166,9 @@ public class CreateQWindow implements Window {
 		
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
-		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX);qType.setLayoutY(yBase+fieldBaseY+30);
+
+		MenuButton qType = new MenuButton("Fill in", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX);qType.setLayoutY(yBase+fieldBaseY+30);
+
 		//choose question type
 		mulChoice.setOnAction(e -> {
 			op1.setVisible(true);
@@ -193,17 +222,15 @@ public class CreateQWindow implements Window {
 		createQ.setOnAction(e->{
 			String questionText = qText.getText();
 			String answerText = aText.getText();
-			String headerText = head.getText();
+			String headerText = qType.getText();
 			String categoryText = category.getText();
 			if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
 				feed.setText("Need values for Header, Question and answer");
 			}else {
 				save.setDisable(false);
 			}
-			qText.setText(""); aText.setText("");head.setText("");
 			
-			
-			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+" "+op1.getText());
+			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+"\n"+op2.getText());
 			if (qType.getText().equals("Multiple choice")){
 				quiz.add(new Question(categoryText, questionText, answerText, headerText, op1.getText(), op2.getText()));
 				
@@ -234,7 +261,7 @@ public class CreateQWindow implements Window {
 		updater2.start();
 		root.getChildren().addAll(setSubjectMenu, qType, qText, aText, feed, head, createQ, op1, op2, save, error, category, serverFeed, tab1, tab2, tab3, tab4, showChat, hideChat, nextQ, prevQ, discard, title);
 		Scene scene = new Scene(root, 600, 600);
-		//scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 
 		return scene;
 	}
