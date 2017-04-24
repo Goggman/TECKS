@@ -42,21 +42,21 @@ public class CreateQWindow implements Window {
 	 */
 	public Scene createScene(){
 		int xBase=100, yBase=0;
-		int fieldBaseX=200, fieldBaseY=300;
+		int fieldBaseX=200, fieldBaseY=350;
 
 		quiz = new ArrayList<>();
 		subjects = new TextArea();
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+fieldBaseX); setSubject.setLayoutY(yBase+fieldBaseY); setSubject.setPromptText("set working subject");
 		
-		TextField head = new TextField(); head.setLayoutX(xBase+fieldBaseX+0); head.setLayoutY(yBase+fieldBaseY+60); head.setPromptText("Set header");
-		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+90);category.setPromptText("Category");
-		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+120);qText.setPromptText("Question");
-		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+150);aText.setPromptText("Answer");
-		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+180);op1.setPromptText("Option 1");op1.setVisible(false);
-		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+210);op2.setPromptText("Option 2");op2.setVisible(false);
-		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+240);
-		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+50);save.setLayoutY(yBase+fieldBaseY+240);
+		TextField head = new TextField(); head.setLayoutX(xBase+fieldBaseX+0); head.setLayoutY(yBase+fieldBaseY+30); head.setPromptText("Set header"); head.setVisible(false); head.setDisable(true);
+		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+60);category.setPromptText("Category");
+		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+90);qText.setPromptText("Question");
+		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+120);aText.setPromptText("Answer");
+		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+150);op1.setPromptText("Option 1");op1.setVisible(false);
+		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+180);op2.setPromptText("Option 2");op2.setVisible(false);
+		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+210);
+		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+50);save.setLayoutY(yBase+fieldBaseY+210);
 		
 		Button nextQ = new Button("next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+300);
 		Button prevQ = new Button("prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+300);
@@ -137,7 +137,7 @@ public class CreateQWindow implements Window {
 		
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
-		MenuButton qType = new MenuButton("Question type", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX);qType.setLayoutY(yBase+fieldBaseY+30);
+		MenuButton qType = new MenuButton("Fill in", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX);qType.setLayoutY(yBase+fieldBaseY+30);
 		//choose question type
 		mulChoice.setOnAction(e -> {
 			op1.setVisible(true);
@@ -191,7 +191,7 @@ public class CreateQWindow implements Window {
 		createQ.setOnAction(e->{
 			String questionText = qText.getText();
 			String answerText = aText.getText();
-			String headerText = head.getText();
+			String headerText = qType.getText();
 			String categoryText = category.getText();
 			if (headerText.isEmpty() || questionText.isEmpty() || answerText.isEmpty() || categoryText.isEmpty()){
 				feed.setText("Need values for Header, Question and answer");
