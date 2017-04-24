@@ -2,9 +2,10 @@ package javaClientCode;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-
-
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.Axis;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +13,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
@@ -26,17 +30,20 @@ public class ProfileWindow implements Window {
 	FeedUpdater updater3;
 	FeedUpdater updater4;
 	FeedUpdater updater5;
+	FeedUpdater updater6;
+	TextArea userScore;
 	TextArea stats;
 	TextArea serverFeed;
 	TextArea subjectsGlobal;
 	TextArea subjectsLocal;
-	TextArea scoreFeed;
+	TextArea subjectScore;
 	MenuButton removeSubject;
 	MenuButton setSubject;
 	MenuButton addSubject;
 	Stage chat;
 	boolean setSubjectNeedsUpdate=true;
 	boolean addSubjectNeedsUpdate=true;
+	int xBase, yBase;
 	
 	ProfileWindow(Stage stageIn, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		stage=stageIn;
@@ -46,40 +53,40 @@ public class ProfileWindow implements Window {
 	}
 	
 	public Scene createScene(){
-		int xBase = 0, yBase = 0;
+		xBase = 0; yBase = 0;
 		Pane root = new Pane();
 
 		Label title = new Label("Your Profile");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 		subjectsLocal = new TextArea();
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250);//subjectsGlobal.setEditable(false);
-		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200);subjectsGlobal.setVisible(false);
-		subjectsGlobal.setWrapText(true);
 
-
+		subjectsGlobal = new TextArea();
+		subjectScore = new TextArea();
+		userScore = new TextArea();
 		
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250); //subjectsGlobal.setEditable(false);
-		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200); 
+		
 
 		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
 
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
 		stats.setEditable(false);
 		
-		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+400);
 
-		serverFeed.setPrefHeight(150); serverFeed.setPrefWidth(250);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(400, 100);
 		serverFeed.setEditable(false);
-		serverFeed.setWrapText(true);
+		
+		
+		
+		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+100); addSubject.setLayoutY(yBase+250); addSubject.setPrefWidth(120);
+		removeSubject = new MenuButton("RemoveSubject");  removeSubject.setLayoutX(xBase+223); removeSubject.setLayoutY(yBase+250); removeSubject.setPrefWidth(120);
+		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+346); setSubject.setLayoutY(yBase+250); setSubject.setPrefWidth(120);
+		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+100); resetScore.setLayoutY(yBase+280); setSubject.setPrefWidth(100);
+		Button requestScore = new Button("reqScore"); requestScore.setLayoutX(xBase+206); requestScore.setLayoutY(yBase+280); requestScore.setPrefWidth(100);
+		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+100); createSubject.setLayoutY(yBase+310); createSubject.setPrefWidth(100);
+		BarChart scoreGraph = prepareUserScore();
+		
 
 
-		scoreFeed = new TextArea(); scoreFeed.setLayoutX(xBase+100); scoreFeed.setLayoutY(yBase+250);
-		scoreFeed.setPrefSize(200, 150);
-
-		scoreFeed.setEditable(false); scoreFeed.setVisible(false);
-		removeSubject = new MenuButton("RemoveSubject");  removeSubject.setLayoutX(350); removeSubject.setLayoutY(430);
-		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+350); setSubject.setLayoutY(xBase+490);
 		setSubject.setOnMouseEntered(e->{
-			//System.out.println("The needsUpdate: "+setSubjectNeedsUpdate);
 			if (subjectsLocal.getText().trim().split("[;]").length == 1){
 				return;
 			}
@@ -112,7 +119,7 @@ public class ProfileWindow implements Window {
 		});
 		removeSubject.setOnMouseEntered(setSubject.getOnMouseEntered());
 		
-		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+350); addSubject.setLayoutY(yBase+400);
+		
 		addSubject.setOnMouseEntered(x->{
 			if (subjectsGlobal.getText().trim().isEmpty()){
 				return;
@@ -197,61 +204,28 @@ public class ProfileWindow implements Window {
 			addSubjects.clear();
 		});
 
-/*
-		TextField removeSubject = new TextField(); removeSubject.setLayoutX(350); removeSubject.setLayoutY(430);
 
-		removeSubject.setPromptText("removeSubject");
-		removeSubject.setStyle("-fx-pref-width: 150");
-		removeSubject.setOnAction(e->{
-			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
-<<<<<<< HEAD
-			removeSubject.clear();
-=======
-			setSubjectNeedsUpdate=true;
->>>>>>> c6d56f4438324ababc695b4cd7608e227817129c
-		});
-		*/
-
-		TextField createSubject = new TextField(); createSubject.setLayoutX(350); createSubject.setLayoutY(460);
+		
 		createSubject.setPromptText("createSubject");
 		createSubject.setStyle("-fx-pref-width: 150");
 		createSubject.setOnAction(e->{
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
-			/*
-			createSubject.clear();
-			//stage.setScene(ctrl.getScene(5));
+			wakeUp();
 		});
-
-		
-		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+350); setSubject.setLayoutY(yBase+490);
-
-		setSubject.setPromptText("setSubject");
-		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
-			setSubject.clear();
-		});
-		
-		
-=======*/
-			addSubjectNeedsUpdate=true;
-		});
-
-
-		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(325); resetScore.setLayoutY(520);
 
 		resetScore.setOnAction(e->{
 			client.sendMessage("request:reset_score\tcontent:local");
 			
 		});
 		
-		Button requestScore = new Button("reqScore"); requestScore.setLayoutX(425); requestScore.setLayoutY(520);
+		
 		requestScore.setOnAction(e->{
 			client.sendMessage("request:get_subject_scores\tcontent:");
 		});
 
 
 
-		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, scoreFeed, requestScore);
+		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, requestScore, scoreGraph);
 
 		
 		
@@ -261,10 +235,12 @@ public class ProfileWindow implements Window {
 		updater2.start();
 		updater3 = new FeedUpdater(client, subjectsGlobal, client.ProfileWindowSubjectsGlobal);
 		updater3.start();
-		updater4 = new FeedUpdater(client, scoreFeed, client.ProfileWindowScores);
+		updater4 = new FeedUpdater(client, userScore, client.ProfileWindowUserScore);
 		updater4.start();
 		updater5 = new FeedUpdater(client, subjectsLocal, client.ProfileWindowSubjectsLocal);
 		updater5.start();
+		updater6 = new FeedUpdater(client, subjectScore, client.ProfileWindowSubjectScore);
+		updater6.start();
 		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		
@@ -272,12 +248,59 @@ public class ProfileWindow implements Window {
 	return scene;
 	}
 	
+	BarChart prepareUserScore(){
+		HashMap categoryScoreMap = new HashMap();
+		String[] rawScoreArray = userScore.getText().split("[@]");
+		for (String scoreString : rawScoreArray){
+			String[] rawScoreStringArray = scoreString.split("[|]");
+			for (String item : rawScoreStringArray){
+				//TODO: continue here
+			}
+		}
+		
+		
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
+		BarChart scoreGraph = new BarChart(xAxis, yAxis);
+		
+		XYChart.Series series1 = new XYChart.Series();
+		series1.getData().add(new XYChart.Data("test", 1));
+		series1.getData().add(new XYChart.Data("test1", 2));
+		series1.getData().add(new XYChart.Data("test2", 3));
+		series1.setName("demo");
+		scoreGraph.getData().add(series1);
+		scoreGraph.setPrefSize(300, 100);
+		
+		scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+		
+		return scoreGraph;
+	}
+	
+	BarChart prepareSubjectScore(){//TODO: continue here too
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
+		BarChart scoreGraph = new BarChart(xAxis, yAxis);
+		
+		XYChart.Series series1 = new XYChart.Series();
+		series1.getData().add(new XYChart.Data("test", 1));
+		series1.getData().add(new XYChart.Data("test1", 2));
+		series1.getData().add(new XYChart.Data("test2", 3));
+		series1.setName("demo");
+		scoreGraph.getData().add(series1);
+		scoreGraph.setPrefSize(300, 100);
+		
+		scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+		
+		return scoreGraph;
+	}
+	
 	public void wakeUp(){
 		stats.setText("Your stats:");	
 		serverFeed.setText("Messages from server:");
 		subjectsGlobal.clear();
 		subjectsLocal.clear();
-		scoreFeed.clear();
+		subjectScore.clear();
+		userScore.clear();
 		setSubject.getItems().clear();
 		removeSubject.getItems().clear();
 		addSubject.getItems().clear();

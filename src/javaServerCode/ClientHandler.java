@@ -987,7 +987,7 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:stats\t"
+					+ "response:userScore\t"
 					+ "content:"+content;
 			out.println(returnToClient);
 		
@@ -1275,7 +1275,7 @@ public class ClientHandler implements Runnable{
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:scores\t"
+					+ "response:subjectScores\t"
 					+ "content:"+content;
 			out.println(returnToClient);
 		
