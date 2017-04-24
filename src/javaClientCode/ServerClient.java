@@ -67,7 +67,7 @@ public class ServerClient {
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
-	        System.out.println("Reay to send\n");
+	        System.out.println("Ready to send\n");
 	    }
 	    
 	
@@ -124,8 +124,9 @@ public class ServerClient {
 		
 	}
 	void parse_subjects(String payload){
+		String subjectsGlobal = getContent(payload).replace("@", ", ");
 		
-		ProfileWindowSubjects.add(getContent(payload));
+		ProfileWindowSubjects.add(subjectsGlobal);
 
 		printPrettyMessageGeneral(payload);
 	}
@@ -134,11 +135,12 @@ public class ServerClient {
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_error(String payload){
-		LoginWindow.add(payload);
-		CreateQWindow.add(payload);
-		QuestionWindowInfo.add(payload);
-		ChatWindowInfo.add(payload);
-		ProfileWindow.add(payload);
+		String error = getContent(payload);
+		LoginWindow.add(error);
+		CreateQWindow.add(error);
+		QuestionWindowInfo.add(error);
+		ChatWindowInfo.add(error);
+		ProfileWindow.add(error);
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){
