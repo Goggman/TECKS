@@ -163,7 +163,7 @@ public class ProfileWindow implements Window {
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
-			//TODO: log user out
+			
 		});
 
 		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
