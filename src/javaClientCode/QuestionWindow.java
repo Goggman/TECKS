@@ -72,14 +72,18 @@ public class QuestionWindow implements Window {
 		bestQuestions = new TextArea();
 		
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
+		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
+		
 		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
-		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+51); nextQ.setLayoutY(yBase+302);
-		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+302);
-		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+103); confirm.setLayoutY(yBase+302);
-		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase); userInput.setLayoutY(yBase+332);
-		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+300); pickCategory.setLayoutY(yBase+390);pickCategory.setText("Categories");
-		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+300); m.setLayoutY(yBase+420);
+
+		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+350);
+		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+340); confirm.setLayoutY(yBase+350);
+		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+350);
+		
+		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+70);pickCategory.setText("Categories");
+		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
+
 		
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
@@ -295,7 +299,7 @@ public class QuestionWindow implements Window {
 						client.sendMessage("request:set_subject\tcontent:"+itemsubject);
 						client.sendMessage("request:get_questions\tcontent:");
 						client.sendMessage("request:get_best_questions\tcontent:");
-						pickCategory.setVisible(true);
+						pickCategory.setDisable(false);
 					});
 					m.getItems().add(item);
 				}
@@ -462,10 +466,10 @@ public class QuestionWindow implements Window {
 		bestQuestions.clear();
 		serverIn.clear();
 		feed.setText("Pick a subject to continue");
-		pickCategory.setVisible(false);
+		pickCategory.setDisable(true);
 		client.sendMessage("request:get_subjects\tcontent:local");
 		if (firstStart==1){
-			feed.setText("Ready to learn? :)");
+			feed.setText("Pick a subject to continue :)");
 			serverIn.setText("Messages from server\n");
 			firstStart=0;
 		}

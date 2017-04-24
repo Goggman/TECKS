@@ -24,11 +24,18 @@ public class ProfileWindow implements Window {
 	FeedUpdater updater2;
 	FeedUpdater updater3;
 	FeedUpdater updater4;
+	FeedUpdater updater5;
 	TextArea stats;
 	TextArea serverFeed;
 	TextArea subjectsGlobal;
+	TextArea subjectsLocal;
 	TextArea scoreFeed;
+	MenuButton removeSubject;
+	MenuButton setSubject;
+	MenuButton addSubject;
 	Stage chat;
+	boolean setSubjectNeedsUpdate=true;
+	boolean addSubjectNeedsUpdate=true;
 	
 	ProfileWindow(Stage stageIn, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		stage=stageIn;
@@ -41,11 +48,11 @@ public class ProfileWindow implements Window {
 		int xBase = 0, yBase = 0;
 		Pane root = new Pane();
 
-		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250);
-		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200);
-		subjectsGlobal.setEditable(false);
-		
-		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);
+		subjectsLocal = new TextArea();
+		subjectsGlobal = new TextArea(); subjectsGlobal.setLayoutX(xBase+300); subjectsGlobal.setLayoutY(yBase+250); //subjectsGlobal.setEditable(false);
+		subjectsGlobal.setPrefHeight(150);subjectsGlobal.setPrefWidth(200); subjectsGlobal.setVisible(false);
+		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
+
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
 		stats.setEditable(false);
 		
@@ -55,7 +62,65 @@ public class ProfileWindow implements Window {
 		
 		scoreFeed = new TextArea(); scoreFeed.setLayoutX(xBase+100); scoreFeed.setLayoutY(yBase+250);
 		scoreFeed.setPrefSize(200, 150);
-		scoreFeed.setEditable(false);
+		scoreFeed.setEditable(false); scoreFeed.setVisible(false);
+		removeSubject = new MenuButton("RemoveSubject");  removeSubject.setLayoutX(350); removeSubject.setLayoutY(430);
+		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+350); setSubject.setLayoutY(xBase+490);
+		setSubject.setOnMouseEntered(e->{
+			//System.out.println("The needsUpdate: "+setSubjectNeedsUpdate);
+			if (subjectsLocal.getText().trim().split("[;]").length == 1){
+				return;
+			}
+			if (subjectsLocal.getText().trim().split("[;]")[1].isEmpty()){
+				return;
+			}
+			if (setSubjectNeedsUpdate){
+				setSubject.getItems().clear();
+				removeSubject.getItems().clear();
+				String[] subjectArray = subjectsLocal.getText().trim().split("[;]")[1].trim().split("[@]");
+				for(String subject : subjectArray){
+					MenuItem item = new MenuItem(subject);
+					item.setOnAction(x->{
+						client.sendMessage("request:set_subject\tcontent:"+new String(subject));
+					});
+					setSubject.getItems().add(item);
+					
+					MenuItem removeSubjectItem = new MenuItem(subject);
+					removeSubjectItem.setOnAction(c->{
+						client.sendMessage("request:remove_subject\tcontent:"+new String(subject));
+						setSubjectNeedsUpdate=true;
+						wakeUp();
+						});
+					removeSubject.getItems().add(removeSubjectItem);
+					
+				}
+				setSubjectNeedsUpdate=false;
+			}
+			
+		});
+		removeSubject.setOnMouseEntered(setSubject.getOnMouseEntered());
+		
+		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+350); addSubject.setLayoutY(yBase+400);
+		addSubject.setOnMouseEntered(x->{
+			if (subjectsGlobal.getText().trim().isEmpty()){
+				return;
+			}
+			if (addSubjectNeedsUpdate){
+				addSubject.getItems().clear();
+				String[] subjectArray = subjectsGlobal.getText().trim().split("[@]");
+				for(String subject : subjectArray){
+					String itemsubject = subject;
+					MenuItem item = new MenuItem(subject);
+					item.setOnAction(z->{
+						client.sendMessage("request:add_subject\tcontent:"+itemsubject);
+						wakeUp();
+					});
+					addSubject.getItems().add(item);
+				}
+				addSubjectNeedsUpdate=false;
+			}
+			
+		});
+		
 		
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
@@ -104,64 +169,50 @@ public class ProfileWindow implements Window {
 			chat.hide();
 		});
 		
-		
-		TextField addSubjects = new TextField(); addSubjects.setLayoutX(325); addSubjects.setLayoutY(400);
-		addSubjects.setPromptText("addSubject");
-		addSubjects.setStyle("-fx-pref-width: 175");
-		addSubjects.setOnAction(e->{
-			client.sendMessage("request:add_subject\tcontent:"+addSubjects.getText());
-		});
-		
-		TextField removeSubject = new TextField(); removeSubject.setLayoutX(325); removeSubject.setLayoutY(430);
+/*
+		TextField removeSubject = new TextField(); removeSubject.setLayoutX(350); removeSubject.setLayoutY(430);
 		removeSubject.setPromptText("removeSubject");
-		removeSubject.setStyle("-fx-pref-width: 175");
+		removeSubject.setStyle("-fx-pref-width: 150");
 		removeSubject.setOnAction(e->{
 			client.sendMessage("request:remove_subject\tcontent:"+removeSubject.getText());
+			setSubjectNeedsUpdate=true;
 		});
-		
+		*/
 
-		TextField createSubject = new TextField(); createSubject.setLayoutX(325); createSubject.setLayoutY(460);
+		TextField createSubject = new TextField(); createSubject.setLayoutX(350); createSubject.setLayoutY(460);
 		createSubject.setPromptText("createSubject");
-		createSubject.setStyle("-fx-pref-width: 175");
+		createSubject.setStyle("-fx-pref-width: 150");
 		createSubject.setOnAction(e->{
 			client.sendMessage("request:create_subject\tcontent:"+createSubject.getText());
+			addSubjectNeedsUpdate=true;
 		});
 
-		TextField setSubject = new TextField(); setSubject.setLayoutX(325); setSubject.setLayoutY(490);
-		setSubject.setPromptText("setSubject");
-		setSubject.setStyle("-fx-pref-width: 175");
-		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
-		});
-		
+
 		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(325); resetScore.setLayoutY(520);
 		resetScore.setOnAction(e->{
 			client.sendMessage("request:reset_score\tcontent:local");
+			
 		});
 		
 		Button requestScore = new Button("reqScore"); requestScore.setLayoutX(425); requestScore.setLayoutY(520);
 		requestScore.setOnAction(e->{
 			client.sendMessage("request:get_subject_scores\tcontent:");
 		});
-		//TextArea subjects = new TextArea(); subjects.setLayoutX(xBase); subjects.setLayoutY(yBase+100);
-		//TextArea score = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+150);
-		//TextArea classScore = new TextArea(); score.setLayoutX(xBase); score.setLayoutY(yBase+200);
-		
 
-		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubjects, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, scoreFeed, requestScore);
+
+		root.getChildren().addAll(stats, serverFeed, subjectsGlobal, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, scoreFeed, requestScore);
 		
 		
 		updater1 = new FeedUpdater(client, stats, client.ProfileWindowStats);
 		updater1.start();
 		updater2 = new FeedUpdater(client, serverFeed, client.ProfileWindow);
 		updater2.start();
-		updater3 = new FeedUpdater(client, subjectsGlobal, client.ProfileWindowSubjects);
+		updater3 = new FeedUpdater(client, subjectsGlobal, client.ProfileWindowSubjectsGlobal);
 		updater3.start();
-
-		
-
 		updater4 = new FeedUpdater(client, scoreFeed, client.ProfileWindowScores);
 		updater4.start();
+		updater5 = new FeedUpdater(client, subjectsLocal, client.ProfileWindowSubjectsLocal);
+		updater5.start();
 		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		
@@ -172,8 +223,14 @@ public class ProfileWindow implements Window {
 	public void wakeUp(){
 		stats.setText("You stats:");	
 		serverFeed.setText("Messages from server:");
-		subjectsGlobal.setText("Global subjects:");
-		scoreFeed.setText("Subject scores here:");
+		subjectsGlobal.clear();
+		subjectsLocal.clear();
+		scoreFeed.clear();
+		setSubject.getItems().clear();
+		removeSubject.getItems().clear();
+		addSubject.getItems().clear();
+		setSubjectNeedsUpdate=true;
+		addSubjectNeedsUpdate=true;
 		client.sendMessage("request:get_username\tcontent:");
 		client.sendMessage("request:get_type\tcontent:");
 		client.sendMessage("request:get_subjects\tcontent:local");
