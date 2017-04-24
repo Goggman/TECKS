@@ -21,7 +21,7 @@ public class FeedUpdater implements Runnable{
 		public void run(){
 			while (true){
 				try {
-					Thread.sleep(800);
+					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
