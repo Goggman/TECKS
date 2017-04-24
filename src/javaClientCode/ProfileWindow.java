@@ -81,14 +81,14 @@ public class ProfileWindow implements Window {
 			stage.setScene(ctrl.getScene(5));
 		});
 
-		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(643);
+		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(543);
 		showChat.setStyle("-fx-pref-width: 95");
 		showChat.setOnAction(e->{
 			ctrl.chat.wakeUp();
 			chat.show();
 			
 		});
-		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(673);
+		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(573);
 		hideChat.setStyle("-fx-pref-width: 95");
 		hideChat.setOnAction(e->{
 			ctrl.chat.sleep();
@@ -153,7 +153,7 @@ public class ProfileWindow implements Window {
 
 		updater4 = new FeedUpdater(client, scoreFeed, client.ProfileWindowScores);
 		updater4.start();
-		Scene scene = new Scene(root, 600, 700);
+		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		
 

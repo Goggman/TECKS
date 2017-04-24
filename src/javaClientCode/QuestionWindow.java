@@ -34,7 +34,9 @@ public class QuestionWindow implements Window {
 	TextArea subjects;
 	TextArea questions;
 	TextArea serverIn;
+	TextArea bestQuestions;
 	TextArea feed;
+	MenuButton pickCategory;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
@@ -67,6 +69,7 @@ public class QuestionWindow implements Window {
 		int xBase=100, yBase=0;
 		subjects = new TextArea();
 		questions = new TextArea();
+		bestQuestions = new TextArea();
 		
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
@@ -75,11 +78,8 @@ public class QuestionWindow implements Window {
 		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase+0); prevQ.setLayoutY(yBase+300);
 		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+100); confirm.setLayoutY(yBase+300);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+0); userInput.setLayoutY(yBase+330);
-		TextField setSubject = new TextField();  setSubject.setLayoutX(xBase+300); setSubject.setLayoutY(yBase+390);
-		Button loadQuestionsFromServer = new Button("LoadQuestions");  loadQuestionsFromServer.setLayoutX(xBase+0); loadQuestionsFromServer.setLayoutY(yBase+390);
-		MenuButton pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+300); pickCategory.setLayoutY(yBase+390);pickCategory.setText("Categories");
-		Button load = new Button("Load"); load.setLayoutX(xBase+200);load.setLayoutY(yBase+390);
-		
+		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+300); pickCategory.setLayoutY(yBase+390);pickCategory.setText("Categories");
+		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+300); m.setLayoutY(yBase+420);
 		
 		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab1.setPrefWidth(100);
@@ -164,50 +164,7 @@ public class QuestionWindow implements Window {
 				userInput.clear();
 			}
 			
-		});
-
-		
-		
-		//
-		
-		setSubject.setPrefWidth(100);
-		setSubject.setPromptText("Set subject");
-		//get subject from server
-		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText().toUpperCase());
-			client.sendMessage("request:get_questions\tcontent:");
-
-		});
-
-
-		loadQuestionsFromServer.setPrefWidth(100);
-		/*
-		loadQuestionsFromServer.setOnAction(e->{
-			if (!metafeed.getText().equals("")){
-				try {
-				Scanner scanner = new Scanner(metafeed.getText());
-				System.out.println("120: " + scanner.nextLine());scanner.nextLine();//Skips first lines, as it contains sender
-				String content = scanner.nextLine();
-				addSchema(readToSchema(content));
-				scanner.close();
-				metafeed.setText("");
-				serverIn.setText("Load successfull");
-				}
-				catch (IndexOutOfBoundsException ex){
-					serverIn.setText("no quiz found for this subject");
-				}
-				
-			}
-			else{
-				serverIn.setText("Load unsuccessfull");
-			}
-			
-		});
-		*/
-
-
-		
-		
+		});	
 		
 		confirm.setOnAction(e-> {
 			Analyzer analyzer = new Analyzer();
@@ -224,16 +181,6 @@ public class QuestionWindow implements Window {
 					
 				}
 
-				/*String appender = "";
-				Iterator<String> it = analyzer.getCategories().keySet().iterator();
-				while (it.hasNext()){
-					String next = it.next().toString();
-					appender += next + ": "
-							+ ""+ analyzer.getCategories().get(next)[0] + "/" + analyzer.getCategories().get(next)[1] + "\n";
-					
-				}
-				feed.setText("Your results: \n" + appender);*/
-
 				String results ="";
 				for (String category : analyzer.getCategories().keySet()){
 					results+="@"+category+"- correct answers: "+analyzer.getCategories().get(category)[0]+" #questions: "+analyzer.getCategories().get(category)[1]+"\n";
@@ -245,7 +192,6 @@ public class QuestionWindow implements Window {
 			}
 		});
 		
-		//
 
 		nextQ.setOnAction(e->{
 			
@@ -324,7 +270,7 @@ public class QuestionWindow implements Window {
 		});
 
 		
-		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+300); m.setLayoutY(yBase+420);
+	
 		m.setPrefWidth(100);
 		m.setOnMouseEntered(e->{
 			if (subjects.getText().trim().isEmpty()){
@@ -339,6 +285,8 @@ public class QuestionWindow implements Window {
 					item.setOnAction(x->{
 						client.sendMessage("request:set_subject\tcontent:"+itemsubject);
 						client.sendMessage("request:get_questions\tcontent:");
+						client.sendMessage("request:get_best_questions\tcontent:");
+						pickCategory.setVisible(true);
 					});
 					m.getItems().add(item);
 				}
@@ -358,13 +306,11 @@ public class QuestionWindow implements Window {
 					return;
 				}
 				pickCategory.getItems().clear();
-				System.out.println(questions.getText().trim());
 				QuestionSchema schemaTemp = readToSchema(questions.getText().trim());
 				HashMap<String, ArrayList<Question>> categoryQuestionMap = new HashMap<>();
 				for(Question q : schemaTemp.getQuestions()){
 					if (categoryQuestionMap.containsKey(q.getCategory())){
 						categoryQuestionMap.get(q.getCategory()).add(q);
-						
 					}
 					else{
 						categoryQuestionMap.put(q.getCategory(), new ArrayList<Question>());
@@ -374,7 +320,6 @@ public class QuestionWindow implements Window {
 				Iterator<String> categories_it = categoryQuestionMap.keySet().iterator();
 				while (categories_it.hasNext()){
 					String next = categories_it.next();
-					//System.out.println(next);
 					MenuItem item = new MenuItem(next);
 					item.setOnAction(x->{
 						setSchema(new QuestionSchema(categoryQuestionMap.get(next),0));
@@ -405,170 +350,38 @@ public class QuestionWindow implements Window {
 					
 				}
 				CategoryNeedsUpdate=0;
-			}
-		});
-		/*
-
-		m.showingProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
-				if (newValue){
-					
-					if (!	serverIn.getText().equals("")){
-						Scanner scanner = new Scanner(serverIn.getText());
-						
-						
-						while (scanner.hasNextLine()){
-							String next = scanner.nextLine();
-							if (next.contains("@")){
-								
-							String [] subjects = next.split("@");
-							for (String s : subjects){
-								
-								MenuItem temp = new MenuItem(s);
-								addMenuItem(temp);
-								temp.setOnAction(e -> {
-									//TODO: set subject
-									client.sendMessage("request:set_subject\tcontent:" + ((MenuItem) e.getSource()).getText());
-									//client.sendMessage("request:set_subject\tcontent:"+setSubject.getText().toUpperCase());
-									client.sendMessage("request:get_questions\tcontent:");
-									
-									
-									loadQuestionsFromServer.fire();
-									
-									
-								});
-							}
-							}
+				MenuItem recommended = new MenuItem("Recommended questions");
+				recommended.setOnAction(z->{
+					setSchema(new QuestionSchema(categoryQuestionMap.get(bestQuestions.getText().trim()),0));
+					feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+					quizStarted=1;
+					Question q = schema.getQuestions().get(index);
+					if (q.getOptions().size() > 1){
+						userInput.setVisible(false);
+						for (RadioButton rb : radiOptions){
+							rb.setVisible(true);
 						}
 						
-						//addSchema(readToSchema(content));
-						//pickSubject.getItems().setAll(items);
-						scanner.close();
-						//metafeed.setText(""); 
-						//serverIn.setText("asd");
-					
-					
-					
+						Collections.shuffle(q.getOptions());
+						for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
+							radiOptions.get(j).setText(q.getOptions().get(k));
+							
+						}
+						
 					}
-				}
-			}
-
-			public void addMenuItem(MenuItem menuItem){
-				MenuItem temp = menuItem;
-				ObservableList<MenuItem> items = m.getItems();
-				boolean go = true;
-				for (MenuItem mi : items){
-					if (mi.getText().equals(temp.getText())){
-						go = false;
+					else {
+						userInput.setVisible(true);
+						for (RadioButton rb : radiOptions){
+							rb.setVisible(false);
+						}
 					}
-					
-				}
-				if (go){
-					
-					m.getItems().add(temp);
-				}
+				});
+				m.getItems().add(recommended);
+				
 			}
-			
 		});
 		
-		load.setStyle("-fx-pref-width: 54");
-		load.setOnAction(e -> {
-			System.out.println("clicked");
-			if (pickCategory.getItems().size() < schemas.size()){
-				for (int i = 0; i < schemas.size(); i++){
-					
-					MenuItem temp = new MenuItem(""+(i + 1) +": "+ schemas.get(i).category);
-					boolean go = true;
-					for (MenuItem mi : pickCategory.getItems()){ //check for duplicates 
-						if(mi.getText().equals(temp.getText()) || 
-								mi.getText().endsWith(temp.getText().split(":")[1])){
-							go = false;
-						}
-					}
-					if (go){
-						pickCategory.getItems().add(temp); 
-						temp.setOnAction(ev -> {
-							index = 0;
-							try {
-								
-								schema = schemas.get(Integer.parseInt(temp.getText().split(":")[0])-1);
-								feed.setText(""+schema.getQuestions().get(index).getQuestionText());
-								
-								if (schema.getQuestions().get(0).getOptions().size() > 1){
-									userInput.setVisible(false);
-									for (int k = 0, j = 0; k < schema.getQuestions().get(0).getOptions().size() &&
-											j < radiOptions.size(); k++, j++){
-										radiOptions.get(j).setText(schema.getQuestions().get(0).getOptions().get(k));
-										radiOptions.get(j).setVisible(true);
-										radiOptions.get(j).setOnAction(eve -> {
-											if (quizStarted == 1){
-												schema.getAnswers().put(schema.getQuestions().get(index), ((RadioButton) eve.getSource()).getText());
-												feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+((RadioButton) eve.getSource()).getText());
-												
-											}
-										});
-									}
-								}
-								else {
-									userInput.setVisible(true);
-									for (RadioButton rb : radiOptions){
-										rb.setVisible(false);
-									}
-								}
-								quizStarted=1;
-								
-							}
-							catch (IndexOutOfBoundsException ex){
-								feed.setText("no quiz selected");
-							}
-							catch (NullPointerException eex){
-								feed.setText("no schema found");
-							}
-						});
-					}
-				}
-			}
-			else if (schemas.size() < 1){
-				feed.setText("No schema found \n try loading one from file");
-			}
-		});
-
-		loadQuestionsFromServer.setOnAction(e->{
-			System.out.println("questions loaded");
-			try {
-				
-				//TimeUnit.SECONDS.sleep(5);
-				Thread.sleep(3000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if (!metafeed.getText().equals("")){
-				try {
-					Scanner scanner = new Scanner(metafeed.getText());
-					scanner.nextLine();scanner.nextLine();//Skips first lines, as it contains sender
-					String content = scanner.nextLine();
-					addSchema(readToSchema(content));
-					scanner.close();
-					metafeed.setText("");
-					serverIn.setText("Load successfull");
-					load.fire();
-				}
-				catch (IndexOutOfBoundsException ex){
-					serverIn.setText("no quiz found for this subject");
-				}
-				
-				
-			}
-			else{
-				serverIn.setText("Load unsuccessfull");
-			}
-			
-		});
-
-		*/
-		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, /*load, setSubject, loadQuestionsFromServer,*/ serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput);
+		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput);
 		Scene scene1 = new Scene(root, 600, 600);
 		//scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 
@@ -579,6 +392,8 @@ public class QuestionWindow implements Window {
 		updater2.start();
 		FeedUpdater updater3 = new FeedUpdater(client, questions, client.QuestionWindowQuestions);
 		updater3.start();
+		FeedUpdater updater4 = new FeedUpdater(client, bestQuestions, client.QuestionWindowRecQs);
+		updater4.start();
 		return scene1;
 	}
 	
@@ -611,7 +426,6 @@ public class QuestionWindow implements Window {
 			
 			while (scanner.hasNext()){
 				String next = scanner.nextLine();
-				System.out.println(next);
 				if (next.contains("Header:")){
 					textData.add(new ArrayList<String>());
 					i++;
@@ -636,8 +450,10 @@ public class QuestionWindow implements Window {
 		SubjectNeedsUpdate=1;
 		subjects.clear();
 		questions.clear();
+		bestQuestions.clear();
 		serverIn.clear();
-		feed.setText("Pick a category to continue");
+		feed.setText("Pick a subject to continue");
+		pickCategory.setVisible(false);
 		client.sendMessage("request:get_subjects\tcontent:local");
 		if (firstStart==1){
 			feed.setText("Ready to learn? :)");

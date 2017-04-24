@@ -796,20 +796,29 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_set_chatroom(String payload){
 		boolean hasRoom = server.getProperties().get("chatrooms").containsKey(getContent(payload));
-		if (getUsername() != null || !hasRoom){
+		if (getUsername() == null || !hasRoom){
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
-					+ "content:You need to log out to switch chatrooms and provide a legal chatroom name";
+					+ "content:You need to log in to enter chatrooms and provide a legal chatroom name";
 			out.println(returnToClient);
 			return;
 		}
 		else{
+			String dummy="";
+			String username = getUsername();
+			String pw = (String)((HashMap)server.getProperties().get("users").get(username)).get("password");
+			parse_logout(dummy);
 			setChat(getContent(payload));
+			String credentials = "request:login\tcontent:"+username+"@"+pw;
+			parse_login(credentials);
+			
+			
+			
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
-					+ "content:Successfully joined chatroom, please log in";
+					+ "content:Successfully joined chatroom "+getChat();
 			out.println(returnToClient);
 		}
 		
@@ -846,32 +855,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 		}
 	}
-	/*void parse_get_subjects(String payload){
-		
-		try {
-			String returnToClient = "timestamp:"+LocalTime.now().toString()
-									+"\tsender:server\t"
-									+"response:info\t"
-									+"content:";
-			//server.getProperties().get("subjects").put("TDT4145", new HashMap<String, ArrayList<String>>());
-			
-			Iterator set = ((HashMap) server.getProperties().get("subjects")).keySet().iterator();
-			while (set.hasNext()){
-				returnToClient+=set.next();
-				if(set.hasNext()){
-					returnToClient+="@";
-				}
-			}
-			
-			out.println(returnToClient);
-		} catch (NullPointerException e){
-			String returnToClient = "timestamp:"+LocalTime.now().toString()
-					+"\tsender:server\t"
-					+"response:info\t"
-					+"content:Null";
-			out.println(returnToClient);
-		}
-	}*/
+
 	void parse_get_username(String payload){
 		try{
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -1095,9 +1079,11 @@ public class ClientHandler implements Runnable{
 				
 			}
 		}
+		/*
 		ArrayList<String> questionsToClient = new ArrayList();
 		ArrayList<String> questions = (ArrayList<String>) ((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions");
 		String content="";
+		
 		if (questions.size()>0){
 			for (String question : questions){ // find the correct category of questions, gather those in a list
 				String[] questionArray = question.split("[|]");
@@ -1119,6 +1105,7 @@ public class ClientHandler implements Runnable{
 			content+=question+"@";
 			}
 			content = content.substring(0, content.length());
+			
 		}
 		else{
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
@@ -1128,10 +1115,11 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
+		*/
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
-				+ "response:question\t"
-				+ "content:"+content;
+				+ "response:bestQuestions\t"
+				+ "content:"+minCategory;
 		out.println(returnToClient);
 		
 		
