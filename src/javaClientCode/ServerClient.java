@@ -73,7 +73,7 @@ public class ServerClient {
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
-	        System.out.println("Reay to send\n");
+	        System.out.println("Ready to send\n");
 	    }
 	    
 	
@@ -138,14 +138,16 @@ public class ServerClient {
 		//timestamp:
 		
 	}
+
 	void parse_bestQuestions(String payload){
 		QuestionWindowRecQs.add(getContent(payload));
 	}
 	
 	
 	void parse_subjects_global(String payload){
-		
-		ProfileWindowSubjectsGlobal.add(getContent(payload));
+		String subjectsGlobal = getContent(payload).replace("@", ", ");
+		ProfileWindowSubjectsGlobal.add(subjectsGlobal);
+
 
 		printPrettyMessageGeneral(payload);
 	}
@@ -172,6 +174,7 @@ public class ServerClient {
 		QuestionWindowInfo.add(getContent(payload));
 		ChatWindowInfo.add(getContent(payload));
 		ProfileWindow.add(getContent(payload));
+
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){

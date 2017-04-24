@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -72,8 +73,12 @@ public class QuestionWindow implements Window {
 		bestQuestions = new TextArea();
 		
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
+
+		Label title = new Label("Quiz");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
+
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
 		
+
 		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
 
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
@@ -85,8 +90,10 @@ public class QuestionWindow implements Window {
 		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
 
 		
+
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
@@ -94,8 +101,10 @@ public class QuestionWindow implements Window {
 		});
 		
 
+
 		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
 		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
@@ -103,16 +112,21 @@ public class QuestionWindow implements Window {
 		
 
 		
+
 		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
 		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
+			//TODO: log user out
 		});
 		
 
+
 		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
 		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
@@ -257,6 +271,7 @@ public class QuestionWindow implements Window {
 					}
 					
 					Collections.shuffle(q.getOptions());
+					
 					for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
 						radiOptions.get(j).setText(q.getOptions().get(k));
 						
@@ -393,8 +408,10 @@ public class QuestionWindow implements Window {
 				
 			}
 		});
+
 		
 		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput);
+
 		Scene scene1 = new Scene(root, 600, 600);
 		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 

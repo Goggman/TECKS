@@ -34,11 +34,10 @@ public class LoginWindow implements Window{
 		feed = new TextArea("Please log in"); feed.setLayoutX(xBase); feed.setLayoutY(300); //feed.setAlignment(Pos.TOP_LEFT);
 
 		feed.setPrefSize(400, 200); feed.setStyle("-fx-border-color:black");
+		feed.setWrapText(true);
 		feed.setEditable(false);
+		//Image tecboy = new Image(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
 		
-		
-		
-
 		//File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
 		File image = new File("POSTER_BOY_NOEDGE_EDIT.png");
 		Image tecboy = new Image(image.toURI().toString());
@@ -46,8 +45,10 @@ public class LoginWindow implements Window{
 		poster_boy.setImage(tecboy); poster_boy.setFitWidth(200); poster_boy.setPreserveRatio(true);
 		
 		
+
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
@@ -55,8 +56,10 @@ public class LoginWindow implements Window{
 		});
 		
 
+
 		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
 		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
@@ -64,16 +67,20 @@ public class LoginWindow implements Window{
 		
 
 		
+
 		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
 		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
 
+
 		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
 		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
@@ -119,15 +126,15 @@ public class LoginWindow implements Window{
 		MenuItem admin = new MenuItem("admin");
 		userType.getItems().addAll(student, lecturer, admin);
 		student.setOnAction(e->{
-			type = "Student";
+			type = "student";
 			userType.setText(type);
 		});
 		lecturer.setOnAction(e->{
-			type = "Lecturer";
+			type = "lecturer";
 			userType.setText(type);
 		});
 		admin.setOnAction(e->{
-			type = "Admin";
+			type = "admin";
 			userType.setText(type);
 		});
 		

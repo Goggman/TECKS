@@ -79,7 +79,7 @@ public class ChatWindow implements Window{
 		
 		serverIn = new TextArea("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); //serverIn.setAlignment(Pos.TOP_LEFT);
 		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");serverIn.setEditable(false);
-		
+		serverIn.setWrapText(true);
 
 		
 		

@@ -9,6 +9,7 @@ import javafx.scene.chart.Axis;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -55,17 +56,21 @@ public class ProfileWindow implements Window {
 		xBase = 0; yBase = 0;
 		Pane root = new Pane();
 
+		Label title = new Label("Your Profile");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 		subjectsLocal = new TextArea();
+
 		subjectsGlobal = new TextArea();
 		subjectScore = new TextArea();
 		userScore = new TextArea();
 		
 		
+
 		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
 
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
 		stats.setEditable(false);
 		
+
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(400, 100);
 		serverFeed.setEditable(false);
 		
@@ -79,6 +84,7 @@ public class ProfileWindow implements Window {
 		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+100); createSubject.setLayoutY(yBase+310); createSubject.setPrefWidth(100);
 		BarChart scoreGraph = prepareUserScore();
 		
+
 
 		setSubject.setOnMouseEntered(e->{
 			if (subjectsLocal.getText().trim().split("[;]").length == 1){
@@ -139,14 +145,17 @@ public class ProfileWindow implements Window {
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab1.setPrefWidth(100);
+
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
 
+
 		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
 		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
@@ -154,16 +163,19 @@ public class ProfileWindow implements Window {
 		
 
 		
+
 		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
 		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
+			
 		});
-		
 
 		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
 		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
@@ -185,6 +197,15 @@ public class ProfileWindow implements Window {
 		
 
 		
+		TextField addSubjects = new TextField(); addSubjects.setLayoutX(xBase+350); addSubjects.setLayoutY(yBase+400);
+		addSubjects.setPromptText("addSubject");
+		addSubjects.setOnAction(e->{
+			client.sendMessage("request:add_subject\tcontent:"+addSubjects.getText());
+			addSubjects.clear();
+		});
+
+
+		
 		createSubject.setPromptText("createSubject");
 		createSubject.setStyle("-fx-pref-width: 150");
 		createSubject.setOnAction(e->{
@@ -192,8 +213,6 @@ public class ProfileWindow implements Window {
 			wakeUp();
 		});
 
-
-		
 		resetScore.setOnAction(e->{
 			client.sendMessage("request:reset_score\tcontent:local");
 			
@@ -205,7 +224,9 @@ public class ProfileWindow implements Window {
 		});
 
 
+
 		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, requestScore, scoreGraph);
+
 		
 		
 		updater1 = new FeedUpdater(client, stats, client.ProfileWindowStats);
@@ -274,7 +295,7 @@ public class ProfileWindow implements Window {
 	}
 	
 	public void wakeUp(){
-		stats.setText("You stats:");	
+		stats.setText("Your stats:");	
 		serverFeed.setText("Messages from server:");
 		subjectsGlobal.clear();
 		subjectsLocal.clear();

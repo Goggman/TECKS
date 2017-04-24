@@ -49,6 +49,7 @@ public class CreateQWindow implements Window {
 		quiz = new ArrayList<>();
 		subjects = new TextArea();
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
+		Label title = new Label("Create Quiz");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+fieldBaseX); setSubject.setLayoutY(yBase+fieldBaseY); setSubject.setPromptText("set working subject");
 
 		
@@ -74,8 +75,10 @@ public class CreateQWindow implements Window {
 		Button discard = new Button("discQ"); discard.setLayoutX(xBase+103); discard.setLayoutY(yBase+302);
 	
 
+
 		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
 		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
@@ -83,8 +86,10 @@ public class CreateQWindow implements Window {
 		});
 		
 
+
 		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
 		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
@@ -92,16 +97,20 @@ public class CreateQWindow implements Window {
 		
 
 		
+
 		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
 		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
+			//TODO: log user out
 		});
-		
+
 
 		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
 		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
@@ -145,7 +154,7 @@ public class CreateQWindow implements Window {
 			}
 		});
 		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black");
-		feed.setPrefSize(350, 200);feed.setEditable(false);
+		feed.setPrefSize(350, 200);feed.setEditable(false);feed.setWrapText(true);
 		
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
@@ -244,12 +253,13 @@ public class CreateQWindow implements Window {
 		
 		//Setup serverFeed and the updater to maintain the feed
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);serverFeed.setEditable(false);
+		serverFeed.setWrapText(true);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
 
 		FeedUpdater updater2 = new FeedUpdater(client, subjects, client.CreateQWindowSubjects);
 		updater2.start();
-		root.getChildren().addAll(setSubjectMenu, qType, qText, aText, feed, head, createQ, op1, op2, save, error, category, serverFeed, tab1, tab2, tab3, tab4, showChat, hideChat, nextQ, prevQ, discard);
+		root.getChildren().addAll(setSubjectMenu, qType, qText, aText, feed, head, createQ, op1, op2, save, error, category, serverFeed, tab1, tab2, tab3, tab4, showChat, hideChat, nextQ, prevQ, discard, title);
 		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 

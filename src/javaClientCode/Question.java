@@ -32,7 +32,8 @@ public class Question {
 		this.correctAnswer  = answer;
 		this.category=categoryInput;
 		this.header = header;
-		this.options.add(answer);
+		//this.options.add(answer);
+		
 		if (options.length > 0){
 			for (int i = 0; i < options.length; i++){
 				this.getOptions().add((String)options[i]);
