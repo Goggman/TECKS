@@ -2,7 +2,6 @@
  * Button section
  */
 Button {
-	-fx-pref-width: 80px;
 	-fx-font-size: 13.0px;
 	-fx-base: #00a7d4;
 	-fx-background: #e5f3f6;
@@ -42,6 +41,7 @@ Button:hover {
  * Menu button section
  */
  
+/*
 MenuButton {
 	-fx-pref-width: 130px;
 	-fx-font-size: 13.0px;
@@ -55,7 +55,7 @@ MenuButton {
 	-fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
 	-fx-background-insets: 0px;
 	-fx-background-radius: 0px;
-	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em;  2 10 3 10 
 	-fx-text-fill: -fx-text-base-color;
 	-fx-alignment: CENTER;
 	-fx-content-display: LEFT;

@@ -72,8 +72,8 @@ public class ChatWindow implements Window{
 			client.sendMessage("request:logout\tcontent:");
 		});
 
-		Button menu2 = new Button("Clear messageFeed"); menu2.setLayoutX(xBase-97); menu2.setLayoutY(yBase+180);
-		menu2.setStyle("-fx-pref-width: 98");
+		Button menu2 = new Button("Clear messageFeed"); menu2.setLayoutX(xBase-94); menu2.setLayoutY(yBase+180);
+		menu2.setStyle("-fx-pref-width: 97");
 		menu2.setOnAction(e->{
 			messageFeed.setText("Window cleared");
 			serverIn.setText("Window cleared");
