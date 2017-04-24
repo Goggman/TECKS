@@ -21,6 +21,7 @@ public class LoginWindow implements Window{
 	TextArea feed;
 	Stage chat;
 	int newStart = 1;
+	String type;
 	LoginWindow(Stage stageInput, GUIController CtrlIn, ServerClient clientIn, Stage chatIn ){
 		ctrl=CtrlIn;
 		stage=stageInput;
@@ -34,12 +35,12 @@ public class LoginWindow implements Window{
 
 		feed.setPrefSize(400, 200); feed.setStyle("-fx-border-color:black");
 		feed.setEditable(false);
-		//Image tecboy = new Image(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
-
 		
 		
+		
 
-		File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
+		//File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
+		File image = new File("TECKS/src/POSTER_BOY_NOEDGE_EDIT.png");
 		Image tecboy = new Image(image.toURI().toString());
 		ImageView poster_boy = new ImageView(); poster_boy.setLayoutX(xBase+70); poster_boy.setLayoutY(yBase+20);
 		poster_boy.setImage(tecboy); poster_boy.setFitWidth(200); poster_boy.setPreserveRatio(true);
@@ -110,14 +111,43 @@ public class LoginWindow implements Window{
 			client.sendMessage("request:logout\tcontent:");
 		});
 		
-		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(643);
+		type = "student";
+		MenuButton userType = new MenuButton("PickType"); userType.setLayoutX(xBase); userType.setLayoutY(yBase+180);
+		userType.setPrefWidth(80);
+		MenuItem student = new MenuItem("student");
+		MenuItem lecturer = new MenuItem("lecturer");
+		MenuItem admin = new MenuItem("admin");
+		userType.getItems().addAll(student, lecturer, admin);
+		student.setOnAction(e->{
+			type = "student";
+			userType.setText(type);
+		});
+		lecturer.setOnAction(e->{
+			type = "lecturer";
+			userType.setText(type);
+		});
+		admin.setOnAction(e->{
+			type = "admin";
+			userType.setText(type);
+		});
+		
+		Button createUser = new Button("CreateUser"); createUser.setLayoutX(xBase); createUser.setLayoutY(yBase+150);
+		createUser.setOnAction(e->{
+			client.sendMessage("request:login\tcontent:"+username.getText()+"@"+password.getText()+"@"+type);
+			type="student";
+			username.clear();
+			password.clear();
+			
+		});
+		
+		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(543);
 		showChat.setStyle("-fx-pref-width: 95");
 		showChat.setOnAction(e->{
 			ctrl.chat.wakeUp();
 			chat.show();
 			
 		});
-		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(673);
+		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(573);
 		hideChat.setStyle("-fx-pref-width: 95");
 		hideChat.setOnAction(e->{
 			ctrl.chat.sleep();
@@ -130,8 +160,8 @@ public class LoginWindow implements Window{
 			feed.setText("Window cleared");
 		});
 
-		root.getChildren().addAll(feed, menu1, showChat, hideChat, menu5, menu6, username, tab1, tab2, tab3, tab4, password, poster_boy);
-		Scene scene = new Scene(root, 600, 700);
+		root.getChildren().addAll(feed, menu1, showChat, hideChat, menu5, menu6, username, tab1, tab2, tab3, tab4, password, poster_boy, createUser, userType);
+		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		FeedUpdater updater = new FeedUpdater(client, feed, client.LoginWindow);
 		//FeedUpdater updater = new FeedUpdater(client, feed);
