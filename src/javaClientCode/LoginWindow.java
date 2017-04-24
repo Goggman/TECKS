@@ -119,15 +119,15 @@ public class LoginWindow implements Window{
 		MenuItem admin = new MenuItem("admin");
 		userType.getItems().addAll(student, lecturer, admin);
 		student.setOnAction(e->{
-			type = "Student";
+			type = "student";
 			userType.setText(type);
 		});
 		lecturer.setOnAction(e->{
-			type = "Lecturer";
+			type = "lecturer";
 			userType.setText(type);
 		});
 		admin.setOnAction(e->{
-			type = "Admin";
+			type = "admin";
 			userType.setText(type);
 		});
 		
