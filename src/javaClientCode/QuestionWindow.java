@@ -75,6 +75,7 @@ public class QuestionWindow implements Window {
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
 		
 		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
+
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
 		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+350);
 		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+340); confirm.setLayoutY(yBase+350);
@@ -82,46 +83,56 @@ public class QuestionWindow implements Window {
 		
 		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+70);pickCategory.setText("Categories");
 		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
+
 		
-		Button tab1 = new Button("Goto quiz"); tab1.setLayoutX(100); tab1.setLayoutY(0); tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		Button tab1 = new Button("Quiz"); tab1.setLayoutX(92); tab1.setLayoutY(2); 
+		tab1.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
 			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
 			
 		});
 		
-		Button tab2 = new Button("Goto Qcreator"); tab2.setLayoutX(200); tab2.setLayoutY(0); tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+		Button tab2 = new Button("Qcreator"); tab2.setLayoutX(196); tab2.setLayoutY(2); 
+		tab2.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab2.setPrefWidth(100);
 		tab2.setOnAction(e->{
 			stage.setScene(ctrl.getScene(2));
 		});
 		
-		////
+
 		
-		Button tab3 = new Button("Goto login"); tab3.setLayoutX(300); tab3.setLayoutY(0); tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+		Button tab3 = new Button("Login"); tab3.setLayoutX(300); tab3.setLayoutY(2); 
+		tab3.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
 		});
 		
-		Button tab4 = new Button("Goto profile"); tab4.setLayoutX(400); tab4.setLayoutY(0); tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
+
+		Button tab4 = new Button("Profile"); tab4.setLayoutX(404); tab4.setLayoutY(2); 
+		tab4.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2;-fx-background-radius: 5, 4, 3;");
 		tab4.setPrefWidth(100);
 		tab4.setOnAction(e->{
 			stage.setScene(ctrl.getScene(5));
 		});
-		Button showChat = new Button("ShowChat"); showChat.setLayoutX(500);showChat.setLayoutY(550);
-		showChat.setPrefWidth(100);
+		
+		
+		Button showChat = new Button("ShowChat"); showChat.setLayoutX(502);showChat.setLayoutY(543);
+		showChat.setStyle("-fx-pref-width: 95");
 		showChat.setOnAction(e->{
 			ctrl.chat.wakeUp();
 			chat.show();
 			
 		});
-		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(500);hideChat.setLayoutY(575);
-		hideChat.setPrefWidth(100);
+		Button hideChat = new Button("HideChat"); hideChat.setLayoutX(502);hideChat.setLayoutY(573);
+		hideChat.setStyle("-fx-pref-width: 95");
 		hideChat.setOnAction(e->{
 			ctrl.chat.sleep();
 			chat.hide();
 		});
+		
 		
 		
 		
@@ -385,7 +396,7 @@ public class QuestionWindow implements Window {
 		
 		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput);
 		Scene scene1 = new Scene(root, 600, 600);
-		//scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
+		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 
 
 		FeedUpdater updater1 = new FeedUpdater(client, subjects, client.QuestionWindowSubjects);
