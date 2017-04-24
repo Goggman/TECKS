@@ -13,16 +13,17 @@ public class ServerClient {
     MessageReceiver receiver;
     Queue<String> LoginWindow;
     Queue<String> ChatWindow;
+    Queue<String> ChatWindowInfo;
     Queue<String> CreateQWindow;
     Queue<String> CreateQWindowSubjects;
-    Queue<String> QuestionWindowQuestions;
-    Queue<String> QuestionWindowInfo;
-    Queue<String> ChatWindowInfo;
     Queue<String> ProfileWindow;
     Queue<String> ProfileWindowStats;
     Queue<String> ProfileWindowSubjects;
     Queue<String> ProfileWindowScores;
     Queue<String> QuestionWindowSubjects;
+    Queue<String> QuestionWindowQuestions;
+    Queue<String> QuestionWindowInfo;
+    Queue<String> QuestionWindowRecQs;
     ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
@@ -59,6 +60,7 @@ public class ServerClient {
 	        QuestionWindowQuestions = new LinkedList<String>();
 	        QuestionWindowInfo = new LinkedList<String>();
 	        QuestionWindowSubjects = new LinkedList<String>();
+	        QuestionWindowRecQs = new LinkedList<String>();
 	        ChatWindowInfo = new LinkedList<String>();
 	       	ProfileWindow = new LinkedList<String>();
 	       	ProfileWindowStats = new LinkedList<String>();
@@ -99,6 +101,9 @@ public class ServerClient {
 		else if (response.equals("scores")){
 			parse_scores(payload);
 		}
+		else if (response.equals("bestQuestions")){
+			parse_bestQuestions(payload);
+		}
 		
 		else{
 			System.out.println("Bad request");
@@ -123,6 +128,9 @@ public class ServerClient {
 		//timestamp:
 		
 	}
+	void parse_bestQuestions(String payload){
+		QuestionWindowRecQs.add(getContent(payload));
+	}
 	void parse_subjects(String payload){
 		
 		ProfileWindowSubjects.add(getContent(payload));
@@ -134,11 +142,11 @@ public class ServerClient {
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_error(String payload){
-		LoginWindow.add(payload);
-		CreateQWindow.add(payload);
-		QuestionWindowInfo.add(payload);
-		ChatWindowInfo.add(payload);
-		ProfileWindow.add(payload);
+		LoginWindow.add(getContent(payload));
+		CreateQWindow.add(getContent(payload));
+		QuestionWindowInfo.add(getContent(payload));
+		ChatWindowInfo.add(getContent(payload));
+		ProfileWindow.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_message(String payload){

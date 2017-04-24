@@ -37,25 +37,21 @@ public class ChatWindow implements Window{
 			messageFeed.setText(messageFeed.getText()+"\n"+text.getText());
 			client.sendMessage("request:msg\tcontent:"+text.getText());
 		});
-		//TextField password = new TextField();
 		
 		Button menu1 = new Button("Create room"); menu1.setLayoutX(xBase+40); menu1.setLayoutY(yBase+40);
 		menu1.setStyle("-fx-pref-width: 120");
 		menu1.setOnAction(e->{
-			//messageFeed.setText(messageFeed.getText()+"\n"+text.getText());
-			client.sendMessage("request:add_chatroom\tcontent:"+text.getText());
+			client.sendMessage("request:create_chatroom\tcontent:"+text.getText());
 		});
-		Button menu6 = new Button("Login to room"); menu6.setLayoutX(xBase+40); menu6.setLayoutY(yBase+100);
+		Button menu6 = new Button("Login"); menu6.setLayoutX(xBase+40); menu6.setLayoutY(yBase+100);
 		menu6.setStyle("-fx-pref-width: 120");
 		menu6.setOnAction(e->{
-			//messageFeed.setText(messageFeed.getText()+"\n"+text.getText());
 			client.sendMessage("request:login\tcontent:"+text.getText());
 		});
 
 		Button menu7 = new Button("Choose room"); menu7.setLayoutX(xBase+40); menu7.setLayoutY(yBase+70);
 		menu7.setStyle("-fx-pref-width: 120");
 		menu7.setOnAction(e->{
-			//messageFeed.setText(messageFeed.getText()+"\n"+text.getText());
 			client.sendMessage("request:set_chatroom\tcontent:"+text.getText());
 		});
 		
@@ -72,32 +68,13 @@ public class ChatWindow implements Window{
 			client.sendMessage("request:logout\tcontent:");
 		});
 
-		Button menu2 = new Button("Clear messageFeed"); menu2.setLayoutX(xBase-94); menu2.setLayoutY(yBase+180);
+		Button menu2 = new Button("Clear mess"); menu2.setLayoutX(xBase-94); menu2.setLayoutY(yBase+180);
 		menu2.setStyle("-fx-pref-width: 97");
 		menu2.setOnAction(e->{
 			messageFeed.setText("Window cleared");
 			serverIn.setText("Window cleared");
 		});
-		/*
-		Button menu4 = new Button("Show more"); menu4.setLayoutX(xBase+40); menu4.setLayoutY(yBase+100);
-		menu4.setStyle("-fx-pref-width: 100");
-		menu4.setOnAction(e->{
-			String messageFeedtext = messageFeed.getText();
-			if (messageFeedtext.length()>100){
-				int counter = 0;
-				for(int x=0;x<messageFeedtext.length();x++){
-					if(messageFeedtext.charAt(x)=='\n'){
-						counter+=1;
-						if (counter==3){
-							messageFeedtext=messageFeedtext.substring(x);
-							messageFeed.setText(messageFeedtext);
-							break;
-						}
-					}
-				}
-				}
-		});
-		*/
+		
 
 		
 		serverIn = new TextArea("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); //serverIn.setAlignment(Pos.TOP_LEFT);
@@ -106,7 +83,7 @@ public class ChatWindow implements Window{
 
 		
 		
-		root.getChildren().addAll(messageFeed, menu1, menu2, menu3, /*menu4*/ menu5, menu6, menu7, text, serverIn);
+		root.getChildren().addAll(messageFeed, menu1, menu2, menu3,/* menu5, menu6*/ menu7, text, serverIn);
 		Scene scene = new Scene(root, 410, 420);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		updater1 = new FeedUpdater(client, messageFeed, client.ChatWindow);
@@ -119,8 +96,9 @@ public class ChatWindow implements Window{
 	
 	
 	public void wakeUp(){
-		serverIn.setText("");
-		messageFeed.setText("");
+		serverIn.setText("Logged into ");
+		messageFeed.setText("Received and sent messages will display here");
+		client.sendMessage("request:get_chatroom\tcontent:");
 	}
 	public void sleep(){
 		
