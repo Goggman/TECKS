@@ -29,7 +29,7 @@ public class ChatWindow implements Window{
 		int xBase=200; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		messageFeed = new TextArea("Welcome to Chat"); messageFeed.setLayoutX(xBase-195); messageFeed.setLayoutY(yBase-200); //messageFeed.setAlignment(Pos.TOP_LEFT);
-		messageFeed.setPrefSize(200, 350); messageFeed.setStyle("-fx-border-color:black");
+		messageFeed.setPrefSize(200, 350); messageFeed.setStyle("-fx-border-color:black");messageFeed.setEditable(false);
 		TextField text = new TextField(); text.setLayoutX(xBase-195); text.setLayoutY(yBase+150);
 		text.setStyle("-fx-pref-width: 200");
 		text.setPromptText("TypeHere");
@@ -101,7 +101,7 @@ public class ChatWindow implements Window{
 
 		
 		serverIn = new TextArea("info messages from server");  serverIn.setLayoutX(xBase+5); serverIn.setLayoutY(yBase-200); //serverIn.setAlignment(Pos.TOP_LEFT);
-		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");
+		serverIn.setPrefSize(200, 230); serverIn.setStyle("-fx-border-color:black");serverIn.setEditable(false);
 		
 
 		

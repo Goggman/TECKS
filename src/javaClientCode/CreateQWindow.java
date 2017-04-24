@@ -125,7 +125,7 @@ public class CreateQWindow implements Window {
 			}
 		});
 		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black");
-		feed.setPrefSize(350, 200);
+		feed.setPrefSize(350, 200);feed.setEditable(false);
 		
 		setSubject.setOnAction(e->{
 			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
@@ -223,7 +223,7 @@ public class CreateQWindow implements Window {
 		});
 		
 		//Setup serverFeed and the updater to maintain the feed
-		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);serverFeed.setEditable(false);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
 

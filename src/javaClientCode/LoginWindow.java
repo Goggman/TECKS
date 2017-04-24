@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import java.io.*;
 public class LoginWindow implements Window{
@@ -29,9 +30,15 @@ public class LoginWindow implements Window{
 	public Scene createScene(){
 		int xBase=100, yBase = 0;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		feed = new TextArea("Please log in"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+300);
+
+		feed = new TextArea("Please log in"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+300); //feed.setAlignment(Pos.TOP_LEFT);
 		feed.setPrefSize(400, 200); feed.setStyle("-fx-border-color:black");
+		feed.setEditable(false);
+		//Image tecboy = new Image(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
+
 		
+		
+
 		File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
 		Image tecboy = new Image(image.toURI().toString());
 		ImageView poster_boy = new ImageView(); poster_boy.setLayoutX(xBase+70); poster_boy.setLayoutY(yBase+20);
@@ -67,7 +74,7 @@ public class LoginWindow implements Window{
 		});
 		
 		
-		TextField password = new TextField(); password.setLayoutX(xBase+100); password.setLayoutY(yBase+180);
+		PasswordField password = new PasswordField(); password.setLayoutX(xBase+100); password.setLayoutY(yBase+180);
 		TextField username = new TextField(); username.setLayoutX(xBase+100); username.setLayoutY(yBase+140);
 		username.setPromptText("username");
 		username.setStyle("-fx-pref-width: 160");
