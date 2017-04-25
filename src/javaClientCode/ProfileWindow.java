@@ -40,11 +40,14 @@ public class ProfileWindow implements Window {
 	MenuButton removeSubject;
 	MenuButton setSubject;
 	MenuButton addSubject;
+	BarChart scoreGraph;
 	Stage chat;
 	boolean setSubjectNeedsUpdate=true;
 	boolean addSubjectNeedsUpdate=true;
 	int xBase, yBase;
-	
+	Button showSubjectGraph;
+	Button resetScore;
+	Button requestScore;
 	ProfileWindow(Stage stageIn, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		stage=stageIn;
 		ctrl=ctrlIn;
@@ -62,28 +65,45 @@ public class ProfileWindow implements Window {
 		subjectsGlobal = new TextArea();
 		subjectScore = new TextArea();
 		userScore = new TextArea();
-		
-		
 
 		stats = new TextArea(); stats.setLayoutX(xBase+100); stats.setLayoutY(yBase+100);stats.setEditable(false);
 
 		stats.setPrefHeight(150); stats.setPrefWidth(400);
 		stats.setEditable(false);
 		
-
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(400, 100);
 		serverFeed.setEditable(false);
-		
-		
 		
 		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+100); addSubject.setLayoutY(yBase+250); addSubject.setPrefWidth(120);
 		removeSubject = new MenuButton("RemoveSubject");  removeSubject.setLayoutX(xBase+223); removeSubject.setLayoutY(yBase+250); removeSubject.setPrefWidth(120);
 		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+346); setSubject.setLayoutY(yBase+250); setSubject.setPrefWidth(120);
-		Button resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+100); resetScore.setLayoutY(yBase+280); setSubject.setPrefWidth(100);
-		Button requestScore = new Button("reqScore"); requestScore.setLayoutX(xBase+206); requestScore.setLayoutY(yBase+280); requestScore.setPrefWidth(100);
+		showSubjectGraph = new Button("showGraph"); showSubjectGraph.setLayoutX(xBase+200); showSubjectGraph.setLayoutY(yBase+310);
+		resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+100); resetScore.setLayoutY(yBase+280); setSubject.setPrefWidth(100);
+		requestScore = new Button("reqScore"); requestScore.setLayoutX(xBase+206); requestScore.setLayoutY(yBase+280); requestScore.setPrefWidth(100);
 		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+100); createSubject.setLayoutY(yBase+310); createSubject.setPrefWidth(100);
-		BarChart scoreGraph = prepareUserScore();
+		scoreGraph = new BarChart(new CategoryAxis(), new NumberAxis()); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+		scoreGraph.setVisible(false);	scoreGraph.setPrefSize(300, 100);
 		
+		MenuButton typeScore = new MenuButton("pickScoreType"); typeScore.setLayoutX(xBase+403);typeScore.setLayoutY(yBase+300);
+		MenuItem showUserScore = new MenuItem("userScore");
+		showUserScore.setOnAction(e->{
+			root.getChildren().remove(scoreGraph);
+			scoreGraph=prepareScore(userScore);
+			scoreGraph.setVisible(true);
+			scoreGraph.setPrefSize(400, 100); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+			root.getChildren().add(scoreGraph);
+			
+		});
+		MenuItem showSubjectScore = new MenuItem("subjectScore"); showSubjectScore.setDisable(true);
+		showSubjectScore.setOnAction(e->{
+			root.getChildren().remove(scoreGraph);
+			scoreGraph=prepareScore(subjectScore);
+			scoreGraph.setVisible(true);
+			scoreGraph.setPrefSize(400, 100); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+			root.getChildren().add(scoreGraph);
+			
+		});
+		typeScore.getItems().addAll(showUserScore, showSubjectScore);
 
 
 		setSubject.setOnMouseEntered(e->{
@@ -101,6 +121,8 @@ public class ProfileWindow implements Window {
 					MenuItem item = new MenuItem(subject);
 					item.setOnAction(x->{
 						client.sendMessage("request:set_subject\tcontent:"+new String(subject));
+						userScore.clear();
+						client.sendMessage("request:get_stats\tcontent:");
 					});
 					setSubject.getItems().add(item);
 					
@@ -196,14 +218,6 @@ public class ProfileWindow implements Window {
 		});
 		
 
-		
-		TextField addSubjects = new TextField(); addSubjects.setLayoutX(xBase+350); addSubjects.setLayoutY(yBase+400);
-		addSubjects.setPromptText("addSubject");
-		addSubjects.setOnAction(e->{
-			client.sendMessage("request:add_subject\tcontent:"+addSubjects.getText());
-			addSubjects.clear();
-		});
-
 
 		
 		createSubject.setPromptText("createSubject");
@@ -219,13 +233,10 @@ public class ProfileWindow implements Window {
 		});
 		
 		
-		requestScore.setOnAction(e->{
-			client.sendMessage("request:get_subject_scores\tcontent:");
-		});
 
 
 
-		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, requestScore, scoreGraph);
+		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, requestScore, scoreGraph, typeScore);
 
 		
 		
@@ -248,51 +259,61 @@ public class ProfileWindow implements Window {
 	return scene;
 	}
 	
-	BarChart prepareUserScore(){
-		HashMap categoryScoreMap = new HashMap();
-		String[] rawScoreArray = userScore.getText().split("[@]");
-		for (String scoreString : rawScoreArray){
-			String[] rawScoreStringArray = scoreString.split("[|]");
-			for (String item : rawScoreStringArray){
-				//TODO: continue here
-			}
+	BarChart<String, Number> prepareScore(TextArea score){
+		if (score.getText().trim().isEmpty()){
+			return new BarChart(new CategoryAxis(), new NumberAxis());
 		}
+			CategoryAxis xAxis = new CategoryAxis();
+			NumberAxis yAxis = new NumberAxis(0, 1, 0.1); 
+			BarChart<String, Number> scoreGraphLocal = new BarChart<>(xAxis, yAxis);
+			
+			
+			HashMap<String, HashMap<String, Double>> subjectMap = new HashMap<>();
 		
+			String[] scoreBySubject = score.getText().split("[@]");
+			System.out.println("contents: "+score.getText());
+			for (String subjectScore : scoreBySubject){
+				HashMap<String, Double> categoryScoreMap = new HashMap<>();
+				String[] rawScoreArray = subjectScore.split("[|]");
+				String subject=rawScoreArray[0];
+				double scoreSubject = Double.parseDouble(rawScoreArray[1]);
+			
+				categoryScoreMap.put("Overall score", scoreSubject);
+				if (rawScoreArray.length>2){
+					for (int x=2;x<rawScoreArray.length;x+=2){
+						try{
+							categoryScoreMap.put(rawScoreArray[x], Double.parseDouble(rawScoreArray[x+1]));
+						}
+						catch(ArrayIndexOutOfBoundsException e){
+							categoryScoreMap.put(rawScoreArray[x], Double.parseDouble("0"));
+						}
+						catch(NumberFormatException xz){
+							categoryScoreMap.put(rawScoreArray[x], Double.parseDouble("0"));
+						}
+					}
+					subjectMap.put(subject, categoryScoreMap);
+				}
+				else{
+					HashMap<String, Double> categoryScoreMapAlt = new HashMap<>();
+					categoryScoreMapAlt.put("Overall Score", scoreSubject);
+					subjectMap.put(subject, categoryScoreMapAlt);
+				}
+
 		
-		CategoryAxis xAxis = new CategoryAxis();
-		NumberAxis yAxis = new NumberAxis();
-		BarChart scoreGraph = new BarChart(xAxis, yAxis);
+			}
+				for(String subjectKey : subjectMap.keySet() ){
+					XYChart.Series<String, Number> series = new XYChart.Series<>();
+					for(String category : subjectMap.get(subjectKey).keySet()){
+						series.getData().add(new XYChart.Data<String, Number>(category, subjectMap.get(subjectKey).get(category)));
+					}
+					series.setName(subjectKey);
+					scoreGraphLocal.getData().add(series);  scoreGraphLocal.setAnimated(false);  scoreGraphLocal.setLegendVisible(true);
+				}
 		
-		XYChart.Series series1 = new XYChart.Series();
-		series1.getData().add(new XYChart.Data("test", 1));
-		series1.getData().add(new XYChart.Data("test1", 2));
-		series1.getData().add(new XYChart.Data("test2", 3));
-		series1.setName("demo");
-		scoreGraph.getData().add(series1);
-		scoreGraph.setPrefSize(300, 100);
-		
-		scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
-		
-		return scoreGraph;
+		return scoreGraphLocal;
 	}
 	
-	BarChart prepareSubjectScore(){//TODO: continue here too
-		CategoryAxis xAxis = new CategoryAxis();
-		NumberAxis yAxis = new NumberAxis();
-		BarChart scoreGraph = new BarChart(xAxis, yAxis);
-		
-		XYChart.Series series1 = new XYChart.Series();
-		series1.getData().add(new XYChart.Data("test", 1));
-		series1.getData().add(new XYChart.Data("test1", 2));
-		series1.getData().add(new XYChart.Data("test2", 3));
-		series1.setName("demo");
-		scoreGraph.getData().add(series1);
-		scoreGraph.setPrefSize(300, 100);
-		
-		scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
-		
-		return scoreGraph;
-	}
+
 	
 	public void wakeUp(){
 		stats.setText("Your stats:");	
@@ -311,6 +332,7 @@ public class ProfileWindow implements Window {
 		client.sendMessage("request:get_subjects\tcontent:local");
 		client.sendMessage("request:get_subjects\tcontent:global");
 		client.sendMessage("request:get_stats\tcontent:");
+		//client.sendMessage("request:get_subject_scores\tcontent:");
 		
 		
 	}
