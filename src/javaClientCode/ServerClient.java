@@ -145,7 +145,7 @@ public class ServerClient {
 	
 	
 	void parse_subjects_global(String payload){
-		String subjectsGlobal = getContent(payload).replace("@", ", ");
+		String subjectsGlobal = getContent(payload);
 		ProfileWindowSubjectsGlobal.add(subjectsGlobal);
 
 
@@ -154,7 +154,12 @@ public class ServerClient {
 	void parse_subjects_local(String payload){
 		ProfileWindowStats.add(getContent(payload));
 		ProfileWindowSubjectsLocal.add(getContent(payload));
-
+		try{	
+			QuestionWindowSubjects.add(getContent(payload).split("[;]")[1].trim());
+			CreateQWindowSubjects.add(getContent(payload).split("[;]")[1].trim());}
+		catch(ArrayIndexOutOfBoundsException e){//do nothing
+		
+		}
 		printPrettyMessageGeneral(payload);
 	}
 	
@@ -195,12 +200,6 @@ public class ServerClient {
 	}
 	void parse_stats(String payload){
 		ProfileWindowStats.add(getContent(payload));
-		try{QuestionWindowSubjects.add(getContent(payload).split("[;]")[1].trim());
-			CreateQWindowSubjects.add(getContent(payload).split("[;]")[1].trim());}
-		catch(ArrayIndexOutOfBoundsException e){//do nothing
-			
-		}
-		
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_question(String payload){
