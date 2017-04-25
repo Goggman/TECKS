@@ -22,12 +22,12 @@ public class ServerHost {
 	
 	
 	
-	HashMap<String,HashMap> properties;
+	HashMap<String, HashMap> properties;
 	int portNumber;
-	ServerSocket serverSocket;
+	public ServerSocket serverSocket;
     PropertiesHandler prop=new PropertiesHandler();
     
-	ServerHost(){
+	public ServerHost(){
 		portNumber=12000;
 		setProperties();
 		try{

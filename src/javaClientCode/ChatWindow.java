@@ -20,19 +20,23 @@ public class ChatWindow implements Window{
 	TextArea serverIn;
 	FeedUpdater updater1;
 	FeedUpdater updater2;
-	TextArea messageFeed;
-	ChatWindow(Stage stageInput, ServerClient clientIn){
+	public TextArea messageFeed;
+	public TextField text;
+	
+	public ChatWindow(Stage stageInput, ServerClient clientIn){
 		stage=stageInput;
 		client=clientIn;
 	}
+	
 	public Scene createScene(){
 		int xBase=200; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		messageFeed = new TextArea("Welcome to Chat"); messageFeed.setLayoutX(xBase-195); messageFeed.setLayoutY(yBase-200); //messageFeed.setAlignment(Pos.TOP_LEFT);
 		messageFeed.setPrefSize(200, 350); messageFeed.setStyle("-fx-border-color:black");messageFeed.setEditable(false);
-		TextField text = new TextField(); text.setLayoutX(xBase-195); text.setLayoutY(yBase+150);
+		text = new TextField(); text.setLayoutX(xBase-195); text.setLayoutY(yBase+150);
 		text.setStyle("-fx-pref-width: 200");
 		text.setPromptText("TypeHere");
+		//TODO: test messageFeed
 		text.setOnAction(e->{
 			messageFeed.setText(messageFeed.getText()+"\n"+text.getText());
 			client.sendMessage("request:msg\tcontent:"+text.getText());
@@ -68,6 +72,7 @@ public class ChatWindow implements Window{
 			client.sendMessage("request:logout\tcontent:");
 		});
 
+		//TODO: test
 		Button menu2 = new Button("Clear mess"); menu2.setLayoutX(xBase-94); menu2.setLayoutY(yBase+180);
 		menu2.setStyle("-fx-pref-width: 97");
 		menu2.setOnAction(e->{
