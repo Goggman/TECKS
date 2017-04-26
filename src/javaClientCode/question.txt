@@ -1,4 +1,0 @@
-Header:  multiple-choice, difficulty-1, tdt4144
-c: Loops
-q: In a while(){} code block, without a terminating condition, which reserved keyword is used to end the loop?
-a: break

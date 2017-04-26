@@ -59,9 +59,10 @@ public class QuestionSchema {
 	}
 
 	QuestionSchema(ArrayList<Question> questionlist, int dummy){
-		for (Question q : questionlist){
-			addQuestion(q);
-		}
+			for (Question q : questionlist){
+				addQuestion(q);
+			}
+		
 	}
 	
 	

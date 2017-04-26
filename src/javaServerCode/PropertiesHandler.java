@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 public class PropertiesHandler {
 	//String path= System.getProperties().getProperty("user.dir") +"/TECKS/src/javaServerCode/serverSave.ser";
-	String path= System.getProperties().getProperty("user.dir") +"serverSave.ser";
+	String path= "serverSave.ser";
 	
 	public PropertiesHandler(){
 		

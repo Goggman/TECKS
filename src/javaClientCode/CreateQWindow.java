@@ -43,26 +43,24 @@ public class CreateQWindow implements Window {
 	public Scene createScene(){
 		int xBase=100, yBase=0;
 
-		int fieldBaseX=200, fieldBaseY=350;
-
-
+		int fieldBaseX=130, fieldBaseY=300;
+		
+		
 		quiz = new ArrayList<>();
 		subjects = new TextArea();
+		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black");feed.setPrefSize(400, 150);feed.setEditable(false);feed.setWrapText(true);
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
-		Label title = new Label("Create Quiz");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
-		TextField setSubject = new TextField(); setSubject.setLayoutX(xBase+fieldBaseX); setSubject.setLayoutY(yBase+fieldBaseY); setSubject.setPromptText("set working subject");
-
-		
+		Label title = new Label("Create Quiz");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px; text-decoration: underline");
 		TextField head = new TextField(); head.setLayoutX(xBase+fieldBaseX+0); head.setLayoutY(yBase+fieldBaseY+30); head.setPromptText("Set header"); head.setVisible(false); head.setDisable(true);
-		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+60);category.setPromptText("Category");
-		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+90);qText.setPromptText("Question");
-		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+120);aText.setPromptText("Answer");
-		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+150);op1.setPromptText("Option 1");op1.setVisible(false);
-		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+180);op2.setPromptText("Option 2");op2.setVisible(false);
-		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+210);
-		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+50);save.setLayoutY(yBase+fieldBaseY+210);
-
-
+		TextField category = new TextField(); category.setLayoutX(xBase+fieldBaseX);category.setLayoutY(yBase+fieldBaseY+2);category.setPromptText("Category");
+		TextField qText = new TextField(); qText.setLayoutX(xBase+fieldBaseX+0); qText.setLayoutY(yBase+fieldBaseY+32);qText.setPromptText("Question");
+		TextField aText = new TextField(); aText.setLayoutX(xBase+fieldBaseX+0); aText.setLayoutY(yBase+fieldBaseY+62);aText.setPromptText("Answer");
+		TextField op1 = new TextField(); op1.setLayoutX(xBase+fieldBaseX);op1.setLayoutY(yBase+fieldBaseY+92);op1.setPromptText("Option 1");op1.setDisable(true);
+		TextField op2 = new TextField(); op2.setLayoutX(xBase+fieldBaseX);op2.setLayoutY(yBase+fieldBaseY+122);op2.setPromptText("Option 2");op2.setDisable(true);
+		Button createQ = new Button("Create"); createQ.setLayoutX(xBase+fieldBaseX); createQ.setLayoutY(yBase+fieldBaseY+152);
+		Button save = new Button("Save q's");save.setLayoutX(xBase+fieldBaseX+75);save.setLayoutY(yBase+fieldBaseY+152);
+		MenuButton setSubjectMenu = new MenuButton("setSubject"); setSubjectMenu.setLayoutX(xBase+fieldBaseX-110); setSubjectMenu.setLayoutY(yBase+fieldBaseY+60);
+		setSubjectMenu.setPrefWidth(100);
 		
 		createQ.setStyle("-fx-pref-width: 73");
 		
@@ -70,9 +68,9 @@ public class CreateQWindow implements Window {
 		save.setStyle("-fx-pref-width: 73");
 
 		
-		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+51); nextQ.setLayoutY(yBase+302);
-		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+302);
-		Button discard = new Button("discQ"); discard.setLayoutX(xBase+103); discard.setLayoutY(yBase+302);
+		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+51); nextQ.setLayoutY(yBase+252);
+		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+252);
+		Button discard = new Button("discQ"); discard.setLayoutX(xBase+103); discard.setLayoutY(yBase+252);
 	
 
 
@@ -134,7 +132,7 @@ public class CreateQWindow implements Window {
 		
 		
 		
-		MenuButton setSubjectMenu = new MenuButton("setSubject"); setSubjectMenu.setLayoutX(xBase+fieldBaseX); setSubjectMenu.setLayoutY(yBase+fieldBaseY);
+		
 		setSubjectMenu.setOnMouseEntered(e->{
 			if (subjects.getText().trim().isEmpty()){
 				return;
@@ -153,12 +151,6 @@ public class CreateQWindow implements Window {
 				SubjectNeedsUpdate = 0;
 			}
 		});
-		TextArea feed = new TextArea("QuestionMaker"); feed.setLayoutX(xBase); feed.setLayoutY(yBase+100); feed.setStyle("-fx-border-color: black");
-		feed.setPrefSize(350, 200);feed.setEditable(false);feed.setWrapText(true);
-		
-		setSubject.setOnAction(e->{
-			client.sendMessage("request:set_subject\tcontent:"+setSubject.getText());
-		});
 
 		Label error = new Label("Needs setSubject");error.setVisible(false);
 		
@@ -167,17 +159,18 @@ public class CreateQWindow implements Window {
 		MenuItem mulChoice = new MenuItem(); mulChoice.setText("Multiple choice");
 		MenuItem fillIn = new MenuItem(); fillIn.setText("Fill in the blank");
 
-		MenuButton qType = new MenuButton("Fill in", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX);qType.setLayoutY(yBase+fieldBaseY+30);
+		MenuButton qType = new MenuButton("Fill in", null, mulChoice, fillIn); qType.setLayoutX(xBase+fieldBaseX-110);qType.setLayoutY(yBase+fieldBaseY+93);
+		qType.setPrefWidth(100);
 
 		//choose question type
 		mulChoice.setOnAction(e -> {
-			op1.setVisible(true);
-			op2.setVisible(true);
+			op1.setDisable(false);
+			op2.setDisable(false);
 			qType.setText("Multiple choice");
 		});
 		fillIn.setOnAction(e -> {
-			op1.setVisible(false);
-			op2.setVisible(false);
+			op1.setDisable(true);
+			op2.setDisable(true);
 			qType.setText("Fill in");
 		});
 		//set category
@@ -188,11 +181,13 @@ public class CreateQWindow implements Window {
 			if (quiz.isEmpty()){
 				return;
 			}
-			feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+			feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			if (index+1<quiz.size()){
 				index++;
 				String options = quiz.get(index).getOptions().toString();
-				feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+				feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+				feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			}
 		});
 		prevQ.setOnAction(e->{
@@ -200,10 +195,12 @@ public class CreateQWindow implements Window {
 			if (quiz.isEmpty()){
 				return;
 			}
-			feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+			feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			if (index-1>-1){
 				index--;
-				feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+				feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+				feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			}
 		});
 		discard.setOnAction(e->{
@@ -230,13 +227,15 @@ public class CreateQWindow implements Window {
 				save.setDisable(false);
 			}
 			
-			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+"\n"+op2.getText());
+			feed.setText("Header: "+headerText+"\nCategory: "+categoryText+"\nText: "+questionText+"\nAnswerText: "+answerText+"\nOptions: ["+op1.getText()+", "+op2.getText()+"]");
+			
 			if (qType.getText().equals("Multiple choice")){
 				quiz.add(new Question(categoryText, questionText, answerText, headerText, op1.getText(), op2.getText()));
 				
 			} else {
 				quiz.add(new Question(categoryText, questionText, answerText, headerText));
 			}
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			qText.clear();
 			aText.clear();
 			head.clear();
@@ -252,7 +251,7 @@ public class CreateQWindow implements Window {
 		});
 		
 		//Setup serverFeed and the updater to maintain the feed
-		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+340); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(200, 240);serverFeed.setEditable(false);
+		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase); serverFeed.setLayoutY(yBase+500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(400, 100);serverFeed.setEditable(false);
 		serverFeed.setWrapText(true);
 		FeedUpdater updater = new FeedUpdater(client, serverFeed, client.CreateQWindow);
 		updater.start();
