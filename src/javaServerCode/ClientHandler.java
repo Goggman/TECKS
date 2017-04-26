@@ -26,6 +26,9 @@ public class ClientHandler implements Runnable{
     private String current_subject;
     private String userType;
     
+    public ClientHandler(){
+    	
+    }
     
 	public ClientHandler(ServerHost server, Socket clientSocket)  {
 		this.server=server;

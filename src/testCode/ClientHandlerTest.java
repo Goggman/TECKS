@@ -14,7 +14,7 @@ public class ClientHandlerTest extends TestCase{
 	ServerHost sh;
 	public void setUp(){
 		sh = new ServerHost();
-		
+		cHandler = new ClientHandler();
 		
 		try {
 			client = new ServerClient();
@@ -31,7 +31,7 @@ public class ClientHandlerTest extends TestCase{
 		cHandler.setUserType("test");
 		client.sendMessage("request:create_subject\tcontent:TEST");
 	}
-	/*
+	
 	public void tearDown(){
 		try {
 			sh.serverSocket.close();
@@ -40,11 +40,11 @@ public class ClientHandlerTest extends TestCase{
 			e.printStackTrace();
 		}
 	}
-	/*
+	
 	public void test(){
 		assertTrue(true);
-	}*/
-	/*
+	}
+	
 	public void testProperties(){
 		assertEquals("test", cHandler.getCurrentSubject());
 		assertEquals("test", cHandler.getUsername());
@@ -52,12 +52,11 @@ public class ClientHandlerTest extends TestCase{
 		assertEquals("test", cHandler.getUserType());
 		
 		
-	}*/
+	}
 	
 	
 	public void testParsers() throws InterruptedException{
 		client.sendMessage("request:create_subject\tcontent:TEST");
-		Thread.sleep(3000);
 		assertEquals(null, cHandler.getReturnToClient());
 	}
 	
