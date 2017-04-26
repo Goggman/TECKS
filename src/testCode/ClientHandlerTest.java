@@ -14,7 +14,7 @@ public class ClientHandlerTest extends TestCase{
 	ServerHost sh;
 	public void setUp(){
 		sh = new ServerHost();
-		cHandler = new ClientHandler();
+		//cHandler = new ClientHandler();
 		
 		try {
 			client = new ServerClient();
@@ -30,6 +30,7 @@ public class ClientHandlerTest extends TestCase{
 		cHandler.setChat("test");
 		cHandler.setUserType("test");
 		client.sendMessage("request:create_subject\tcontent:TEST");
+		
 	}
 	
 	public void tearDown(){
@@ -50,8 +51,6 @@ public class ClientHandlerTest extends TestCase{
 		assertEquals("test", cHandler.getUsername());
 		assertEquals("test", cHandler.getChat());
 		assertEquals("test", cHandler.getUserType());
-		
-		
 	}
 	
 	

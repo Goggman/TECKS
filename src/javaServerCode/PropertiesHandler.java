@@ -10,7 +10,11 @@ public class PropertiesHandler {
 	//String path= System.getProperties().getProperty("user.dir") +"/TECKS/src/javaServerCode/serverSave.ser";
 	String path= System.getProperties().getProperty("user.dir") +"serverSave.ser";
 	
-	HashMap purgeMap(HashMap map){								//helper function, clears the map from non .ser -able objects (objects that cannot be written to file easily), particularly clienthandler objects, which are to be found in the properties map
+	public PropertiesHandler(){
+		
+	}
+	
+	public HashMap purgeMap(HashMap map){								//helper function, clears the map from non .ser -able objects (objects that cannot be written to file easily), particularly clienthandler objects, which are to be found in the properties map
 		HashMap newmap = new HashMap<String, HashMap>();
 		newmap.put("users", (HashMap)map.get("users"));
 		newmap.put("chatrooms", new HashMap());
@@ -31,7 +35,7 @@ public class PropertiesHandler {
 		
 		return newmap;
 	}
-	void saveProperties(HashMap map) throws Exception{
+	public void saveProperties(HashMap map) throws Exception{
 		ObjectOutputStream oos=null;
 		FileOutputStream fout=null;
 		try{
@@ -56,7 +60,7 @@ public class PropertiesHandler {
 		}
 		
 	}
-	HashMap<String, HashMap> loadProperties(){
+	public HashMap<String, HashMap> loadProperties(){
 		ObjectInputStream objectinputstream = null;
 		FileInputStream streamIn=null;
 		try {
@@ -78,5 +82,9 @@ public class PropertiesHandler {
 		    } 
 		}
 		return null;
+	}
+	
+	public String getPath(){
+		return path;
 	}
 }

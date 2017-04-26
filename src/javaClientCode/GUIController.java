@@ -21,7 +21,7 @@ public class GUIController {
 	 * @param stageInput
 	 */
 	GUIController(){
-		
+		windows = new ArrayList<Scene>();
 	}
 	GUIController(Stage stageInput){
 		client=new ServerClient();
@@ -31,7 +31,6 @@ public class GUIController {
 		chatStage.setScene(chat.createScene());
 		stage=stageInput; stage.setResizable(false);
 		
-
 		windows = new ArrayList<Scene>();
 		vindauge = new ArrayList<Window>();
 		
@@ -59,7 +58,7 @@ public class GUIController {
 	 * add new scene
 	 * @param window
 	 */
-	void addScene(Scene window){
+	public void addScene(Scene window){
 		if (! windows.contains(window)){
 			windows.add(window);
 		}
@@ -70,7 +69,7 @@ public class GUIController {
 	 * @param index
 	 * @return Scene object
 	 */
-	Scene getScene(int index){
+	public Scene getScene(int index){
 		((Window)vindauge.get(index)).wakeUp();
 		return windows.get(index);
 	}

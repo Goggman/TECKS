@@ -28,6 +28,10 @@ public class ChatWindow implements Window{
 		client=clientIn;
 	}
 	
+	public ChatWindow() {
+		client = new ServerClient();
+	}
+
 	public Scene createScene(){
 		int xBase=200; int yBase = 200;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
