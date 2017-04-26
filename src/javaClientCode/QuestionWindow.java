@@ -68,27 +68,26 @@ public class QuestionWindow implements Window {
 	 * @return scene1 Scene objekt
 	 */
 	public Scene createScene(){
-		int xBase=100, yBase=0;
+		int xBase=100, yBase=70;
 		subjects = new TextArea();
 		questions = new TextArea();
 		bestQuestions = new TextArea();
 		
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 
-		Label title = new Label("Quiz");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
+		Label title = new Label("Quiz");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
 		
 
-		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(xBase); serverIn.setLayoutY(yBase+450); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
-
+		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(100); serverIn.setLayoutY(500); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
 		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+350);
-		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+340); confirm.setLayoutY(yBase+350);
+		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+330); confirm.setLayoutY(yBase+350);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+350);
 		
-		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+70);pickCategory.setText("Categories");
-		m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
+		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+100);pickCategory.setText("Categories");
+		m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+100);
 
 		
 
@@ -218,6 +217,8 @@ public class QuestionWindow implements Window {
 				client.sendMessage("request:add_results\tcontent:"+analyzer.prepareContent());
 				quizStarted=0;
 				index=0;
+				pickCategory.setDisable(false);
+				m.setDisable(false);
 			}
 		});
 		
@@ -303,6 +304,7 @@ public class QuestionWindow implements Window {
 	
 		m.setPrefWidth(100);
 		m.setOnMouseEntered(e->{
+
 			if (subjects.getText().trim().isEmpty()){
 				return;
 			}
@@ -357,19 +359,18 @@ public class QuestionWindow implements Window {
 						setSchema(new QuestionSchema(categoryQuestionMap.get(next),0));
 						feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
 						quizStarted=1;
+						pickCategory.setDisable(true);
+						m.setDisable(true);
 						Question q = schema.getQuestions().get(index);
 						if (q.getOptions().size() > 1){
 							userInput.setVisible(false);
 							for (RadioButton rb : radiOptions){
 								rb.setVisible(true);
 							}
-							
 							Collections.shuffle(q.getOptions());
 							for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
 								radiOptions.get(j).setText(q.getOptions().get(k));
-								
 							}
-							
 						}
 						else {
 							userInput.setVisible(true);
@@ -379,11 +380,16 @@ public class QuestionWindow implements Window {
 						}
 					});
 					pickCategory.getItems().add(item);
-					
 				}
 				CategoryNeedsUpdate=0;
 				MenuItem recommended = new MenuItem("Recommended questions");
 				recommended.setOnAction(z->{
+					if (bestQuestions.getText().trim().isEmpty()){
+						return;
+					}
+					if(!categoryQuestionMap.containsKey(bestQuestions.getText().trim())) {
+						return;
+					}
 					setSchema(new QuestionSchema(categoryQuestionMap.get(bestQuestions.getText().trim()),0));
 					feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
 					quizStarted=1;
@@ -393,13 +399,10 @@ public class QuestionWindow implements Window {
 						for (RadioButton rb : radiOptions){
 							rb.setVisible(true);
 						}
-						
 						Collections.shuffle(q.getOptions());
 						for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
 							radiOptions.get(j).setText(q.getOptions().get(k));
-							
 						}
-						
 					}
 					else {
 						userInput.setVisible(true);
@@ -409,12 +412,11 @@ public class QuestionWindow implements Window {
 					}
 				});
 				m.getItems().add(recommended);
-				
 			}
 		});
 
 		
-		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput);
+		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput, title);
 
 		Scene scene1 = new Scene(root, 600, 600);
 		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
@@ -486,7 +488,7 @@ public class QuestionWindow implements Window {
 		questions.clear();
 		bestQuestions.clear();
 		serverIn.clear();
-		feed.setText("Pick a subject to continue");
+		feed.setText(feed.getText()+"\n"+"Pick a subject to continue");
 		pickCategory.setDisable(true);
 		client.sendMessage("request:get_subjects\tcontent:local");
 		if (firstStart==1){

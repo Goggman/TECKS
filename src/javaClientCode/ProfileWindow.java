@@ -40,6 +40,7 @@ public class ProfileWindow implements Window {
 	MenuButton removeSubject;
 	MenuButton setSubject;
 	MenuButton addSubject;
+	Label graphName;
 	BarChart scoreGraph;
 	Stage chat;
 	boolean setSubjectNeedsUpdate=true;
@@ -57,9 +58,8 @@ public class ProfileWindow implements Window {
 	
 	public Scene createScene(){
 		xBase = 0; yBase = 0;
-		Pane root = new Pane();
+		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 
-		Label title = new Label("Your Profile");title.setLayoutX(200);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
 		subjectsLocal = new TextArea();
 
 		subjectsGlobal = new TextArea();
@@ -73,18 +73,17 @@ public class ProfileWindow implements Window {
 		
 		serverFeed = new TextArea(); serverFeed.setLayoutX(xBase+100); serverFeed.setLayoutY(yBase+500); serverFeed.setStyle("-fx-border-color: black"); serverFeed.setPrefSize(400, 100);
 		serverFeed.setEditable(false);
-		
-		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+100); addSubject.setLayoutY(yBase+250); addSubject.setPrefWidth(120);
-		removeSubject = new MenuButton("RemoveSubject");  removeSubject.setLayoutX(xBase+223); removeSubject.setLayoutY(yBase+250); removeSubject.setPrefWidth(120);
-		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+346); setSubject.setLayoutY(yBase+250); setSubject.setPrefWidth(120);
-		showSubjectGraph = new Button("showGraph"); showSubjectGraph.setLayoutX(xBase+200); showSubjectGraph.setLayoutY(yBase+310);
-		resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+100); resetScore.setLayoutY(yBase+280); setSubject.setPrefWidth(100);
-		requestScore = new Button("reqScore"); requestScore.setLayoutX(xBase+206); requestScore.setLayoutY(yBase+280); requestScore.setPrefWidth(100);
-		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+100); createSubject.setLayoutY(yBase+310); createSubject.setPrefWidth(100);
-		scoreGraph = new BarChart(new CategoryAxis(), new NumberAxis()); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
+		Label title = new Label("Your profile");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
+		addSubject = new MenuButton("addSubject");  addSubject.setLayoutX(xBase+100); addSubject.setLayoutY(yBase+253); addSubject.setPrefWidth(120);
+		removeSubject = new MenuButton("removeSubject");  removeSubject.setLayoutX(xBase+346); removeSubject.setLayoutY(yBase+253); removeSubject.setPrefWidth(120);
+		setSubject = new MenuButton("setSubject"); setSubject.setLayoutX(xBase+223); setSubject.setLayoutY(yBase+253); setSubject.setPrefWidth(120);
+		showSubjectGraph = new Button("showGraph"); showSubjectGraph.setLayoutX(xBase+200); showSubjectGraph.setLayoutY(yBase+313);
+		resetScore = new Button("resetScore"); resetScore.setLayoutX(xBase+100); resetScore.setLayoutY(yBase+283); resetScore.setPrefWidth(120); resetScore.setPrefHeight(29); resetScore.setStyle("-fx-alignment: BASELINE_LEFT");
+		TextField createSubject = new TextField(); createSubject.setLayoutX(xBase+100); createSubject.setLayoutY(yBase+316); createSubject.setPrefWidth(100);
+		scoreGraph = new BarChart(new CategoryAxis(), new NumberAxis()); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+353);
 		scoreGraph.setVisible(false);	scoreGraph.setPrefSize(300, 100);
-		
-		MenuButton typeScore = new MenuButton("pickScoreType"); typeScore.setLayoutX(xBase+403);typeScore.setLayoutY(yBase+300);
+		graphName = new Label("No score showing"); graphName.setLayoutX(xBase+270);graphName.setLayoutY(yBase+323);
+		MenuButton typeScore = new MenuButton("pickScoreType"); typeScore.setLayoutX(xBase+223);typeScore.setLayoutY(yBase+283); typeScore.setPrefHeight(resetScore.getPrefHeight());
 		MenuItem showUserScore = new MenuItem("userScore");
 		showUserScore.setOnAction(e->{
 			root.getChildren().remove(scoreGraph);
@@ -92,9 +91,10 @@ public class ProfileWindow implements Window {
 			scoreGraph.setVisible(true);
 			scoreGraph.setPrefSize(400, 100); scoreGraph.setLayoutX(xBase+100); scoreGraph.setLayoutY(yBase+350);
 			root.getChildren().add(scoreGraph);
+			graphName.setText(setSubject.getText());
 			
 		});
-		MenuItem showSubjectScore = new MenuItem("subjectScore"); showSubjectScore.setDisable(true);
+		MenuItem showSubjectScore = new MenuItem("subjectScore");
 		showSubjectScore.setOnAction(e->{
 			root.getChildren().remove(scoreGraph);
 			scoreGraph=prepareScore(subjectScore);
@@ -122,7 +122,10 @@ public class ProfileWindow implements Window {
 					item.setOnAction(x->{
 						client.sendMessage("request:set_subject\tcontent:"+new String(subject));
 						userScore.clear();
+						subjectScore.clear();
 						client.sendMessage("request:get_stats\tcontent:");
+						setSubject.setText(subject);
+						client.sendMessage("request:get_subject_scores\tcontent:noreply");
 					});
 					setSubject.getItems().add(item);
 					
@@ -236,7 +239,7 @@ public class ProfileWindow implements Window {
 
 
 
-		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, requestScore, scoreGraph, typeScore);
+		root.getChildren().addAll(stats, serverFeed, addSubject, showChat, hideChat, createSubject, resetScore, removeSubject, setSubject, tab1, tab2, tab3, tab4, scoreGraph, typeScore, graphName, title);
 
 		
 		
@@ -252,7 +255,7 @@ public class ProfileWindow implements Window {
 		updater5.start();
 		updater6 = new FeedUpdater(client, subjectScore, client.ProfileWindowSubjectScore);
 		updater6.start();
-		Scene scene = new Scene(root, 600, 600);
+		Scene scene = new Scene(root, 600, 600); 
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		
 
@@ -332,7 +335,7 @@ public class ProfileWindow implements Window {
 		client.sendMessage("request:get_subjects\tcontent:local");
 		client.sendMessage("request:get_subjects\tcontent:global");
 		client.sendMessage("request:get_stats\tcontent:");
-		//client.sendMessage("request:get_subject_scores\tcontent:");
+		
 		
 		
 	}

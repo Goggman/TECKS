@@ -3,6 +3,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,16 +30,13 @@ public class LoginWindow implements Window{
 		chat=chatIn;
 	}
 	public Scene createScene(){
-		int xBase=100, yBase = 0;
+		int xBase=100, yBase = 80;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 		feed = new TextArea("Please log in"); feed.setLayoutX(xBase); feed.setLayoutY(300); //feed.setAlignment(Pos.TOP_LEFT);
-
-		feed.setPrefSize(400, 200); feed.setStyle("-fx-border-color:black");
+		Label title = new Label("Login");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
+		feed.setPrefSize(400, 100); feed.setStyle("-fx-border-color:black"); feed.setLayoutX(100); feed.setLayoutY(500);
 		feed.setWrapText(true);
 		feed.setEditable(false);
-		//Image tecboy = new Image(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
-		
-		//File image = new File(System.getProperties().getProperty("user.dir") +"/TECKS/src/javaClientCode/POSTER_BOY_NOEDGE_EDIT.png");
 		File image = new File("POSTER_BOY_NOEDGE_EDIT.png");
 		Image tecboy = new Image(image.toURI().toString());
 		ImageView poster_boy = new ImageView(); poster_boy.setLayoutX(xBase+70); poster_boy.setLayoutY(yBase+20);
@@ -106,21 +104,20 @@ public class LoginWindow implements Window{
 		});
 
 		//TextField password = new TextField();
-		Button menu1 = new Button("Login"); menu1.setLayoutX(xBase+150); menu1.setLayoutY(210);
+		Button menu1 = new Button("Login"); menu1.setLayoutX(xBase+150); menu1.setLayoutY(yBase+210);
 		menu1.setPrefWidth(100);
 		menu1.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText()+"@"+password.getText());
 			username.clear(); password.clear();
 		});
-		Button menu6 = new Button("Logout"); menu6.setLayoutX(xBase+150); menu6.setLayoutY(240);
+		Button menu6 = new Button("Logout"); menu6.setLayoutX(xBase+150); menu6.setLayoutY(yBase+240);
 		menu6.setPrefWidth(100);
 		menu6.setOnAction(e->{
 			client.sendMessage("request:logout\tcontent:");
 		});
 		
 		type = "student";
-		MenuButton userType = new MenuButton("PickType"); userType.setLayoutX(xBase); userType.setLayoutY(yBase+180);
-		//userType.setPrefWidth(80);
+		MenuButton userType = new MenuButton("PickType"); userType.setLayoutX(xBase+150); userType.setLayoutY(yBase+300); userType.setPrefWidth(100); userType.setPrefHeight(30);
 		MenuItem student = new MenuItem("student");
 		MenuItem lecturer = new MenuItem("lecturer");
 		MenuItem admin = new MenuItem("admin");
@@ -138,7 +135,8 @@ public class LoginWindow implements Window{
 			userType.setText(type);
 		});
 		
-		Button createUser = new Button("CreateUser"); createUser.setLayoutX(xBase); createUser.setLayoutY(yBase+150);
+		Button createUser = new Button("CreateUser"); createUser.setLayoutX(xBase+150); createUser.setLayoutY(yBase+270);
+		createUser.setPrefWidth(100);
 		createUser.setOnAction(e->{
 			client.sendMessage("request:login\tcontent:"+username.getText()+"@"+password.getText()+"@"+type);
 			type="student";
@@ -161,17 +159,10 @@ public class LoginWindow implements Window{
 			chat.hide();
 		});
 
-		Button menu5 = new Button("Clear window"); menu5.setLayoutX(100);menu5.setLayoutY(503);
-		menu5.setStyle("-fx-pref-width: 100");
-		menu5.setOnAction(e->{
-			feed.setText("Window cleared");
-		});
-
-		root.getChildren().addAll(feed, menu1, showChat, hideChat, menu5, menu6, username, tab1, tab2, tab3, tab4, password, poster_boy, createUser, userType);
+		root.getChildren().addAll(feed, menu1, showChat, hideChat, menu6, username, tab1, tab2, tab3, tab4, password, poster_boy, createUser, userType, title);
 		Scene scene = new Scene(root, 600, 600);
 		scene.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
 		FeedUpdater updater = new FeedUpdater(client, feed, client.LoginWindow);
-		//FeedUpdater updater = new FeedUpdater(client, feed);
 		updater.start();
 		return scene;
 	}
@@ -181,7 +172,7 @@ public class LoginWindow implements Window{
 			newStart = 0;
 		}
 		else{
-			feed.setText("");
+			feed.clear();
 		}
 		
 	}
