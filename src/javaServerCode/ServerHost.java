@@ -27,7 +27,7 @@ public class ServerHost {
 	ServerSocket serverSocket;
     PropertiesHandler prop=new PropertiesHandler();
     
-	ServerHost(){
+	public ServerHost(){
 		portNumber=12000;
 		setProperties();
 		try{

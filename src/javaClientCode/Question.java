@@ -20,7 +20,7 @@ public class Question {
 	 * @param header header text
 	 * @param options list of options
 	 */
-	Question(String categoryInput, String question, String answer, String header, Object... options){
+	public Question(String categoryInput, String question, String answer, String header, Object... options){
 		this.questionText = question;
 		String[] props = header.split(",");
 		for (String words : props){

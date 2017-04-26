@@ -20,8 +20,8 @@ public class ChatWindow implements Window{
 	TextArea serverIn;
 	FeedUpdater updater1;
 	FeedUpdater updater2;
-	TextArea messageFeed;
-	ChatWindow(Stage stageInput, ServerClient clientIn){
+	public TextArea messageFeed;
+	public ChatWindow(Stage stageInput, ServerClient clientIn){
 		stage=stageInput;
 		client=clientIn;
 	}
