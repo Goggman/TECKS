@@ -975,9 +975,7 @@ public class ClientHandler implements Runnable{
 			}
 			
 			String content = "";
-			//Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
-			//while(subject_it.hasNext()){
-				//String nextSubject = (String)subject_it.next();
+			
 				String nextSubject = getCurrentSubject();
 				HashMap subject = (HashMap)((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(nextSubject);
 			
@@ -993,15 +991,11 @@ public class ClientHandler implements Runnable{
 					categoryAndScore+=nextCategory+"|"+categoryScore;
 					if (category_it.hasNext()){
 						categoryAndScore +="|";
-						}
+						} //TODO: classcast Exception , why, fix
 				}
 				totalScore=totalScore/(double)subject.get("#questions");
 				content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
-				//if (subject_it.hasNext()){
-				//	content+="@";
-				//}
-			
-			//}
+
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:userScore\t"
@@ -1101,43 +1095,6 @@ public class ClientHandler implements Runnable{
 				
 			}
 		}
-		/*
-		ArrayList<String> questionsToClient = new ArrayList();
-		ArrayList<String> questions = (ArrayList<String>) ((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions");
-		String content="";
-		
-		if (questions.size()>0){
-			for (String question : questions){ // find the correct category of questions, gather those in a list
-				String[] questionArray = question.split("[|]");
-				for(int x=0;x<questionArray.length;x++){
-				
-					if (questionArray[x].split("[;]")[0].equals("c")){
-						String category = questionArray[x].split("[;]")[1];
-						if (category.equals(minCategory)){
-							questionsToClient.add(question);
-						}
-					
-					}
-				}
-			
-			}
-		
-			content = "";
-			for(String question : questionsToClient){ 
-			content+=question+"@";
-			}
-			content = content.substring(0, content.length());
-			
-		}
-		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
-					+"\tsender:server\t"
-					+ "response:error\t"
-					+ "content:No questions added in subject";
-			out.println(returnToClient);
-			return;
-		}
-		*/
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:bestQuestions\t"

@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,12 +40,14 @@ public class QuestionWindow implements Window {
 	TextArea feed;
 	MenuButton pickCategory;
 	MenuButton m;
+	CheckBox check;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
 	int firstStart = 1;
 	int SubjectNeedsUpdate = 1;
 	int CategoryNeedsUpdate = 1;
+	
 	public void addSchema(QuestionSchema qs){
 		
 		schemas.add(qs);
@@ -76,9 +79,10 @@ public class QuestionWindow implements Window {
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 
 		Label title = new Label("Quiz");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
-
+		Label green = new Label(" Correct"); green.setLayoutX(xBase+250);green.setLayoutY(yBase+350); green.setStyle("-fx-background-color: green"); green.setVisible(false); green.setPrefSize(70, 25);
+		Label red = new Label(" Wrong"); red.setLayoutX(xBase+250); red.setLayoutY(yBase+350); red.setStyle("-fx-background-color: red"); red.setVisible(false);	red.setPrefSize(70, 25);
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
-		
+		check = new CheckBox("Enable hints?"); check.setLayoutX(xBase+250); check.setLayoutY(yBase+390);
 
 		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(100); serverIn.setLayoutY(500); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
@@ -188,7 +192,26 @@ public class QuestionWindow implements Window {
 				
 				schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
 				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+				
+				if (check.isSelected()){
+					Question question = schema.getQuestions().get(index);
+					String correctAnswer = question.getCorrectAnswer();
+					if (userInput.getText().equals(correctAnswer)){
+						green.setVisible(true);
+						red.setVisible(false);
+					}
+					else{
+						green.setVisible(false);
+						red.setVisible(true);
+					
+					}
+				}
+				else{
+					green.setVisible(false);
+					red.setVisible(false);
+				}
 				userInput.clear();
+
 			}
 			
 		});	
@@ -416,7 +439,7 @@ public class QuestionWindow implements Window {
 		});
 
 		
-		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput, title);
+		root.getChildren().addAll(feed, confirm, nextQ, prevQ, pickCategory, serverIn, showChat, hideChat, m, tab1, tab2, tab3, tab4, userInput, title, green, red, check);
 
 		Scene scene1 = new Scene(root, 600, 600);
 		scene1.getStylesheets().add(getClass().getResource("GUI.css").toExternalForm());
