@@ -50,16 +50,7 @@ public class QuestionWindow implements Window {
 	int firstStart = 1;
 	int SubjectNeedsUpdate = 1;
 	int CategoryNeedsUpdate = 1;
-<<<<<<< HEAD
-	
-	public void addSchema(QuestionSchema qs){
-		
-		schemas.add(qs);
-		setSchema(qs);
-	}
-=======
->>>>>>> refs/remotes/origin/master
-	
+
 	QuestionWindow(Stage stageInput, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		client = clientIn;
 		stage=stageInput;

@@ -880,14 +880,14 @@ public class ClientHandler implements Runnable{
 		if(getUserType()==null || !getUserType().equals("admin")){
 
 			if (getUserType()==null){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:You need to log in to verify that you are and admin to use this function";
 				out.println(returnToClient);
 				return;
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -971,7 +971,7 @@ public class ClientHandler implements Runnable{
 				return;
 			}
 			if (getCurrentSubject()==null){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:You need to set a working subject";
@@ -1001,7 +1001,7 @@ public class ClientHandler implements Runnable{
 				totalScore=totalScore/Double.parseDouble(""+subject.get("#questions"));
 				content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
 
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:userScore\t"
@@ -1057,7 +1057,7 @@ public class ClientHandler implements Runnable{
 		}
 		
 		((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).put("score", scoreOld+totalScore );
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 				+"\tsender:server\t"
 				+ "response:info\t"
@@ -1098,7 +1098,7 @@ public class ClientHandler implements Runnable{
 				
 			}
 		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 				+"\tsender:server\t"
 				+ "response:bestQuestions\t"
@@ -1176,7 +1176,7 @@ public class ClientHandler implements Runnable{
 			if (getContent(payload).equals("noreply")){
 				return;
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -1184,7 +1184,7 @@ public class ClientHandler implements Runnable{
 			out.println(returnToClient);
 			return;
 		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 				+"\tsender:server\t"
 				+ "response:stats\t"
@@ -1198,7 +1198,7 @@ public class ClientHandler implements Runnable{
 			if (getContent(payload).equals("noreply")){
 				return;
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -1210,7 +1210,7 @@ public class ClientHandler implements Runnable{
 			if (getContent(payload).equals("noreply")){
 				return;
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:error\t"
@@ -1291,7 +1291,7 @@ public class ClientHandler implements Runnable{
 				}
 			}
 
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 
 					+"\tsender:server\t"
 					+ "response:subjectScore\t"
