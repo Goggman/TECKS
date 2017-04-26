@@ -38,11 +38,14 @@ public class QuestionWindow implements Window {
 	TextArea serverIn;
 	TextArea bestQuestions;
 	TextArea feed;
+	Label green;
+	Label red;
 	MenuButton pickCategory;
 	MenuButton m;
+	Button confirm;
 	CheckBox check;
-	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
-	ArrayList<String> answers = new ArrayList<>(); //input answers from user
+	ArrayList<QuestionSchema> schemas = new ArrayList<>();
+	ArrayList<String> answers = new ArrayList<>();
 	ServerClient client;
 	int firstStart = 1;
 	int SubjectNeedsUpdate = 1;
@@ -79,15 +82,15 @@ public class QuestionWindow implements Window {
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
 
 		Label title = new Label("Quiz");title.setLayoutX(100);title.setLayoutY(50);title.setStyle("-fx-font-size: 30px");
-		Label green = new Label(" Correct"); green.setLayoutX(xBase+250);green.setLayoutY(yBase+350); green.setStyle("-fx-background-color: green"); green.setVisible(false); green.setPrefSize(70, 25);
-		Label red = new Label(" Wrong"); red.setLayoutX(xBase+250); red.setLayoutY(yBase+350); red.setStyle("-fx-background-color: red"); red.setVisible(false);	red.setPrefSize(70, 25);
+		green = new Label(" Correct"); green.setLayoutX(xBase+250);green.setLayoutY(yBase+350); green.setStyle("-fx-background-color: green"); green.setVisible(false); green.setPrefSize(70, 25);
+		red = new Label(" Wrong"); red.setLayoutX(xBase+250); red.setLayoutY(yBase+350); red.setStyle("-fx-background-color: red"); red.setVisible(false);	red.setPrefSize(70, 25);
 		feed = new TextArea(); feed.setLayoutX(xBase); feed.setLayoutY(yBase+150); feed.setStyle("-fx-border-color: black"); feed.setPrefSize(400, 200);feed.setEditable(false);
 		check = new CheckBox("Enable hints?"); check.setLayoutX(xBase+250); check.setLayoutY(yBase+390);
 
 		serverIn = new TextArea("InfoMessagesFromServer");serverIn.setLayoutX(100); serverIn.setLayoutY(500); serverIn.setStyle("-fx-border-color: black"); serverIn.setPrefSize(400, 100);serverIn.setEditable(false);
 		Button nextQ = new Button("Next"); nextQ.setLayoutX(xBase+50); nextQ.setLayoutY(yBase+350);
 		Button prevQ = new Button("Prev"); prevQ.setLayoutX(xBase); prevQ.setLayoutY(yBase+350);
-		Button confirm = new Button("Confirm"); confirm.setLayoutX(xBase+330); confirm.setLayoutY(yBase+350);
+		confirm  = new Button("Confirm"); confirm.setLayoutX(xBase+330); confirm.setLayoutY(yBase+350);
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+350);
 		
 		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+100);pickCategory.setText("Categories");
@@ -100,7 +103,7 @@ public class QuestionWindow implements Window {
 
 		tab1.setPrefWidth(100);
 		tab1.setOnAction(e->{
-			stage.setScene(ctrl.getScene(1)); //QuestionScene at index 1 in GUIctrl
+			stage.setScene(ctrl.getScene(1));
 			
 		});
 		
@@ -123,7 +126,6 @@ public class QuestionWindow implements Window {
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
-			//TODO: log user out
 		});
 		
 
@@ -162,9 +164,10 @@ public class QuestionWindow implements Window {
 		options.add("");
 		options.add("");
 		
-		int radX = xBase+200, radY = yBase + 300;
+		int radX = xBase+170, radY = yBase + 350;
 		
 		ToggleGroup tg = new ToggleGroup();
+		
 		for (String s : options){
 			RadioButton temp = new RadioButton(s);
 			temp.setLayoutX(radX);temp.setLayoutY(radY);
@@ -175,7 +178,26 @@ public class QuestionWindow implements Window {
 					return;
 				}
 				schema.getAnswers().put(schema.getQuestions().get(index), temp.getText());
-				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\nAnswer Given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+				feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
+				if (check.isSelected()){
+					Question question = schema.getQuestions().get(index);
+					String correctAnswer = question.getCorrectAnswer();
+					if (temp.getText().equals(correctAnswer)){
+						green.setVisible(true);
+						red.setVisible(false);
+					}
+					else{
+						green.setVisible(false);
+						red.setVisible(true);
+					
+					}
+				}
+				else{
+					green.setVisible(false);
+					red.setVisible(false);
+				}
+			
 			});
 
 			radiOptions.add(temp);
@@ -192,7 +214,7 @@ public class QuestionWindow implements Window {
 				
 				schema.getAnswers().put(schema.getQuestions().get(index), userInput.getText());
 				feed.setText(""+schema.getQuestions().get(index).getQuestionText()+"\n Answer Given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
-				
+				feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
 				if (check.isSelected()){
 					Question question = schema.getQuestions().get(index);
 					String correctAnswer = question.getCorrectAnswer();
@@ -251,6 +273,8 @@ public class QuestionWindow implements Window {
 			if (quizStarted==1){
 				if (index < schema.getQuestions().size()-1){
 					index++;
+					green.setVisible(false);
+					red.setVisible(false);
 					
 				} 
 				tg.selectToggle(null);
@@ -260,9 +284,11 @@ public class QuestionWindow implements Window {
 					for (RadioButton rb : radiOptions){
 						rb.setVisible(true);
 					}
-					Collections.shuffle(q.getOptions());
-					for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-						radiOptions.get(j).setText(q.getOptions().get(k));
+					ArrayList<String> answerOptions=new ArrayList<String>(q.getOptions());
+					answerOptions.add(q.getCorrectAnswer());
+					Collections.shuffle(answerOptions);
+					for (int k = 0, j = 0; k < answerOptions.size() && j < radiOptions.size(); k++, j++){
+						radiOptions.get(j).setText(answerOptions.get(k));
 					}
 				}
 				else {
@@ -271,13 +297,13 @@ public class QuestionWindow implements Window {
 						rb.setVisible(false);
 					}
 				}	
-				feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
-				
+				feed.setText(q.getQuestionText()+"\nAnswer given: "+schema.getAnswers().get(q));
+				feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
 				if (index == schema.getQuestions().size()-1){
-					System.out.println("false");
 					prevQ.setDisable(false);nextQ.setDisable(true);
-				} else {
-					System.out.println("true");
+				} 
+				else {
+					//Do nothing
 					
 				}
 			}
@@ -287,19 +313,23 @@ public class QuestionWindow implements Window {
 			if (quizStarted==1){
 				if (index!=0){
 					index--;
+					green.setVisible(false);
+					red.setVisible(false);
 				}
 				tg.selectToggle(null);
 				Question q = schema.getQuestions().get(index);
-				if (q.getOptions().size() > 1){
+				ArrayList<String> answerOptions=new ArrayList<>(q.getOptions());
+				answerOptions.add(q.getCorrectAnswer());
+				if (answerOptions.size() > 1){
 					userInput.setVisible(false);
 					for (RadioButton rb : radiOptions){
 						rb.setVisible(true);
 					}
 					
-					Collections.shuffle(q.getOptions());
+					Collections.shuffle(answerOptions);
 					
-					for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-						radiOptions.get(j).setText(q.getOptions().get(k));
+					for (int k = 0, j = 0; k <answerOptions.size() && j < radiOptions.size(); k++, j++){
+						radiOptions.get(j).setText(answerOptions.get(k));
 						
 						
 					}
@@ -310,14 +340,13 @@ public class QuestionWindow implements Window {
 						rb.setVisible(false);
 					}
 				}
-				feed.setText(q.getQuestionText()+"\n Answer given: "+schema.getAnswers().get(q));
-				
+				feed.setText(q.getQuestionText()+"\nAnswer given: "+schema.getAnswers().get(q));
+				feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
 				if (index==0){
-					System.out.println("false");
 					nextQ.setDisable(false);prevQ.setDisable(true);
 				}
 				else {
-					System.out.println("true");
+					//Do nothing
 					
 				}
 			}
@@ -355,6 +384,7 @@ public class QuestionWindow implements Window {
 		});
 		pickCategory.setPrefWidth(100);
 		pickCategory.setOnMouseEntered(e->{
+			HashMap<String, ArrayList<Question>> categoryQuestionMap = new HashMap<>();
 			if (questions.getText().trim().isEmpty()){
 				return;
 			}
@@ -364,7 +394,7 @@ public class QuestionWindow implements Window {
 				}
 				pickCategory.getItems().clear();
 				QuestionSchema schemaTemp = readToSchema(questions.getText().trim());
-				HashMap<String, ArrayList<Question>> categoryQuestionMap = new HashMap<>();
+				
 				for(Question q : schemaTemp.getQuestions()){
 					if (categoryQuestionMap.containsKey(q.getCategory())){
 						categoryQuestionMap.get(q.getCategory()).add(q);
@@ -380,19 +410,22 @@ public class QuestionWindow implements Window {
 					MenuItem item = new MenuItem(next);
 					item.setOnAction(x->{
 						setSchema(new QuestionSchema(categoryQuestionMap.get(next),0));
-						feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+						feed.setText(schema.getQuestions().get(index).getQuestionText()+"\nAnswer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+						feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
 						quizStarted=1;
 						pickCategory.setDisable(true);
 						m.setDisable(true);
 						Question q = schema.getQuestions().get(index);
-						if (q.getOptions().size() > 1){
+						ArrayList<String> answerOptions = new ArrayList<>(q.getOptions());
+						answerOptions.add(q.getCorrectAnswer());
+						if (answerOptions.size() > 1){
 							userInput.setVisible(false);
 							for (RadioButton rb : radiOptions){
 								rb.setVisible(true);
 							}
-							Collections.shuffle(q.getOptions());
-							for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-								radiOptions.get(j).setText(q.getOptions().get(k));
+							Collections.shuffle(answerOptions);
+							for (int k = 0, j = 0; k < answerOptions.size() && j < radiOptions.size(); k++, j++){
+								radiOptions.get(j).setText(answerOptions.get(k));
 							}
 						}
 						else {
@@ -405,36 +438,45 @@ public class QuestionWindow implements Window {
 					pickCategory.getItems().add(item);
 				}
 				CategoryNeedsUpdate=0;
-				MenuItem recommended = new MenuItem("Recommended questions");
-				recommended.setOnAction(z->{
-					if (bestQuestions.getText().trim().isEmpty()){
-						return;
+			
+			
+			
+			MenuItem recommended = new MenuItem("Recommended questions");
+			recommended.setOnAction(z->{
+				if (bestQuestions.getText().trim().isEmpty()){
+					return;
+				}
+				if(!categoryQuestionMap.containsKey(bestQuestions.getText().trim())) {
+					return;
+				}
+				
+				setSchema(new QuestionSchema(categoryQuestionMap.get(bestQuestions.getText().trim()),0));
+				feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
+				feed.setText(feed.getText()+"\n\n\n\n\n\n\n\n\n"+(index+1)+"/"+schema.getQuestions().size());
+				quizStarted=1;
+				pickCategory.setDisable(true);
+				m.setDisable(true);
+				Question q = schema.getQuestions().get(index);
+				ArrayList<String> answerOption = new ArrayList<>(q.getOptions());
+				answerOption.add(q.getCorrectAnswer());
+				if (answerOption.size() > 1){
+					userInput.setVisible(false);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(true);
 					}
-					if(!categoryQuestionMap.containsKey(bestQuestions.getText().trim())) {
-						return;
+					Collections.shuffle(answerOption);
+					for (int k = 0, j = 0; k < answerOption.size() && j < radiOptions.size(); k++, j++){
+						radiOptions.get(j).setText(answerOption.get(k));
 					}
-					setSchema(new QuestionSchema(categoryQuestionMap.get(bestQuestions.getText().trim()),0));
-					feed.setText(schema.getQuestions().get(index).getQuestionText()+"\n Answer given: "+schema.getAnswers().get(schema.getQuestions().get(index)));
-					quizStarted=1;
-					Question q = schema.getQuestions().get(index);
-					if (q.getOptions().size() > 1){
-						userInput.setVisible(false);
-						for (RadioButton rb : radiOptions){
-							rb.setVisible(true);
-						}
-						Collections.shuffle(q.getOptions());
-						for (int k = 0, j = 0; k < q.getOptions().size() && j < radiOptions.size(); k++, j++){
-							radiOptions.get(j).setText(q.getOptions().get(k));
-						}
+				}
+				else {
+					userInput.setVisible(true);
+					for (RadioButton rb : radiOptions){
+						rb.setVisible(false);
 					}
-					else {
-						userInput.setVisible(true);
-						for (RadioButton rb : radiOptions){
-							rb.setVisible(false);
-						}
-					}
-				});
-				m.getItems().add(recommended);
+				}
+			});
+			pickCategory.getItems().add(recommended);
 			}
 		});
 
@@ -504,6 +546,9 @@ public class QuestionWindow implements Window {
 		for (RadioButton b :radiOptions){
 			b.setVisible(false);
 		}
+		
+		red.setVisible(false);
+		green.setVisible(false);
 		quizStarted=0;
 		CategoryNeedsUpdate=1;
 		SubjectNeedsUpdate=1;
@@ -511,8 +556,9 @@ public class QuestionWindow implements Window {
 		questions.clear();
 		bestQuestions.clear();
 		serverIn.clear();
-		feed.setText(feed.getText()+"\n"+"Pick a subject to continue");
+		feed.setText("Pick a subject to continue");
 		pickCategory.setDisable(true);
+		m.setDisable(false);
 		client.sendMessage("request:get_subjects\tcontent:local");
 		if (firstStart==1){
 			feed.setText("Pick a subject to continue :)");

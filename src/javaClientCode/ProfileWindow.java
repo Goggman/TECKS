@@ -85,6 +85,7 @@ public class ProfileWindow implements Window {
 		graphName = new Label("No score showing"); graphName.setLayoutX(xBase+270);graphName.setLayoutY(yBase+323);
 		MenuButton typeScore = new MenuButton("pickScoreType"); typeScore.setLayoutX(xBase+223);typeScore.setLayoutY(yBase+283); typeScore.setPrefHeight(resetScore.getPrefHeight());
 		MenuItem showUserScore = new MenuItem("userScore");
+		
 		showUserScore.setOnAction(e->{
 			root.getChildren().remove(scoreGraph);
 			scoreGraph=prepareScore(userScore);
@@ -274,7 +275,6 @@ public class ProfileWindow implements Window {
 			HashMap<String, HashMap<String, Double>> subjectMap = new HashMap<>();
 		
 			String[] scoreBySubject = score.getText().split("[@]");
-			System.out.println("contents: "+score.getText());
 			for (String subjectScore : scoreBySubject){
 				HashMap<String, Double> categoryScoreMap = new HashMap<>();
 				String[] rawScoreArray = subjectScore.split("[|]");

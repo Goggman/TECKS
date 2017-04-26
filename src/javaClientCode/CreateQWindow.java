@@ -181,11 +181,13 @@ public class CreateQWindow implements Window {
 			if (quiz.isEmpty()){
 				return;
 			}
-			feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+			feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			if (index+1<quiz.size()){
 				index++;
 				String options = quiz.get(index).getOptions().toString();
-				feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+				feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+				feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			}
 		});
 		prevQ.setOnAction(e->{
@@ -193,10 +195,12 @@ public class CreateQWindow implements Window {
 			if (quiz.isEmpty()){
 				return;
 			}
-			feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+			feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			if (index-1>-1){
 				index--;
-				feed.setText(quiz.get(index).getHeader()+"\n"+quiz.get(index).getCategory()+"\n"+quiz.get(index).getQuestionText()+"\n"+quiz.get(index).getOptions().toString());
+				feed.setText("Header: "+quiz.get(index).getHeader()+"\nCategory: "+quiz.get(index).getCategory()+"\nText: "+quiz.get(index).getQuestionText()+"\nAnswer: "+quiz.get(index).getCorrectAnswer()+"\n Options: "+quiz.get(index).getOptions().toString());
+				feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			}
 		});
 		discard.setOnAction(e->{
@@ -223,13 +227,15 @@ public class CreateQWindow implements Window {
 				save.setDisable(false);
 			}
 			
-			feed.setText(""+headerText+"\n"+categoryText+"\n"+questionText+"\n"+answerText+"\n"+op1.getText()+"\n"+op2.getText());
+			feed.setText("Header: "+headerText+"\nCategory: "+categoryText+"\nText: "+questionText+"\nAnswerText: "+answerText+"\nOptions: ["+op1.getText()+", "+op2.getText()+"]");
+			
 			if (qType.getText().equals("Multiple choice")){
 				quiz.add(new Question(categoryText, questionText, answerText, headerText, op1.getText(), op2.getText()));
 				
 			} else {
 				quiz.add(new Question(categoryText, questionText, answerText, headerText));
 			}
+			feed.setText(feed.getText()+"\n\n\n"+(index+1)+"/"+quiz.size());
 			qText.clear();
 			aText.clear();
 			head.clear();
