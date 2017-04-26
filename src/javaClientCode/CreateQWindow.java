@@ -141,7 +141,7 @@ public class CreateQWindow implements Window {
 			}
 			if (SubjectNeedsUpdate==1){
 				setSubjectMenu.getItems().clear();
-				String[] subjectArray = subjects.getText().split("[\n]")[1].split("[@]");
+				String[] subjectArray = subjects.getText().trim().split("[@]");
 				for (String subject : subjectArray){
 					String itemsubject = subject;
 					MenuItem item = new MenuItem(subject);

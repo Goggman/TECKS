@@ -38,6 +38,7 @@ public class QuestionWindow implements Window {
 	TextArea bestQuestions;
 	TextArea feed;
 	MenuButton pickCategory;
+	MenuButton m;
 	ArrayList<QuestionSchema> schemas = new ArrayList<>(); //list of categories
 	ArrayList<String> answers = new ArrayList<>(); //input answers from user
 	ServerClient client;
@@ -87,7 +88,7 @@ public class QuestionWindow implements Window {
 		TextField userInput = new TextField(); userInput.setPromptText("Type here"); userInput.setLayoutX(xBase+100); userInput.setLayoutY(yBase+350);
 		
 		pickCategory = new MenuButton(); pickCategory.setLayoutX(xBase+200); pickCategory.setLayoutY(yBase+70);pickCategory.setText("Categories");
-		MenuButton m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
+		m = new MenuButton("Subjects"); m.setLayoutX(xBase+100); m.setLayoutY(yBase+70);
 
 		
 
@@ -216,6 +217,7 @@ public class QuestionWindow implements Window {
 
 				client.sendMessage("request:add_results\tcontent:"+analyzer.prepareContent());
 				quizStarted=0;
+				index=0;
 			}
 		});
 		
@@ -311,6 +313,8 @@ public class QuestionWindow implements Window {
 					String itemsubject = subject;
 					MenuItem item = new MenuItem(subject);
 					item.setOnAction(x->{
+						questions.clear();
+						CategoryNeedsUpdate=1;
 						client.sendMessage("request:set_subject\tcontent:"+itemsubject);
 						client.sendMessage("request:get_questions\tcontent:");
 						client.sendMessage("request:get_best_questions\tcontent:");

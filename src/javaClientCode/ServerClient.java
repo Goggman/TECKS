@@ -20,7 +20,8 @@ public class ServerClient {
     Queue<String> ProfileWindowStats;
     Queue<String> ProfileWindowSubjectsGlobal;
     Queue<String> ProfileWindowSubjectsLocal;
-    Queue<String> ProfileWindowScores;
+    Queue<String> ProfileWindowUserScore;
+    Queue<String> ProfileWindowSubjectScore;
     Queue<String> QuestionWindowSubjects;
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
@@ -67,7 +68,8 @@ public class ServerClient {
 	       	ProfileWindowStats = new LinkedList<String>();
 	       	ProfileWindowSubjectsLocal = new LinkedList<String>();
 	       	ProfileWindowSubjectsGlobal = new LinkedList<String>();
-	       	ProfileWindowScores = new LinkedList<String>();
+	       	ProfileWindowUserScore = new LinkedList<String>();
+	    	ProfileWindowSubjectScore = new LinkedList<String>();
 	        receiver = new MessageReceiver(this);
 	        receiver.start();
 	        
@@ -103,8 +105,11 @@ public class ServerClient {
 		else if(response.equals("subjectsLocal")){
 			parse_subjects_local(payload);
 		}
-		else if (response.equals("scores")){
-			parse_scores(payload);
+		else if (response.equals("userScore")){
+			parse_user_score(payload);
+		}
+		else if (response.equals("subjectScore")){
+			parse_subject_score(payload);
 		}
 		else if (response.equals("bestQuestions")){
 			parse_bestQuestions(payload);
@@ -140,7 +145,7 @@ public class ServerClient {
 	
 	
 	void parse_subjects_global(String payload){
-		String subjectsGlobal = getContent(payload).replace("@", ", ");
+		String subjectsGlobal = getContent(payload);
 		ProfileWindowSubjectsGlobal.add(subjectsGlobal);
 
 
@@ -149,14 +154,24 @@ public class ServerClient {
 	void parse_subjects_local(String payload){
 		ProfileWindowStats.add(getContent(payload));
 		ProfileWindowSubjectsLocal.add(getContent(payload));
-
+		try{	
+			QuestionWindowSubjects.add(getContent(payload).split("[;]")[1].trim());
+			CreateQWindowSubjects.add(getContent(payload).split("[;]")[1].trim());}
+		catch(ArrayIndexOutOfBoundsException e){//do nothing
+		
+		}
 		printPrettyMessageGeneral(payload);
 	}
 	
 	
-	void parse_scores(String payload){
-		ProfileWindowScores.add(getContent(payload));
+	void parse_subject_score(String payload){
+		ProfileWindowSubjectScore.add(getContent(payload));
 		printPrettyMessageGeneral(payload);
+	}
+	void parse_user_score(String payload){
+		ProfileWindowUserScore.add(getContent(payload));
+		printPrettyMessageGeneral(payload);
+		
 	}
 	void parse_error(String payload){
 		LoginWindow.add(getContent(payload));
@@ -185,12 +200,6 @@ public class ServerClient {
 	}
 	void parse_stats(String payload){
 		ProfileWindowStats.add(getContent(payload));
-		try{QuestionWindowSubjects.add(getContent(payload).split("[;]")[1].trim());
-			CreateQWindowSubjects.add(getContent(payload).split("[;]")[1].trim());}
-		catch(ArrayIndexOutOfBoundsException e){//do nothing
-			
-		}
-		
 		printPrettyMessageGeneral(payload);
 	}
 	void parse_question(String payload){

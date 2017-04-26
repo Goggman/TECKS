@@ -965,11 +965,20 @@ public class ClientHandler implements Runnable{
 				out.println(returnToClient);
 				return;
 			}
+			if (getCurrentSubject()==null){
+				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+						+"\tsender:server\t"
+						+ "response:error\t"
+						+ "content:You need to set a working subject";
+				out.println(returnToClient);
+				return;
+			}
 			
 			String content = "";
-			Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
-			while(subject_it.hasNext()){
-				String nextSubject = (String)subject_it.next();
+			//Iterator subject_it = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).keySet().iterator();
+			//while(subject_it.hasNext()){
+				//String nextSubject = (String)subject_it.next();
+				String nextSubject = getCurrentSubject();
 				HashMap subject = (HashMap)((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(nextSubject);
 			
 				Iterator category_it = ((HashMap)subject.get("categories")).keySet().iterator();
@@ -988,14 +997,18 @@ public class ClientHandler implements Runnable{
 				}
 				totalScore=totalScore/(double)subject.get("#questions");
 				content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
-				if (subject_it.hasNext()){
-					content+="@";
-				}
+				//if (subject_it.hasNext()){
+				//	content+="@";
+				//}
 			
-			}
+
+			
 			returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
+			
+
 					+"\tsender:server\t"
-					+ "response:stats\t"
+					+ "response:userScore\t"
 					+ "content:"+content;
 			out.println(returnToClient);
 		
@@ -1273,17 +1286,17 @@ public class ClientHandler implements Runnable{
 				}
 			}
 			Iterator categories_it = subjectScoreMap.keySet().iterator();
-			content+="|"+totalScore/totalQuestions+"@";
+			content+="|"+totalScore/totalQuestions+"|";
 			while (categories_it.hasNext()){
 				String category = (String)categories_it.next();
 				content+=category+"|"+((double)((HashMap)subjectScoreMap.get(category)).get("score")/(double)((HashMap)subjectScoreMap.get(category)).get("#questions"));
 				if (categories_it.hasNext()){
-					content+="@";
+					content+="|";
 				}
 			}
 			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
-					+ "response:scores\t"
+					+ "response:subjectScores\t"
 					+ "content:"+content;
 			out.println(returnToClient);
 		
