@@ -102,7 +102,6 @@ public class CreateQWindow implements Window {
 		tab3.setPrefWidth(100);
 		tab3.setOnAction(e->{
 			stage.setScene(ctrl.getScene(4));
-			//TODO: log user out
 		});
 
 
@@ -176,7 +175,7 @@ public class CreateQWindow implements Window {
 		//set category
 
 		
-		nextQ.setOnAction(e->{//TODO: nextQ prevQ and discard is throwing out of bounds exceptions, fix this
+		nextQ.setOnAction(e->{
 
 			if (quiz.isEmpty()){
 				return;
