@@ -50,12 +50,15 @@ public class QuestionWindow implements Window {
 	int firstStart = 1;
 	int SubjectNeedsUpdate = 1;
 	int CategoryNeedsUpdate = 1;
+<<<<<<< HEAD
 	
 	public void addSchema(QuestionSchema qs){
 		
 		schemas.add(qs);
 		setSchema(qs);
 	}
+=======
+>>>>>>> refs/remotes/origin/master
 	
 	QuestionWindow(Stage stageInput, GUIController ctrlIn, ServerClient clientIn, Stage chatIn){
 		client = clientIn;
@@ -64,10 +67,10 @@ public class QuestionWindow implements Window {
 		chat=chatIn;
 		
 	}
-	public void setAnswer(String a, String b){
-		b = a;
+	public QuestionWindow(){
 		
 	}
+	
 
 	/**
 	 * Method for creating a scene in gui controller
@@ -498,16 +501,30 @@ public class QuestionWindow implements Window {
 		return scene1;
 	}
 	
+	public void addSchema(QuestionSchema qs){	
+		schemas.add(qs);
+		setSchema(qs);
+	}
+	
+	
 	/**
 	 * 
 	 * @return schema returns schema for the quiz window
 	 */
-	QuestionSchema getSchema(){
+	public QuestionSchema getSchema(){
 		return schema;
 	}
 
+	public ArrayList<QuestionSchema> getSchemas(){
+		return schemas;
+	}
 	public void setSchema(QuestionSchema questionSchema) {
 		schema = questionSchema;
+		
+	}
+	
+	public void setAnswer(String a, String b){
+		b = a;
 		
 	}
 	

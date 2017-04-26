@@ -20,12 +20,17 @@ public class ClientHandler implements Runnable{
 	private PrintWriter out;
     private BufferedReader in;
     
+    private String returnToClient;
     private String username;
     private String chatroom;
     private String current_subject;
     private String userType;
     
-	ClientHandler(ServerHost server, Socket clientSocket)  {
+    public ClientHandler(){
+    	
+    }
+    
+	public ClientHandler(ServerHost server, Socket clientSocket)  {
 		this.server=server;
 		this.clientSocket=clientSocket;
 		try{
@@ -37,8 +42,10 @@ public class ClientHandler implements Runnable{
 	    } 
 		
 	}
-	
-	String getRequest(String payload){						//helper functions to save space and time, get the request and content part of a message easy
+	public String getReturnToClient(){
+		return returnToClient;
+	}
+	public String getRequest(String payload){						//helper functions to save space and time, get the request and content part of a message easy
 		try{
 			return payload.split("\t")[0].split(":")[1];
 			}
@@ -46,7 +53,7 @@ public class ClientHandler implements Runnable{
 				return "";
 			}
 	}
-	String getContent(String payload){
+	public String getContent(String payload){
 		try{
 		return payload.split("\t")[1].split(":")[1];
 		}
@@ -54,26 +61,26 @@ public class ClientHandler implements Runnable{
 			return "";
 		}
 	}
-	String getChat(){
+	public String getChat(){
 		return chatroom;
 	}
-	void setChat(String chatname){
+	public void setChat(String chatname){
 		chatroom=chatname;
 	}
-	PrintWriter getOut(){
+	public PrintWriter getOut(){
 		return out;
 	}
 	
-	String getUsername(){
+	public String getUsername(){
 		return username;
 	}
-	void setUsername(String name){
+	public void setUsername(String name){
 		this.username = name;
 	}
-	String getCurrentSubject(){
+	public String getCurrentSubject(){
 		return current_subject;
 	}
-	void setCurrentSubject(String subject){
+	public void setCurrentSubject(String subject){
 		this.current_subject=subject;
 	}
 	boolean saveProperties(){
@@ -123,16 +130,16 @@ public class ClientHandler implements Runnable{
 		}
 	}
 	
-	String get_sender(String payload){
+	public String get_sender(String payload){
 		return payload.split("\t")[1].split(":")[1];
 	}
-	String getUserType(){
+	public String getUserType(){
 		return this.userType;
 	}
-	void setUserType(String type){
+	public void setUserType(String type){
 		this.userType = type;
 	}
-	String get_content(String payload){
+	public String get_content(String payload){
 		try{
 			return payload.split("\t")[3].split(":")[1];
 		}
@@ -248,7 +255,7 @@ public class ClientHandler implements Runnable{
 	
 	void parse_login(String payload){
 		if (getContent(payload).split("@").length<2){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:you need to provide correct arguments for login, format is <username>@<PW>@<type> if new user, <username>@<PW> if already created user";
@@ -259,7 +266,7 @@ public class ClientHandler implements Runnable{
 		String password= getContent(payload).split("@")[1];
 		
 		if (username.equals("")){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:you need to provide username for login, format is <username>@<PW>@<type>";
@@ -267,7 +274,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if (getUsername() != null){											//check if already given username
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Already logged in";
@@ -282,7 +289,7 @@ public class ClientHandler implements Runnable{
 		try{
 			while (userIterator.hasNext()){
 				if (((ClientHandler)userIterator.next()).getUsername().equals(username)){
-					String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+					returnToClient= 	"timestamp:"+LocalTime.now().toString()
 							+"\tsender:server\t"
 							+ "response:error\t"
 							+ "content:Username already logged in";
@@ -302,7 +309,7 @@ public class ClientHandler implements Runnable{
 		
 		if(users.containsKey(username)){					//Check if already create user, check password
 			if (!password.equals(((HashMap)users.get(username)).get("password"))){
-				String returnToClient = "timestamp:"+LocalTime.now().toString()
+				returnToClient = "timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:info\t"
 						+ "content:Invalid password or username";
@@ -314,7 +321,7 @@ public class ClientHandler implements Runnable{
 		}
 		else {
 			if (getContent(payload).split("@").length<3){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:you need to provide correct arguments for login, format is <username>@<PW>@<type> if new user, <username>@<PW> if already created user";
@@ -323,7 +330,7 @@ public class ClientHandler implements Runnable{
 			}
 			String userType= getContent(payload).split("@")[2]; // "admin" for admin, "student" for student, "lecturer" for lecturer
 			if (userType.equals("") || !(userType.equals("admin")||userType.equals("student")||userType.equals("lecturer"))){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:You need to supply a usertype, <username>@<PW>@<type>, either admin, student, lecturer";
@@ -346,7 +353,7 @@ public class ClientHandler implements Runnable{
 		}
 		setUsername(username);
 		
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:OK - Login successful as "+this.username+" as "+getUserType()+" into chatroom - "+getChat();
@@ -374,14 +381,14 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_logout(String payload){
 		if (getChat()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Need to log in to log out";
 			out.println(returnToClient);
 			return;
 		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:Logout successful";
@@ -410,14 +417,14 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_msg(String payload){
 		if (getUsername()==null || getChat()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to send messages";
 			out.println(returnToClient);
 			return;
 		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 								+"\tsender:server\t"
 								+ "response:info\t"
 								+ "content:Message sent";
@@ -442,7 +449,7 @@ public class ClientHandler implements Runnable{
 		}
 	void parse_history(String payload){
 		if (this.username==null || this.chatroom==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to see chat logs";
@@ -451,7 +458,7 @@ public class ClientHandler implements Runnable{
 		}
 		ArrayList chatlog = (ArrayList)((HashMap)server.getProperties().get("chatrooms").get(this.chatroom)).get("log"); // print every message received so far
 		for(int x=0;x<chatlog.size();x++){
-			String returnToClient= 	"timestamp:"+get_timestamp((String)chatlog.get(x))+"\t"
+			returnToClient= 	"timestamp:"+get_timestamp((String)chatlog.get(x))+"\t"
 					+"sender:"+get_sender((String)chatlog.get(x))+"\t"
 					+ "response:history\t"
 					+ "content:"+get_content((String)chatlog.get(x));
@@ -461,15 +468,16 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_create_subject(String payload){
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
 			out.println(returnToClient);
+			System.out.println("retrun: " + returnToClient);
 			return;
 		}
 		if(getUserType().equals("student")){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Students are not allowed to utilize this function";
@@ -477,7 +485,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if (server.getProperties().get("subjects").containsKey(getContent(payload))){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Subject already exists";
@@ -487,7 +495,7 @@ public class ClientHandler implements Runnable{
 			server.getProperties().get("subjects").put(getContent(payload), new HashMap());
 			((HashMap)server.getProperties().get("subjects").get(getContent(payload))).put("members", new ArrayList<String>());
 			((HashMap)server.getProperties().get("subjects").get(getContent(payload))).put("questions", new ArrayList<String>());
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Subject created successfully";
@@ -497,7 +505,7 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_set_subject(String payload){
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -505,7 +513,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if (! server.getProperties().get("subjects").containsKey(getContent(payload))){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Subject does not exist";
@@ -513,7 +521,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if (! ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).containsKey(getContent(payload))){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Subject does not exist in your registered subjects";
@@ -521,7 +529,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Current subject set successfully";
@@ -532,7 +540,7 @@ public class ClientHandler implements Runnable{
 	void parse_add_subject(String payload){
 		String subject = getContent(payload);
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -543,7 +551,7 @@ public class ClientHandler implements Runnable{
 		boolean hasSubject = ((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).containsKey(getContent(payload));
 		boolean subjectExists = server.getProperties().get("subjects").containsKey(getContent(payload));
 		if (hasSubject || !subjectExists ){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Subject does not exist, or you already have registered in the subject";
@@ -558,16 +566,16 @@ public class ClientHandler implements Runnable{
 			((HashMap) subjects.get(subject)).put("#questions",Double.parseDouble("-1"));
 			((ArrayList)((HashMap)server.getProperties().get("subjects").get(subject)).get("members")).add(getUsername());
 			
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Subject added successfully";
 			out.println(returnToClient);
 		}
 	}
-	void parse_add_question(String payload){
+	public void parse_add_question(String payload){
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -575,7 +583,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if(getCurrentSubject()==null ){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to set the working subject";
@@ -583,7 +591,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if(getUserType().equals("student")){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Students are not allowed to utilize this function";
@@ -592,15 +600,15 @@ public class ClientHandler implements Runnable{
 		}
 		
 		((ArrayList)((HashMap)server.getProperties().get("subjects").get(getCurrentSubject())).get("questions")).add(getContent(payload));
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:Question added successfully in "+getCurrentSubject();
 		out.println(returnToClient);
 	}
-	void parse_get_subjects(String payload){
+	public void parse_get_subjects(String payload){
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -617,7 +625,7 @@ public class ClientHandler implements Runnable{
 					subjects+="@";
 				}
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:subjectsGlobal\t"
 					+ "content:"+subjects;
@@ -633,14 +641,14 @@ public class ClientHandler implements Runnable{
 					subjects+="@";
 				}
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:subjectsLocal\t"
 					+ "content:Your registered subjects; "+subjects;
 			out.println(returnToClient);
 		}
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Must supply argument, global or local";
@@ -654,7 +662,7 @@ public class ClientHandler implements Runnable{
 	void parse_remove_subject(String payload){
 
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -675,14 +683,14 @@ public class ClientHandler implements Runnable{
 			((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).remove(getContent(payload));
 			((ArrayList)((HashMap)server.getProperties().get("subjects").get(getContent(payload))).get("members")).remove(getUsername());
 			
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Subject removed from your list";
 			out.println(returnToClient);
 		}
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You are not a participant in "+getContent(payload);
@@ -692,7 +700,7 @@ public class ClientHandler implements Runnable{
 	void parse_get_questions(String payload){
 		
 		if(getUsername()==null || getCurrentSubject()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function, and set a working subject";
@@ -725,7 +733,7 @@ public class ClientHandler implements Runnable{
 			questions = questions.substring(0, questions.length()-1);
 		}
 		
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:question\t"
 				+ "content:"+questions;
@@ -735,7 +743,7 @@ public class ClientHandler implements Runnable{
 		
 	void parse_help(String payload){
 		String help = (String)server.getProperties().get("help").get("text");
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:"+help;
@@ -750,7 +758,7 @@ public class ClientHandler implements Runnable{
 				chatrooms+=", ";
 			}
 		}
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:Chatrooms - "+chatrooms;
@@ -759,7 +767,7 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_create_chatroom(String payload){
 		if(getUsername()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function";
@@ -769,7 +777,7 @@ public class ClientHandler implements Runnable{
 		
 		boolean hasRoom = server.getProperties().get("chatrooms").containsKey(getContent(payload));
 		if (hasRoom){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Chatroom already exists";
@@ -781,7 +789,7 @@ public class ClientHandler implements Runnable{
 			((HashMap)server.getProperties().get("chatrooms").get(getContent(payload))).put("log",new ArrayList<String>());
 			((HashMap)server.getProperties().get("chatrooms").get(getContent(payload))).put("users",new HashMap<ClientHandler, HashMap>());
 			
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Chatroom "+getContent(payload)+" successfully created";
@@ -792,7 +800,7 @@ public class ClientHandler implements Runnable{
 	void parse_set_chatroom(String payload){
 		boolean hasRoom = server.getProperties().get("chatrooms").containsKey(getContent(payload));
 		if (getUsername() == null || !hasRoom){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to enter chatrooms and provide a legal chatroom name";
@@ -810,7 +818,7 @@ public class ClientHandler implements Runnable{
 			
 			
 			
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Successfully joined chatroom "+getChat();
@@ -820,14 +828,14 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_get_chatroom(String payload){
 		try{
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:"+getChat().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Null";
@@ -836,14 +844,14 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_get_subject(String payload){
 		try{
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:"+getCurrentSubject().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:No current subject";
@@ -853,14 +861,14 @@ public class ClientHandler implements Runnable{
 
 	void parse_get_username(String payload){
 		try{
-		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+		returnToClient= 	"timestamp:"+LocalTime.now().toString()
 				+"\tsender:server\t"
 				+ "response:stats\t"
 				+ "content:Your username; "+getUsername().toString();
 		out.println(returnToClient);
 		}
 		catch(NullPointerException e){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:stats\t"
 					+ "content:No username";
@@ -870,6 +878,7 @@ public class ClientHandler implements Runnable{
 	void parse_save_server(String payload){ 
 		
 		if(getUserType()==null || !getUserType().equals("admin")){
+
 			if (getUserType()==null){
 				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
@@ -879,6 +888,7 @@ public class ClientHandler implements Runnable{
 				return;
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Students and lecturers are not allowed to utilize this function";
@@ -887,7 +897,7 @@ public class ClientHandler implements Runnable{
 		}
 		
 		if (saveProperties()){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Server status saved";
@@ -895,7 +905,7 @@ public class ClientHandler implements Runnable{
 		}
 
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Save unsuccessfull";
@@ -913,7 +923,7 @@ public class ClientHandler implements Runnable{
 				contentToClient+=((ClientHandler)connectedClients_it.next()).getUsername();
 				
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:"+contentToClient;
@@ -921,7 +931,7 @@ public class ClientHandler implements Runnable{
 		}
 		else if (content.equals("local")){
 			if (getChat()==null){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:You need to log in to get local users";
@@ -934,7 +944,7 @@ public class ClientHandler implements Runnable{
 					contentToClient+=((ClientHandler)connectedClients_it.next()).getUsername();
 					
 				}
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:info\t"
 						+ "content:"+contentToClient;
@@ -943,7 +953,7 @@ public class ClientHandler implements Runnable{
 			}
 		}
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to suply an argument, global or local";
@@ -953,7 +963,7 @@ public class ClientHandler implements Runnable{
 	void parse_get_stats(String payload){ //get overall score for each subject, and score for each category, number of correct answers/total questions asked
 		//send this      timestamp:<time>\tsender:server\tresponse:stats\tcontent:<subject>|<overall score>|<category>|<score>|<category>|<score>...@<subject>|<overall score>|<overall_score>|<category>|<score>...
 			if (getUsername()==null){
-				String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+				returnToClient= 	"timestamp:"+LocalTime.now().toString()
 						+"\tsender:server\t"
 						+ "response:error\t"
 						+ "content:You need to log in to use this function";
@@ -992,6 +1002,7 @@ public class ClientHandler implements Runnable{
 				content+=nextSubject+"|"+totalScore+"|"+categoryAndScore;
 
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:userScore\t"
 					+ "content:"+content;
@@ -1002,7 +1013,7 @@ public class ClientHandler implements Runnable{
 	void parse_add_results(String payload){ //send results of a quiz to the properties of the server, update score
 		//adds to current subject, payload is request:add_results\tcontent:<#questions>@<category>|<score>|<#questionsInScore>@<category>|<score>|<#questionsInScore>.... 
 		if (getUsername()==null || getCurrentSubject()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in and set a working subject";
@@ -1047,6 +1058,7 @@ public class ClientHandler implements Runnable{
 		
 		((HashMap) ((HashMap) ((HashMap) server.getProperties().get("users").get(getUsername())).get("subjects")).get(getCurrentSubject())).put("score", scoreOld+totalScore );
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 				+"\tsender:server\t"
 				+ "response:info\t"
 				+ "content:Results added successfully";
@@ -1054,7 +1066,7 @@ public class ClientHandler implements Runnable{
 	}
 	void parse_get_best_questions(String payload){ 
 		if (getUsername()==null || getCurrentSubject()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in and/or set the working subject";
@@ -1062,7 +1074,7 @@ public class ClientHandler implements Runnable{
 			return;
 		}
 		if (!((HashMap)((HashMap)server.getProperties().get("users").get(getUsername())).get("subjects")).containsKey(getCurrentSubject())){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You have not registered in the working subject";
@@ -1087,6 +1099,7 @@ public class ClientHandler implements Runnable{
 			}
 		}
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 				+"\tsender:server\t"
 				+ "response:bestQuestions\t"
 				+ "content:"+minCategory;
@@ -1098,7 +1111,7 @@ public class ClientHandler implements Runnable{
 	
 	void parse_reset_score(String payload){ // set score and questions asked in active subject, and in every category under active subject to 0
 		if (getUsername()==null || getCurrentSubject()==null){
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in and/or set the working subject";
@@ -1119,7 +1132,7 @@ public class ClientHandler implements Runnable{
 			}
 			
 			
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Score reset successfully in "+getCurrentSubject();
@@ -1141,7 +1154,7 @@ public class ClientHandler implements Runnable{
 					((HashMap)((HashMap)currentSubject.get("categories")).get(category)).put("score", Double.parseDouble("0"));
 				}
 			}
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:info\t"
 					+ "content:Score reset successfully in all subjects";
@@ -1149,7 +1162,7 @@ public class ClientHandler implements Runnable{
 
 		}
 		else{
-			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+			returnToClient= 	"timestamp:"+LocalTime.now().toString()
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to supply an argument for this function, local or global";
@@ -1159,18 +1172,20 @@ public class ClientHandler implements Runnable{
 
 	void parse_get_type(String payload){
 		if (getUsername()==null){
+
 			if (getContent(payload).equals("noreply")){
 				return;
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to get the usertype";
 			out.println(returnToClient);
 			return;
 		}
-		
 		String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 				+"\tsender:server\t"
 				+ "response:stats\t"
 				+ "content:User type; "+getUserType();
@@ -1184,6 +1199,7 @@ public class ClientHandler implements Runnable{
 				return;
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:You need to log in to use this function, or you need to set the current subject";
@@ -1195,6 +1211,7 @@ public class ClientHandler implements Runnable{
 				return;
 			}
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:error\t"
 					+ "content:Your username does not have the required privelige";
@@ -1273,8 +1290,9 @@ public class ClientHandler implements Runnable{
 					content+="|";
 				}
 			}
-			
+
 			String returnToClient= 	"timestamp:"+LocalTime.now().toString()
+
 					+"\tsender:server\t"
 					+ "response:subjectScore\t"
 					+ "content:"+content;

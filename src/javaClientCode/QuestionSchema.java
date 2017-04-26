@@ -12,7 +12,7 @@ public class QuestionSchema {
 	
 
 	
-	QuestionSchema(ArrayList<ArrayList<String>> quizList){
+	public QuestionSchema(ArrayList<ArrayList<String>> quizList){
 		
 		for (ArrayList<String> list : quizList){
 			String header="";
@@ -70,7 +70,7 @@ public class QuestionSchema {
 	 * getter method for questions
 	 * @return ArrayList of questions
 	 */
-	ArrayList<Question> getQuestions(){
+	public ArrayList<Question> getQuestions(){
 		return questions;
 	}
 	
@@ -78,16 +78,16 @@ public class QuestionSchema {
 	 * getter method for answers
 	 * @return Strings containing the correct answers
 	 */
-	HashMap<Question, String> getAnswers(){
+	public HashMap<Question, String> getAnswers(){
 		return answers;
 	}
 	
-	void removeQuestion(Question q){
+	public void removeQuestion(Question q){
 		questions.remove(q);
 		answers.remove(q);
 		
 	}
-	void addQuestion(Question q){
+	public void addQuestion(Question q){
 		questions.add(q);
 		answers.put(q, "");
 	}

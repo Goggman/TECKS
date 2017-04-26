@@ -56,6 +56,10 @@ public class ProfileWindow implements Window {
 		chat = chatIn;
 	}
 	
+	public ProfileWindow() {
+		
+	}
+
 	public Scene createScene(){
 		xBase = 0; yBase = 0;
 		Pane root = new Pane(); root.setStyle("-fx-background-color: white");
@@ -263,7 +267,7 @@ public class ProfileWindow implements Window {
 	return scene;
 	}
 	
-	BarChart<String, Number> prepareScore(TextArea score){
+	public BarChart<String, Number> prepareScore(TextArea score){
 		if (score.getText().trim().isEmpty()){
 			return new BarChart(new CategoryAxis(), new NumberAxis());
 		}
@@ -316,7 +320,13 @@ public class ProfileWindow implements Window {
 		return scoreGraphLocal;
 	}
 	
-
+	public boolean getSubjectNeedsUpdate(){
+		return setSubjectNeedsUpdate;
+	}
+	
+	public boolean getAddSubjectNeedsUpdate(){
+		return addSubjectNeedsUpdate;
+	}
 	
 	public void wakeUp(){
 		stats.setText("Your stats:");	

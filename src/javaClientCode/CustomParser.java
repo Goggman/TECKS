@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class CustomParser {
 
-	private String path = "C:/users/martin/tdt4100-2017-master/ws/PU_GUI/src/TECKS/";
+	private String path = System.getProperty("user.dir" + "TECKS/src/javaClientCode/");
 	
 	
 	public void ReadFile(String filename){
@@ -23,6 +23,7 @@ public class CustomParser {
 	 * @throws IOException
 	 */
 	public ArrayList<ArrayList<String>> OpenFile(String path) throws IOException{
+		System.out.println(System.getProperty("user.dir"));
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);
 		

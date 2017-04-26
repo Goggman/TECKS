@@ -26,7 +26,7 @@ public class ServerClient {
     Queue<String> QuestionWindowQuestions;
     Queue<String> QuestionWindowInfo;
     Queue<String> QuestionWindowRecQs;
-    ServerClient(){
+    public ServerClient(){
 
     	init(new String[]{"localhost", "12000"}); //
 
@@ -215,7 +215,7 @@ public class ServerClient {
 				
 						);
 	}
-	void sendMessage(String payload){
+	public void sendMessage(String payload){
 		try{
 			out.println(payload);
 		}

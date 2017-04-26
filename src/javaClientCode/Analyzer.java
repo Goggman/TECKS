@@ -11,7 +11,8 @@ import java.util.Iterator;
 public class Analyzer {
 	HashMap<String, int[]> categories;
 	int totalNumberOfQuestions;
-	Analyzer(){
+	
+	public Analyzer(){
 		init_score();
 	}
 	
@@ -23,7 +24,12 @@ public class Analyzer {
 		categories = new HashMap<String, int[]>();
 		totalNumberOfQuestions = 0;
 	}
-	void registerAnswer(String categoryIn, boolean isCorrect){
+	/**
+	 * Insert score of subject
+	 * @param categoryIn
+	 * @param isCorrect
+	 */
+	public void registerAnswer(String categoryIn, boolean isCorrect){
 		if (getCategories().containsKey(categoryIn)){
 			int scoreOld = categories.get(categoryIn)[0];
 			int numberOfQuestionsOld = categories.get(categoryIn)[1];
@@ -56,14 +62,23 @@ public class Analyzer {
 		}
 	}
 	
-	HashMap<String, int[]> getCategories(){
+	public HashMap<String, int[]> getCategories(){
 		return categories;
 	}
-	int[] getScoreAndQuestions(String categoryIn){
+	/**
+	 * 
+	 * @param categoryIn String key of the hashmap
+	 * @return int[] in format [questions answered correctly, questions asked]
+	 */
+	public int[] getScoreAndQuestions(String categoryIn){
 		return categories.get(categoryIn);
 	}
 	
-	String prepareContent(){
+	/**
+	 * 
+	 * @return a String with format: numberOfQuestions@category1|score1|score2@category2...
+	 */
+	public String prepareContent(){
 		String content = totalNumberOfQuestions+"@";
 		Iterator category_it = categories.keySet().iterator();
 		
