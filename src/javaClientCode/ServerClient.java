@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 public class ServerClient {
-	
+	String ip = "localhost"; // change this to connect over internet
 	Socket echoSocket;
     PrintWriter out;
     BufferedReader in;
@@ -28,7 +28,7 @@ public class ServerClient {
     Queue<String> QuestionWindowRecQs;
     public ServerClient(){
 
-    	init(new String[]{"localhost", "12000"}); //
+    	init(new String[]{ip, "12000"}); //
 
     	
     	//listen();
